@@ -1,0 +1,54 @@
+#===============================================[ Notes ]================================================#
+# name: SmartTournament                                                                                  #
+# author: Hid                                                                                            #
+# version: 1.0                                                                                           #
+#========================================================================================================#
+
+configuration:
+   tournament_delay: 120
+
+
+messages:
+
+
+
+spectator:
+    world:
+    x:
+    y:
+    z:
+    yaw:
+    pitch:
+
+arena:
+   'one':
+      1:
+        world:
+        x:
+        y:
+        z:
+        yaw:
+        pitch:
+      2:
+        world:
+        x:
+        y:
+        z:
+        yaw:
+        pitch:
+   'two':
+      1:
+        world:
+        x:
+        y:
+        z:
+        yaw:
+        pitch:
+      2:
+        world:
+        x:
+        y:
+        z:
+        yaw:
+        pitch:
+
