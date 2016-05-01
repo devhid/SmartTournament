@@ -64,7 +64,7 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                if(mainManager.getTournamentManager().getTournament().getStage() != TournamentStage.WAITING) {
+                if(mainManager.getTournamentManager().getTournament().getStage() == TournamentStage.ACTIVE) {
                     ps.sendMessage("&cThis tournament has already started.");
                     return true;
                 }
@@ -73,6 +73,8 @@ public class CommandTournament implements CommandExecutor {
                     ps.sendMessage("&cYou have already joined the tournament.");
                     return true;
                 }
+
+                ps.sendMessage("You have successfully joined the tournament.");
                 mainManager.getTournamentManager().getPlayers().add(ps);
                 ps.teleport(mainManager.getTournamentManager().getSpectatorArea());
 
@@ -87,6 +89,7 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
+                ps.sendMessage("You have successfully left the tournament.");
                 mainManager.getTournamentManager().getPlayers().remove(ps);
                 mainManager.getMatchManager().getWinners().remove(ps);
                 break;
@@ -98,6 +101,14 @@ public class CommandTournament implements CommandExecutor {
                     sender.sendMessage("&cA tournament is already running.");
                     return true;
                 }
+
+                if(TournamentPlugin.i.getConfig().get("arenas") == null ||
+                        TournamentPlugin.i.getConfig().get("spectator") == null) {
+                    sender.sendMessage("You must set a spectator area and at least one arena first.");
+                    return true;
+                }
+
+                sender.sendMessage("You have successfully started the tournament.");
                 mainManager.getTournamentManager().startTournament();
                 break;
 
@@ -118,8 +129,8 @@ public class CommandTournament implements CommandExecutor {
                 checkPerm(sender, "smarttournament.setspawn");
                 if(args.length == 2) {
                     if(args[1].equalsIgnoreCase("spectator")) {
-                        Location loc = ps.getLocation();
-
+                        mainManager.getTournamentManager().setSpectatorArea(ps);
+                        return true;
                     }
                 }
 
@@ -130,18 +141,18 @@ public class CommandTournament implements CommandExecutor {
                     try {
                         num = Integer.parseInt(args[2]);
                     } catch (NumberFormatException ex) {
-                        sender.sendMessage("&cYou must enter a number for the third argument.");
+                        ps.sendMessage("&cYou must enter a number for the third argument.");
                         return true;
                     }
                     num = Integer.parseInt(args[2]);
 
-                    if(TournamentPlugin.i.getConfig().contains("arenas." + arenaName)) {
-                       sender.sendMessage("&cYou have already created an arena with this name.");
+                    if(num < 1 || num > 2) {
+                        ps.sendMessage("You must enter either '1' or '2' for the position.");
                         return true;
                     }
 
-                    // arena stuff here
-
+                    mainManager.getArenaManager().setLocation(arenaName, ps, num);
+                    return true;
                 }
                 break;
 

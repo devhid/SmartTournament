@@ -24,6 +24,10 @@ public class MatchManager {
         return winners;
     }
 
+    public void addWinner(Player player) {
+        winners.add(player);
+    }
+
     public void teleportPlayers(Match match) {
         match.getFirstPlayer().teleport(match.getArena().getFirstLoc());
         match.getSecondPlayer().teleport(match.getArena().getSecondLoc());

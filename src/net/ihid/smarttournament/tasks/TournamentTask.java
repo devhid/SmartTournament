@@ -58,6 +58,7 @@ public class TournamentTask extends BukkitRunnable {
 
         else if(TournamentPlugin.getMainManager().getMatchManager().getMatches().size() == 0) {
             Bukkit.broadcastMessage("&cThe tournament has ended due to an error.");
+            Bukkit.getServer().getScheduler().cancelAllTasks();
             cancel();
         }
     }

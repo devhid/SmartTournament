@@ -2,6 +2,7 @@ package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
+import net.ihid.smarttournament.enums.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,39 +16,51 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class TournamentManager {
+
     @Getter
-    private final Tournament[] tournaments = new Tournament[1];
+    private Tournament tournament;
 
     @Getter
     private final List<Player> players = new ArrayList<>();
+
+    public TournamentManager() {
+        tournament = new Tournament();
+    }
 
     public boolean isInTournament(Player player) {
        return players.contains(player);
     }
 
-    public Tournament getTournament() {
-        return tournaments[0];
-    }
-
-    public void addTournament(Tournament tournament) {
-        tournaments[0] = tournament;
-    }
-
-
     public void startTournament() {
         if(!isTournamentRunning()) {
-            getTournament().start();
+            tournament.start();
         }
     }
 
     public void endTournament() {
         if(isTournamentRunning()) {
-            getTournament().end();
+            tournament.end();
         }
     }
 
     public boolean isTournamentRunning() {
-        return getTournament() != null;
+        return tournament.getStage() != TournamentStage.NON_ACTIVE;
+    }
+
+    public void setSpectatorArea(Player player) {
+        final YamlConfiguration config = TournamentPlugin.i.getConfig();
+        final String path = "spectator";
+
+        Location loc = player.getLocation();
+        config.set(path + ".world", loc.getWorld().getName());
+        config.set(path + ".x", loc.getBlockX());
+        config.set(path + ".y", loc.getBlockY());
+        config.set(path + ".z", loc.getBlockZ());
+        config.set(path + ".pitch", loc.getPitch());
+        config.set(path + ".yaw", loc.getYaw());
+
+        TournamentPlugin.i.getRawConfig().saveConfig();
+
     }
 
     public Location getSpectatorArea() {

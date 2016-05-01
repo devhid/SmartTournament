@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public class TournamentListener implements Listener {
                         }
 
                         deadPlayers.add(ps);
-                        mainManager.getMatchManager().getWinners().add(match.getWinner());
+                        mainManager.getMatchManager().addWinner(match.getWinner());
                         match.getWinner().teleport(mainManager.getTournamentManager().getSpectatorArea());
 
                         mainManager.getMatchManager().endMatch(match);
@@ -117,7 +118,7 @@ public class TournamentListener implements Listener {
                         }
                         match.toSet().forEach(player -> player.teleport(mainManager.getTournamentManager().getSpectatorArea()));
 
-                        mainManager.getMatchManager().getWinners().add(match.getWinner());
+                        mainManager.getMatchManager().addWinner(match.getWinner());
                         mainManager.getMatchManager().endMatch(match);
                         break;
                     }
@@ -130,4 +131,23 @@ public class TournamentListener implements Listener {
                 break;
         }
     }
+
+    /*@EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent evt) {
+        if(!mainManager.getTournamentManager().isTournamentRunning()) {
+            return;
+        }
+
+        if(mainManager.getTournamentManager().isInTournament(evt.getPlayer())) {
+            switch(evt.getMessage().) {
+                case "leave":
+                    break;
+                case "join":
+                    break;
+                default:
+                    evt.getPlayer().sendMessage("You cannot use any commands while in a tournament.");
+                    evt.setCancelled(true);
+            }
+        }
+    }*/
 }

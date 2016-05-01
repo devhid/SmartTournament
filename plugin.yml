@@ -8,5 +8,3 @@ commands:
     tournament:
         aliases: [tourney, st, smarttournament, smartt, stournament, stourney]
         description: The base command for all tournament commands.
-
-
