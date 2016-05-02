@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class MatchManager {
     @Getter
-    private final Set<Match> matches = new TreeSet<>();
+    private final List<Match> matches = new ArrayList<>();
 
     private final List<Player> winners = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class MatchManager {
     public void startMatch(Match match) {
         teleportPlayers(match);
         matches.add(match);
-        new MatchTask(match).runTaskLaterAsynchronously(TournamentPlugin.i, match.getDuration());
+        new MatchTask(match).runTaskTimerAsynchronously(TournamentPlugin.i, 0L, match.getDuration());
     }
 
     public void endMatch(Match match) {
