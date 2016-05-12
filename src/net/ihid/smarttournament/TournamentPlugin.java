@@ -1,6 +1,7 @@
 package net.ihid.smarttournament;
 
 import lombok.Getter;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.commands.CommandTournament;
 import net.ihid.smarttournament.data.PluginConfig;
 import net.ihid.smarttournament.listeners.TournamentListener;
@@ -19,6 +20,9 @@ public class TournamentPlugin extends JavaPlugin {
     private static MainManager mainManager;
 
     @Getter
+    private static TournamentAPI tournamentAPI;
+
+    @Getter
     private final PluginConfig rawConfig = new PluginConfig(this, "settings.yml");
 
     @Override
@@ -27,6 +31,8 @@ public class TournamentPlugin extends JavaPlugin {
         saveDefault();
 
         mainManager = new MainManager();
+        tournamentAPI = new TournamentAPI();
+
         loadCommands();
         loadListeners();
     }

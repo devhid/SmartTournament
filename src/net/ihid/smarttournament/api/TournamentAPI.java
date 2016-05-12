@@ -4,6 +4,7 @@ import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
+import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -24,7 +25,19 @@ public class TournamentAPI {
         return mainManager.getArenaManager().getAvailableArena();
     }
 
+    public void setLocation(String arenaName, Player player, int num) {
+        mainManager.getArenaManager().setLocation(arenaName, player, num);
+    }
+
+    public void loadArenas() {
+        mainManager.getArenaManager().loadArenas();
+    }
+
     /** match methods **/
+    public List<Match> getMatches() {
+        return mainManager.getMatchManager().getMatches();
+    }
+
     public List<Player> getWinners() {
         return mainManager.getMatchManager().getWinners();
     }
@@ -46,6 +59,14 @@ public class TournamentAPI {
     }
 
     /** tournament methods **/
+    public Tournament getTournament() {
+        return mainManager.getTournamentManager().getTournament();
+    }
+
+    public List<Player> getPlayers() {
+        return mainManager.getTournamentManager().getPlayers();
+    }
+
     public boolean isInTournament(Player player) {
         return mainManager.getTournamentManager().isInTournament(player);
     }
@@ -64,5 +85,9 @@ public class TournamentAPI {
 
     public Location getSpectatorArea() {
         return mainManager.getTournamentManager().getSpectatorArea();
+    }
+
+    public void setSpectatorArea(Player player) {
+        mainManager.getTournamentManager().setSpectatorArea(player);
     }
 }

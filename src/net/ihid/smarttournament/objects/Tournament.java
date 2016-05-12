@@ -29,7 +29,7 @@ public class Tournament {
     }
 
     public void start() {
-        TournamentPlugin.getMainManager().getArenaManager().loadArenas();
+        TournamentPlugin.getTournamentAPI().loadArenas();
 
         new PreTournamentTask(this).runTaskTimer(TournamentPlugin.i, 0L, 20L); // use enum way for config (look at phone bookmark)
     }

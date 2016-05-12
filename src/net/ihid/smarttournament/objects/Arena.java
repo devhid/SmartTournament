@@ -13,8 +13,6 @@ import java.util.Set;
  * Created by Mikey on 4/24/2016.
  */
 public class Arena {
-    private ArenaManager arenaManager = TournamentPlugin.getMainManager().getArenaManager();
-
     @Getter
     private String arenaName;
 

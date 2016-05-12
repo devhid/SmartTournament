@@ -1,6 +1,7 @@
 package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class TournamentListener implements Listener {
     private TournamentPlugin plugin;
 
-    private static final MainManager mainManager = TournamentPlugin.getMainManager();
+    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
     private Set<Player> deadPlayers;
 
@@ -32,12 +33,12 @@ public class TournamentListener implements Listener {
     public void onRespawn(PlayerRespawnEvent evt) {
         Player ps = evt.getPlayer();
 
-        if(!mainManager.getTournamentManager().isTournamentRunning()) {
+        if(!api.isTournamentRunning()) {
             return;
         }
 
         if(deadPlayers.contains(ps)) {
-            ps.teleport(mainManager.getTournamentManager().getSpectatorArea());
+            ps.teleport(api.getSpectatorArea());
             deadPlayers.remove(ps);
         }
 
@@ -47,13 +48,13 @@ public class TournamentListener implements Listener {
     public void onDeath(PlayerDeathEvent evt) {
         Player ps = evt.getEntity();
 
-        if(!mainManager.getTournamentManager().isTournamentRunning()) {
+        if(!api.isTournamentRunning()) {
             return;
         }
 
-        switch(mainManager.getTournamentManager().getTournament().getStage()) {
+        switch(api.getTournament().getStage()) {
             case WAITING:
-                if(!mainManager.getTournamentManager().isInTournament(ps)) {
+                if(!api.isInTournament(ps)) {
                     return;
                 }
 
@@ -61,10 +62,10 @@ public class TournamentListener implements Listener {
                 break;
 
             case ACTIVE:
-                mainManager.getTournamentManager().getPlayers().remove(ps);
-                mainManager.getMatchManager().getWinners().remove(ps);
+                api.getPlayers().remove(ps);
+                api.getWinners().remove(ps);
 
-                for(Match match : mainManager.getMatchManager().getMatches()) {
+                for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
                         if (ps == match.getFirstPlayer()) {
                             match.setWinner(match.getSecondPlayer());
@@ -73,10 +74,10 @@ public class TournamentListener implements Listener {
                         }
 
                         deadPlayers.add(ps);
-                        mainManager.getMatchManager().addWinner(match.getWinner());
-                        match.getWinner().teleport(mainManager.getTournamentManager().getSpectatorArea());
+                        api.addWinner(match.getWinner());
+                        match.getWinner().teleport(api.getSpectatorArea());
 
-                        mainManager.getMatchManager().endMatch(match);
+                        api.endMatch(match);
                         break;
                     }
                     break;
@@ -93,33 +94,33 @@ public class TournamentListener implements Listener {
     public void onQuit(PlayerQuitEvent evt) {
         Player ps = evt.getPlayer();
 
-        if(!mainManager.getTournamentManager().isTournamentRunning()) {
+        if(!api.isTournamentRunning()) {
             return;
         }
 
-        switch(mainManager.getTournamentManager().getTournament().getStage()) {
+        switch(api.getTournament().getStage()) {
             case WAITING:
-                if(!mainManager.getTournamentManager().isInTournament(ps)) {
+                if(!api.isInTournament(ps)) {
                     return;
                 }
-                mainManager.getTournamentManager().getPlayers().remove(ps);
+                api.getPlayers().remove(ps);
                 break;
 
             case ACTIVE:
-                mainManager.getTournamentManager().getPlayers().remove(ps);
-                mainManager.getMatchManager().getWinners().remove(ps);
+                api.getPlayers().remove(ps);
+                api.getWinners().remove(ps);
 
-                for(Match match : mainManager.getMatchManager().getMatches()) {
+                for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
                         if (ps == match.getFirstPlayer()) {
                             match.setWinner(match.getSecondPlayer());
                         } else {
                             match.setWinner(match.getFirstPlayer());
                         }
-                        match.toSet().forEach(player -> player.teleport(mainManager.getTournamentManager().getSpectatorArea()));
+                        match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
 
-                        mainManager.getMatchManager().addWinner(match.getWinner());
-                        mainManager.getMatchManager().endMatch(match);
+                        api.addWinner(match.getWinner());
+                        api.endMatch(match);
                         break;
                     }
                     break;
@@ -134,11 +135,11 @@ public class TournamentListener implements Listener {
 
     /*@EventHandler
     public void onCommand(PlayerCommandPreprocessEvent evt) {
-        if(!mainManager.getTournamentManager().isTournamentRunning()) {
+        if(!api.isTournamentRunning()) {
             return;
         }
 
-        if(mainManager.getTournamentManager().isInTournament(evt.getPlayer())) {
+        if(api.isInTournament(evt.getPlayer())) {
             switch(evt.getMessage().) {
                 case "leave":
                     break;

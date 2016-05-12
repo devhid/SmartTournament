@@ -19,8 +19,8 @@ public class MatchTask extends BukkitRunnable {
         if (match.getMatchId() != 0) {
             Bukkit.broadcastMessage("&a" + match.getFirstPlayer() + "&7 and &a" + match.getSecondPlayer() + "&7 have both been eliminated for idling.");
 
-            TournamentPlugin.getMainManager().getMatchManager().endMatch(match);
-            match.toSet().forEach(player -> player.teleport(TournamentPlugin.getMainManager().getTournamentManager().getSpectatorArea()));
+            TournamentPlugin.getTournamentAPI().endMatch(match);
+            match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
             cancel();
         }
         match.setMatchId(getTaskId());
