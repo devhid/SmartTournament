@@ -34,7 +34,7 @@ public class CommandTournament implements CommandExecutor {
             checkPerm(sender, "smarttournament.default");
             checkArgs(args, 1);
         } catch (CommandException e) {
-            sender.sendMessage(e.getMessage());
+            sender.sendMessage(ChatUtil.color(e.getMessage()));
             return true;
         }
 
@@ -44,8 +44,8 @@ public class CommandTournament implements CommandExecutor {
             sender.sendMessage(ChatUtil.color(e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
-            sender.sendMessage("&cSevere error. Please contact a server administrator for assistance.");
-            TournamentPlugin.i.disable();
+            sender.sendMessage(ChatUtil.color("&cSevere error. Please contact a server administrator for assistance."));
+            //TournamentPlugin.i.disable();
         }
 
         return true;
@@ -60,21 +60,21 @@ public class CommandTournament implements CommandExecutor {
                 ps = (Player) sender;
 
                 if(!mainManager.getTournamentManager().isTournamentRunning()) {
-                    ps.sendMessage("&cThere are currently no tournaments running.");
+                    ps.sendMessage(ChatUtil.color("&cThere are currently no tournaments running."));
                     return true;
                 }
 
                 if(mainManager.getTournamentManager().getTournament().getStage() == TournamentStage.ACTIVE) {
-                    ps.sendMessage("&cThis tournament has already started.");
+                    ps.sendMessage(ChatUtil.color("&cThis tournament has already started."));
                     return true;
                 }
 
                 if(mainManager.getTournamentManager().getPlayers().contains(ps)) {
-                    ps.sendMessage("&cYou have already joined the tournament.");
+                    ps.sendMessage(ChatUtil.color("&cYou have already joined the tournament."));
                     return true;
                 }
 
-                ps.sendMessage("You have successfully joined the tournament.");
+                ps.sendMessage(ChatUtil.color("You have successfully joined the tournament."));
                 mainManager.getTournamentManager().getPlayers().add(ps);
                 ps.teleport(mainManager.getTournamentManager().getSpectatorArea());
 
@@ -85,11 +85,11 @@ public class CommandTournament implements CommandExecutor {
                 ps = (Player) sender;
 
                 if(!mainManager.getTournamentManager().isTournamentRunning()) {
-                    ps.sendMessage("&cYou are currently not in a tournament.");
+                    ps.sendMessage(ChatUtil.color("&cYou are currently not in a tournament."));
                     return true;
                 }
 
-                ps.sendMessage("You have successfully left the tournament.");
+                ps.sendMessage(ChatUtil.color("You have successfully left the tournament."));
                 mainManager.getTournamentManager().getPlayers().remove(ps);
                 mainManager.getMatchManager().getWinners().remove(ps);
                 break;
@@ -98,17 +98,17 @@ public class CommandTournament implements CommandExecutor {
                 checkPerm(sender, "smarttournament.start");
 
                 if(mainManager.getTournamentManager().isTournamentRunning()) {
-                    sender.sendMessage("&cA tournament is already running.");
+                    sender.sendMessage(ChatUtil.color("&cA tournament is already running."));
                     return true;
                 }
 
                 if(TournamentPlugin.i.getConfig().get("arenas") == null ||
                         TournamentPlugin.i.getConfig().get("spectator") == null) {
-                    sender.sendMessage("You must set a spectator area and at least one arena first.");
+                    sender.sendMessage(ChatUtil.color("You must set a spectator area and at least one arena first."));
                     return true;
                 }
 
-                sender.sendMessage("You have successfully started the tournament.");
+                sender.sendMessage(ChatUtil.color("You have successfully started the tournament."));
                 mainManager.getTournamentManager().startTournament();
                 break;
 
@@ -116,7 +116,7 @@ public class CommandTournament implements CommandExecutor {
                 checkPerm(sender, "smarttournament.end");
 
                 if(!mainManager.getTournamentManager().isTournamentRunning()) {
-                    sender.sendMessage("&cThere is no tournament currently running.");
+                    sender.sendMessage(ChatUtil.color("&cThere is no tournament currently running."));
                     return true;
                 }
                 mainManager.getTournamentManager().endTournament();
@@ -141,13 +141,13 @@ public class CommandTournament implements CommandExecutor {
                     try {
                         num = Integer.parseInt(args[2]);
                     } catch (NumberFormatException ex) {
-                        ps.sendMessage("&cYou must enter a number for the third argument.");
+                        ps.sendMessage(ChatUtil.color("&cYou must enter a number for the third argument."));
                         return true;
                     }
                     num = Integer.parseInt(args[2]);
 
                     if(num < 1 || num > 2) {
-                        ps.sendMessage("You must enter either '1' or '2' for the position.");
+                        ps.sendMessage(ChatUtil.color("You must enter either '1' or '2' for the position."));
                         return true;
                     }
 
@@ -157,7 +157,8 @@ public class CommandTournament implements CommandExecutor {
                 break;
 
             default:
-                sender.sendMessage("Wrong usage randy ass.");
+                sender.sendMessage(ChatUtil.color("Wrong usage bro."));
+                break;
         }
         return false;
     }

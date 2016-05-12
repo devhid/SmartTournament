@@ -5,6 +5,8 @@ import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.tasks.MatchTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 
@@ -36,7 +38,7 @@ public class MatchManager {
     public void startMatch(Match match) {
         teleportPlayers(match);
         matches.add(match);
-        new MatchTask(match).runTaskTimerAsynchronously(TournamentPlugin.i, 0L, match.getDuration());
+        new MatchTask(match).runTaskTimer(TournamentPlugin.i, 0L, match.getDuration());
     }
 
     public void endMatch(Match match) {

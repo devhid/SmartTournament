@@ -21,8 +21,12 @@ public class PreTournamentTask extends BukkitRunnable {
 
     public void run() {
         if(countdown == 0) {
-            Bukkit.broadcastMessage("&eThe tournament has started!");
-            new TournamentTask(tournament).runTaskTimer(TournamentPlugin.i, 0L, 20L);
+            if(TournamentPlugin.getMainManager().getTournamentManager().getPlayers().size() < 4) {
+                Bukkit.broadcastMessage("&eThere are not enough players for this tournament to start.");
+            } else {
+                Bukkit.broadcastMessage("&eThe tournament has started!");
+                new TournamentTask(tournament).runTaskTimer(TournamentPlugin.i, 0L, 20L);
+            }
             cancel();
         }
 
