@@ -60,8 +60,13 @@ public class TournamentListener implements Listener {
                 break;
 
             case ACTIVE:
-                api.getPlayers().remove(ps);
-                api.getWinners().remove(ps);
+                if(api.getPlayers().contains(ps)) {
+                    api.getPlayers().remove(ps);
+                }
+                
+                if(api.getPlayers().contains(ps)) {
+                    api.getWinners().remove(ps);
+                }
 
                 for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
@@ -70,11 +75,14 @@ public class TournamentListener implements Listener {
                         } else {
                             match.setWinner(match.getFirstPlayer());
                         }
-
+                        
                         deadPlayers.add(ps);
-                        api.addWinner(match.getWinner());
+                        
+                        match.getArena().setOccupied(false);
+                        match.setArena(null);
                         match.getWinner().teleport(api.getSpectatorArea());
 
+                        api.addWinner(match.getWinner());
                         api.endMatch(match);
                         break;
                     }
@@ -105,8 +113,13 @@ public class TournamentListener implements Listener {
                 break;
 
             case ACTIVE:
-                api.getPlayers().remove(ps);
-                api.getWinners().remove(ps);
+                if(api.getPlayers().contains(ps)) {
+                    api.getPlayers().remove(ps);
+                }
+                
+                if(api.getPlayers().contains(ps)) {
+                    api.getWinners().remove(ps);
+                }
 
                 for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
@@ -115,6 +128,9 @@ public class TournamentListener implements Listener {
                         } else {
                             match.setWinner(match.getFirstPlayer());
                         }
+                        
+                        match.getArena().setOccupied(false);
+                        match.setArena(null);
                         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
 
                         api.addWinner(match.getWinner());
@@ -123,8 +139,6 @@ public class TournamentListener implements Listener {
                     }
                     break;
                 }
-                break;
-            case FINISHED:
                 break;
             default:
                 break;

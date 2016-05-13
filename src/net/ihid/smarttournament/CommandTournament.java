@@ -80,7 +80,12 @@ public class CommandTournament implements CommandExecutor {
                 ps = (Player) sender;
 
                 if(!api.isTournamentRunning()) {
-                    ps.sendMessage(ChatUtil.color("&cYou are currently not in a tournament."));
+                    ps.sendMessage(ChatUtil.color("&cThere are currently no tournaments running."));
+                    return true;
+                }
+                
+                if(!api.getPlayers().contains(ps)) {
+                    ps.sendMessage(ChatUtil.color("&cYou have not joined a tournament."));
                     return true;
                 }
 
