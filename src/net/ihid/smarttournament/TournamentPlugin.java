@@ -1,10 +1,6 @@
 package net.ihid.smarttournament;
 
 import lombok.Getter;
-import net.ihid.smarttournament.api.TournamentAPI;
-import net.ihid.smarttournament.commands.CommandTournament;
-import net.ihid.smarttournament.data.PluginConfig;
-import net.ihid.smarttournament.listeners.TournamentListener;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

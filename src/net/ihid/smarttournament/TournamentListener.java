@@ -1,14 +1,12 @@
-package net.ihid.smarttournament.listeners;
+package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
-import net.ihid.smarttournament.managers.MainManager;
+import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package net.ihid.smarttournament.api;
+package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.managers.MainManager;

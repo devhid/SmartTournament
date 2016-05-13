@@ -1,4 +1,4 @@
-package net.ihid.smarttournament.util;
+package net.ihid.smarttournament;
 
 import org.bukkit.ChatColor;
 

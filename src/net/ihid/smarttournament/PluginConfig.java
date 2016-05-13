@@ -1,4 +1,4 @@
-package net.ihid.smarttournament.data;
+package net.ihid.smarttournament;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -3,15 +3,9 @@ package net.ihid.smarttournament.objects;
 import lombok.Getter;
 import lombok.Setter;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.enums.TournamentStage;
-import net.ihid.smarttournament.managers.MainManager;
-import net.ihid.smarttournament.managers.TournamentManager;
+import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
-import net.ihid.smarttournament.tasks.TournamentTask;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.List;
 
 /**
  * Created by Mikey on 4/24/2016.

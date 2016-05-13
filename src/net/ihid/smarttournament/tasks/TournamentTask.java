@@ -1,8 +1,8 @@
 package net.ihid.smarttournament.tasks;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
-import net.ihid.smarttournament.enums.TournamentStage;
+import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
