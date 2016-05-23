@@ -1,5 +1,6 @@
 package net.ihid.smarttournament;
 
+import net.ihid.smarttournament.enums.TournamentStage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -69,8 +70,10 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                ps.sendMessage(ChatUtil.color("You have successfully joined the tournament."));
                 api.getPlayers().add(ps);
+                api.removeTag(ps);
+
+                ps.sendMessage(ChatUtil.color("&aYou have successfully joined the tournament."));
                 ps.teleport(api.getSpectatorArea());
 
                 break;
@@ -89,7 +92,7 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                ps.sendMessage(ChatUtil.color("You have successfully left the tournament."));
+                ps.sendMessage(ChatUtil.color("&aYou have successfully left the tournament."));
                 api.getPlayers().remove(ps);
                 api.getWinners().remove(ps);
                 break;
@@ -104,11 +107,11 @@ public class CommandTournament implements CommandExecutor {
 
                 if(TournamentPlugin.i.getConfig().get("arenas") == null ||
                         TournamentPlugin.i.getConfig().get("spectator") == null) {
-                    sender.sendMessage(ChatUtil.color("You must set a spectator area and at least one arena first."));
+                    sender.sendMessage(ChatUtil.color("&cYou must set a spectator area and at least one arena first."));
                     return true;
                 }
 
-                sender.sendMessage(ChatUtil.color("You have successfully started the tournament."));
+                sender.sendMessage(ChatUtil.color("&aYou have successfully started the tournament."));
                 api.startTournament();
                 break;
 
@@ -141,7 +144,7 @@ public class CommandTournament implements CommandExecutor {
                     int num = Integer.parseInt(args[2]);
 
                     if(num < 1 || num > 2) {
-                        ps.sendMessage(ChatUtil.color("You must enter either '1' or '2' for the position."));
+                        ps.sendMessage(ChatUtil.color("&cYou must enter either '1' or '2' for the position."));
                         return true;
                     }
 
@@ -151,7 +154,7 @@ public class CommandTournament implements CommandExecutor {
                 break;
 
             default:
-                sender.sendMessage(ChatUtil.color("Wrong usage bro."));
+                sender.sendMessage(ChatUtil.color("&cImproper usage. Type /tournament start|end|join|leave|setspawn <arena> <num>."));
                 break;
         }
         return false;
@@ -162,7 +165,7 @@ public class CommandTournament implements CommandExecutor {
         try {
             num = Integer.parseInt(number);
         } catch(NumberFormatException ex) {
-            throw new CommandException(ChatUtil.color("You must enter a positive integer for the third argument."));
+            throw new CommandException(ChatUtil.color("&cYou must enter a positive integer for the third argument."));
         }
     }
 

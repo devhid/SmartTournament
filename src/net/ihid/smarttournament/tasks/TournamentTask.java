@@ -2,7 +2,7 @@ package net.ihid.smarttournament.tasks;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentAPI;
-import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.enums.TournamentStage;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
@@ -38,6 +38,9 @@ public class TournamentTask extends BukkitRunnable {
         }
 
         if(players.size() > 1) {
+            System.out.println("in tournament task players: " + api.getPlayers().size());
+            System.out.println("in tournament task winners: " + api.getWinners().size());
+            System.out.println("starting new match");
             Match match = new Match(players.remove(0), players.remove(0));
             match.setArena(arena);
 
@@ -46,24 +49,24 @@ public class TournamentTask extends BukkitRunnable {
         }
 
         else if(players.size() == 1) {
+            System.out.println("in tournament task players == 1 winners: " + api.getWinners().size());
             winners.add(players.remove(0));
         }
 
         else if(winners.size() > 1) {
+            System.out.println("in tournament task winners > 1: " + api.getWinners().size());
             players.addAll(winners);
             winners.clear();
         }
 
         else if(winners.size() == 1 && api.getMatches().size() == 0) {
             Bukkit.broadcastMessage("&e" + winners.get(0).getName() + " has won the tournament!");
-            tournament.setStage(TournamentStage.FINISHED);
-            cancel();
+            tournament.end();
         }
 
         else if(api.getMatches().size() == 0) {
             Bukkit.broadcastMessage("&cThe tournament has ended due to an error.");
-            Bukkit.getServer().getScheduler().cancelAllTasks();
-            cancel();
+            tournament.end();
         }
     }
 }

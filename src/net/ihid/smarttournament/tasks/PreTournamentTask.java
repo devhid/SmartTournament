@@ -1,7 +1,7 @@
 package net.ihid.smarttournament.tasks;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.enums.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,17 +15,21 @@ public class PreTournamentTask extends BukkitRunnable {
 
     public PreTournamentTask(Tournament tournament) {
         this.tournament = tournament;
-        this.countdown = 120;
+        this.countdown = 10;
         tournament.setStage(TournamentStage.WAITING);
     }
 
     public void run() {
         if(countdown == 0) {
-            if(TournamentPlugin.getTournamentAPI().getPlayers().size() < 4) {
+            if(TournamentPlugin.getTournamentAPI().getPlayers().size() < 2) {
+                tournament.end();
                 Bukkit.broadcastMessage("&eThere are not enough players for this tournament to start.");
             } else {
                 Bukkit.broadcastMessage("&eThe tournament has started!");
-                new TournamentTask(tournament).runTaskTimer(TournamentPlugin.i, 0L, 20L);
+                TournamentTask task = new TournamentTask(tournament);
+                tournament.setTournamentTask(task);
+
+                task.runTaskTimer(TournamentPlugin.i, 0L, 20L);
             }
             cancel();
         }

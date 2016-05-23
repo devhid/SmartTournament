@@ -2,7 +2,7 @@ package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.enums.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,7 +28,7 @@ public class TournamentManager {
     }
 
     public boolean isInTournament(Player player) {
-       return players.contains(player);
+       return players.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
     public void startTournament() {

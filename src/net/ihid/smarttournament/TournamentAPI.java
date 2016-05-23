@@ -29,6 +29,10 @@ public class TournamentAPI {
         mainManager.getArenaManager().setLocation(arenaName, player, num);
     }
 
+    public List<Arena> getArenas() {
+        return mainManager.getArenaManager().getArenas();
+    }
+
     public void loadArenas() {
         mainManager.getArenaManager().loadArenas();
     }
@@ -56,6 +60,10 @@ public class TournamentAPI {
 
     public void endMatch(Match match) {
         mainManager.getMatchManager().endMatch(match);
+    }
+
+    public void removeTag(Player player) {
+        mainManager.getMatchManager().removeTag(player);
     }
 
     /** tournament methods **/

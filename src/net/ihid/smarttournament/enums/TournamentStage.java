@@ -1,4 +1,4 @@
-package net.ihid.smarttournament;
+package net.ihid.smarttournament.enums;
 
 /**
  * Created by Mikey on 4/26/2016.
@@ -6,6 +6,5 @@ package net.ihid.smarttournament;
 public enum TournamentStage {
     NON_ACTIVE,
     WAITING,
-    ACTIVE,
-    FINISHED;
+    ACTIVE;
 }

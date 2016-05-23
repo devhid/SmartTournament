@@ -1,7 +1,9 @@
 package net.ihid.smarttournament;
 
+import com.jackproehl.plugins.CombatLog;
 import lombok.Getter;
 import net.ihid.smarttournament.managers.MainManager;
+import net.minelink.ctplus.CombatTagPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,12 +52,12 @@ public class TournamentPlugin extends JavaPlugin {
         rawConfig.saveDefaultConfig();
     }
 
+    public static CombatTagPlus getCombatTag() {
+        return (CombatTagPlus) Bukkit.getServer().getPluginManager().getPlugin("CombatTagPlus");
+    }
+
     @Override
     public YamlConfiguration getConfig() {
         return getRawConfig().getConfig();
-    }
-
-    public void disable() {
-        setEnabled(false);
     }
 }

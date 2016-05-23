@@ -9,6 +9,31 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://A:/Users/Mikey/Folders/ENHANCED_PRISON/plugins/CombatLog-1.8.11-fix.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlus:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mcstats.bukkit:metrics-lite:R8-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-API:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_7_R3:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_7_R4:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_8_R1:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_8_R2:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_8_R3:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-v1_9_R1:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusHook:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusFactions-v1_6:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusFactions-v1_8:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusFactions-v2_6:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusFactions-v2_7:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusWG-v5:1.2.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusWG-v6:1.2.4-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />

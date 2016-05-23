@@ -3,6 +3,7 @@ package net.ihid.smarttournament.objects;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
+import net.ihid.smarttournament.tasks.MatchTask;
 import org.bukkit.entity.Player;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  */
 public class Match {
     @Getter
-    private Player firstPlayer, secondPlayer;
+    private Player initiator, opponent;
 
     @Getter @Setter
     private Arena arena;
@@ -23,15 +24,27 @@ public class Match {
     private long duration;
 
     @Getter @Setter
-    private int matchId;
+    private boolean isRunning;
 
-    public Match(Player firstPlayer, Player secondPlayer) {
-        this.firstPlayer = firstPlayer;
-        this.secondPlayer = secondPlayer;
+    @Getter @Setter
+    private MatchTask matchTask;
+
+    public Match(Player initiator, Player opponent) {
+        this.initiator = initiator;
+        this.opponent = opponent;
         this.duration = 20L /*ticks*/ * 60 /*seconds*/ * 3 /*minutes*/;
+        this.isRunning = true;
+    }
+
+    public void reset() {
+        arena.setOccupied(false);
+        arena = null;
+        matchTask.cancel();
+        isRunning = false;
+        winner = null;
     }
 
     public Set<Player> toSet() {
-        return Sets.newHashSet(firstPlayer, secondPlayer);
+        return Sets.newHashSet(initiator, opponent);
     }
 }

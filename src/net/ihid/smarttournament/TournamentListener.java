@@ -1,11 +1,15 @@
 package net.ihid.smarttournament;
 
+import com.jackproehl.plugins.CombatLog;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.objects.Match;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -20,7 +24,7 @@ public class TournamentListener implements Listener {
 
     private TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
-    private Set<Player> deadPlayers;
+    private Set<String> deadPlayers; // eventually use config to get rid of players
 
     public TournamentListener(TournamentPlugin instance) {
         plugin = instance;
@@ -28,120 +32,103 @@ public class TournamentListener implements Listener {
     }
 
     @EventHandler
-    public void onRespawn(PlayerRespawnEvent evt) {
-        Player ps = evt.getPlayer();
-
-        if(!api.isTournamentRunning()) {
-            return;
-        }
-
-        if(deadPlayers.contains(ps)) {
-            ps.teleport(api.getSpectatorArea());
-            deadPlayers.remove(ps);
-        }
-
-    }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent evt) {
-        Player ps = evt.getEntity();
-
-        if(!api.isTournamentRunning()) {
-            return;
-        }
-
-        switch(api.getTournament().getStage()) {
-            case WAITING:
-                if(!api.isInTournament(ps)) {
-                    return;
-                }
-
-                deadPlayers.add(ps);
-                break;
-
-            case ACTIVE:
-                if(api.getPlayers().contains(ps)) {
-                    api.getPlayers().remove(ps);
-                }
-                
-                if(api.getPlayers().contains(ps)) {
-                    api.getWinners().remove(ps);
-                }
-
-                for(Match match : api.getMatches()) {
-                    if(match.toSet().contains(ps)) {
-                        if (ps == match.getFirstPlayer()) {
-                            match.setWinner(match.getSecondPlayer());
-                        } else {
-                            match.setWinner(match.getFirstPlayer());
-                        }
-                        
-                        deadPlayers.add(ps);
-                        
-                        match.getArena().setOccupied(false);
-                        match.setArena(null);
-                        match.getWinner().teleport(api.getSpectatorArea());
-
-                        api.addWinner(match.getWinner());
-                        api.endMatch(match);
-                        break;
-                    }
-                    break;
-                }
-                break;
-            case FINISHED:
-                break;
-            default:
-                break;
-        }
-    }
-
-    @EventHandler
     public void onQuit(PlayerQuitEvent evt) {
-        Player ps = evt.getPlayer();
+        manageQuitOrDeath(evt, evt.getPlayer());
+    }
 
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent evt) {
+        if(!(evt.getEntity() instanceof Player)) {
+            return;
+        }
+
+        manageQuitOrDeath(evt, (Player) evt.getEntity());
+    }
+
+    private void manageQuitOrDeath(Event evt, Player ps) {
         if(!api.isTournamentRunning()) {
+            return;
+        }
+
+        if(!api.isInTournament(ps)) {
             return;
         }
 
         switch(api.getTournament().getStage()) {
             case WAITING:
-                if(!api.isInTournament(ps)) {
-                    return;
-                }
-                api.getPlayers().remove(ps);
-                break;
+                if(evt.getEventName().equals("PlayerQuitEvent")) {
+                    removeFromTournament(ps);
+                } else {
+                    EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
 
+                    if(isDead(ed)) {
+                        ed.getEntity().teleport(api.getSpectatorArea());
+                    }
+                }
+                break;
             case ACTIVE:
-                if(api.getPlayers().contains(ps)) {
-                    api.getPlayers().remove(ps);
-                }
-                
-                if(api.getPlayers().contains(ps)) {
-                    api.getWinners().remove(ps);
-                }
 
                 for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
-                        if (ps == match.getFirstPlayer()) {
-                            match.setWinner(match.getSecondPlayer());
+
+                        if(evt.getEventName().equals("PlayerQuitEvent")) {
+                            PlayerQuitEvent pq = (PlayerQuitEvent) evt;
+                            ps = pq.getPlayer();
                         } else {
-                            match.setWinner(match.getFirstPlayer());
+                            EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
+
+                            ps = (Player) ed.getEntity();
+
+                            if(!isDead(ed)) {
+                                return;
+                            }
+                            ed.setCancelled(true);
                         }
-                        
-                        match.getArena().setOccupied(false);
-                        match.setArena(null);
+
+                        if (ps == match.getInitiator()) {
+                            match.setWinner(match.getOpponent());
+                        } else {
+                            match.setWinner(match.getInitiator());
+                        }
+
+
+                        ps.setHealth(20.0);
+
+                        removeFromTournament(ps);
+
+                        api.removeTag(ps);
+                        api.removeTag(match.getWinner());
+
                         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
 
+                        System.out.println("winners: " + api.getWinners().size());
+
                         api.addWinner(match.getWinner());
                         api.endMatch(match);
                         break;
                     }
                     break;
                 }
+                removeFromTournament(ps);
                 break;
             default:
                 break;
+        }
+    }
+
+    private boolean isDead(EntityDamageByEntityEvent evt) {
+        Player ps = (Player) evt.getEntity();
+
+        return ps.getHealth() <= evt.getDamage();
+    }
+
+    private void removeFromTournament(Player ps) {
+        if(api.getWinners().contains(ps)) {
+            api.getWinners().remove(ps);
+        }
+
+        if(api.getPlayers().contains(ps)) {
+            api.getPlayers().remove(ps);
         }
     }
 

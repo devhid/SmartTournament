@@ -16,13 +16,15 @@ public class MatchTask extends BukkitRunnable {
     }
 
     public void run() {
-        if (match.getMatchId() != 0) {
-            Bukkit.broadcastMessage("&a" + match.getFirstPlayer() + "&7 and &a" + match.getSecondPlayer() + "&7 have both been eliminated for idling.");
-
-            TournamentPlugin.getTournamentAPI().endMatch(match);
-            match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
+        if(!match.isRunning()) {
             cancel();
+            return;
         }
-        match.setMatchId(getTaskId());
+
+        Bukkit.broadcastMessage("&a" + match.getInitiator().getName() + "&7 and &a" + match.getOpponent().getName() + "&7 have both been eliminated for idling.");
+        TournamentPlugin.getTournamentAPI().endMatch(match);
+
+        match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
+        cancel();
     }
 }
