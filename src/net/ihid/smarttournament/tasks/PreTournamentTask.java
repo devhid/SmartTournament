@@ -1,7 +1,7 @@
 package net.ihid.smarttournament.tasks;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.enums.TournamentStage;
+import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;

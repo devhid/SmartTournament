@@ -1,6 +1,5 @@
 package net.ihid.smarttournament;
 
-import net.ihid.smarttournament.enums.TournamentStage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
