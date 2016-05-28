@@ -1,5 +1,6 @@
 package net.ihid.smarttournament.tasks;
 
+import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
@@ -23,9 +24,9 @@ public class PreTournamentTask extends BukkitRunnable {
         if(countdown == 0) {
             if(TournamentPlugin.getTournamentAPI().getPlayers().size() < 2) {
                 tournament.end();
-                Bukkit.broadcastMessage("&eThere are not enough players for this tournament to start.");
+                Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &eThere are not enough players for this tournament to start."));
             } else {
-                Bukkit.broadcastMessage("&eThe tournament has started!");
+                Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &eThe tournament has started!"));
                 TournamentTask task = new TournamentTask(tournament);
                 tournament.setTournamentTask(task);
 
@@ -35,7 +36,7 @@ public class PreTournamentTask extends BukkitRunnable {
         }
 
         else if(countdown == 120 || countdown == 60 || countdown == 30 || countdown == 10 || countdown == 3 || countdown == 2 || countdown == 1) {
-            Bukkit.broadcastMessage("&7The tournament will begin in &c " + countdown + " &7second(s).");
+            Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &7The tournament will begin in&c " + countdown + " &7second(s)."));
         }
 
         countdown--;

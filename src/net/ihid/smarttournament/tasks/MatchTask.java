@@ -1,5 +1,6 @@
 package net.ihid.smarttournament.tasks;
 
+import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.Bukkit;
@@ -21,7 +22,7 @@ public class MatchTask extends BukkitRunnable {
             return;
         }
 
-        Bukkit.broadcastMessage("&a" + match.getInitiator().getName() + "&7 and &a" + match.getOpponent().getName() + "&7 have both been eliminated for idling.");
+        Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &a" + match.getInitiator().getName() + "&7 and &a" + match.getOpponent().getName() + "&7 have both been eliminated for idling."));
         TournamentPlugin.getTournamentAPI().endMatch(match);
 
         match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));

@@ -1,5 +1,6 @@
 package net.ihid.smarttournament.tasks;
 
+import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.TournamentStage;
@@ -60,12 +61,12 @@ public class TournamentTask extends BukkitRunnable {
         }
 
         else if(winners.size() == 1 && api.getMatches().size() == 0) {
-            Bukkit.broadcastMessage("&e" + winners.get(0).getName() + " has won the tournament!");
+            Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &e" + winners.get(0).getName() + " has won the tournament!"));
             tournament.end();
         }
 
         else if(api.getMatches().size() == 0) {
-            Bukkit.broadcastMessage("&cThe tournament has ended due to an error.");
+            Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &cThe tournament has ended due to an error."));
             tournament.end();
         }
     }

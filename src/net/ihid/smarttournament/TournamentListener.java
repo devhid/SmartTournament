@@ -24,11 +24,8 @@ public class TournamentListener implements Listener {
 
     private TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
-    private Set<String> deadPlayers; // eventually use config to get rid of players
-
     public TournamentListener(TournamentPlugin instance) {
         plugin = instance;
-        deadPlayers = new HashSet<>();
     }
 
     @EventHandler
@@ -41,7 +38,6 @@ public class TournamentListener implements Listener {
         if(!(evt.getEntity() instanceof Player)) {
             return;
         }
-
         manageQuitOrDeath(evt, (Player) evt.getEntity());
     }
 
@@ -62,6 +58,7 @@ public class TournamentListener implements Listener {
                     EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
 
                     if(isDead(ed)) {
+                        ed.setCancelled(true);
                         ed.getEntity().teleport(api.getSpectatorArea());
                     }
                 }
@@ -70,16 +67,21 @@ public class TournamentListener implements Listener {
 
                 for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
-
+                        System.out.println("handle event for match" + match.getInitiator().getName() + " " + match.getOpponent().getName());
                         if(evt.getEventName().equals("PlayerQuitEvent")) {
                             PlayerQuitEvent pq = (PlayerQuitEvent) evt;
                             ps = pq.getPlayer();
                         } else {
-                            EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
+                            EntityDamageByEntityEvent ed = null;
+
+                            if(evt instanceof EntityDamageByEntityEvent) {
+                                ed = (EntityDamageByEntityEvent) evt;
+                            }
 
                             ps = (Player) ed.getEntity();
 
                             if(!isDead(ed)) {
+                                System.out.println("the hit was not lethal");
                                 return;
                             }
                             ed.setCancelled(true);
@@ -91,24 +93,18 @@ public class TournamentListener implements Listener {
                             match.setWinner(match.getInitiator());
                         }
 
-
                         ps.setHealth(20.0);
+                        //removeFromTournament(ps);
 
-                        removeFromTournament(ps);
-
-                        api.removeTag(ps);
-                        api.removeTag(match.getWinner());
-
+                        api.removeTag(ps, match.getWinner());
                         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
-
-                        System.out.println("winners: " + api.getWinners().size());
 
                         api.addWinner(match.getWinner());
                         api.endMatch(match);
                         break;
                     }
-                    break;
                 }
+                System.out.println(ps.getName() + " was damaged and could not find match");
                 removeFromTournament(ps);
                 break;
             default:

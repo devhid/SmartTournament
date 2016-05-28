@@ -25,23 +25,13 @@ public class MatchManager {
     @Getter
     private final List<Player> winners = new ArrayList<>();
 
-    /*public List<Player> getWinners() {
-        matches.forEach(match -> winners.add(match.getWinner()));
-        return winners;
-    }*/
-
     public void addWinner(Player player) {
         winners.add(player);
     }
 
     public void teleportPlayers(Match match) {
         final TagManager tagManager = TournamentPlugin.getCombatTag().getTagManager();
-        for(Player player: match.toSet()) {
-            if(player != null && tagManager.isTagged(player.getUniqueId())) {
-                tagManager.untag(player.getUniqueId());
-            }
-        }
-        //match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
+        match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
 
         match.getInitiator().teleport(match.getArena().getFirstLoc());
         match.getOpponent().teleport(match.getArena().getSecondLoc());
@@ -62,21 +52,20 @@ public class MatchManager {
 
     public void endMatch(Match match) {
         Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &c" + match.getWinner().getName() + " &7has won the fight!"));
+
         final TagManager tagManager = TournamentPlugin.getCombatTag().getTagManager();
-        for(Player player: match.toSet()) {
-            if(player != null && tagManager.isTagged(player.getUniqueId())) {
-                tagManager.untag(player.getUniqueId());
-            }
-        }
-        //match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
+        match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
 
         match.reset();
         matches.remove(match);
     }
 
-    public void removeTag(Player ps) {
-        if(TournamentPlugin.getCombatTag().getTagManager().isTagged(ps.getUniqueId())) {
+    public void removeTag(Player... ps) {
+        final TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
+        Arrays.stream(ps).filter(player -> tm.isTagged(player.getUniqueId())).forEach(player -> tm.untag(player.getUniqueId()));
+
+        /*if(TournamentPlugin.getCombatTag().getTagManager().isTagged(ps.getUniqueId())) {
             TournamentPlugin.getCombatTag().getTagManager().untag(ps.getUniqueId());
-        }
+        }*/
     }
 }

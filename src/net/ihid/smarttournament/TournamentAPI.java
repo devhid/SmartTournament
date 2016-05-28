@@ -62,8 +62,8 @@ public class TournamentAPI {
         mainManager.getMatchManager().endMatch(match);
     }
 
-    public void removeTag(Player player) {
-        mainManager.getMatchManager().removeTag(player);
+    public void removeTag(Player... ps) {
+        mainManager.getMatchManager().removeTag(ps);
     }
 
     /** tournament methods **/
