@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -67,7 +68,6 @@ public class TournamentListener implements Listener {
 
                 for(Match match : api.getMatches()) {
                     if(match.toSet().contains(ps)) {
-                        System.out.println("handle event for match" + match.getInitiator().getName() + " " + match.getOpponent().getName());
                         if(evt.getEventName().equals("PlayerQuitEvent")) {
                             PlayerQuitEvent pq = (PlayerQuitEvent) evt;
                             ps = pq.getPlayer();
@@ -81,7 +81,6 @@ public class TournamentListener implements Listener {
                             ps = (Player) ed.getEntity();
 
                             if(!isDead(ed)) {
-                                System.out.println("the hit was not lethal");
                                 return;
                             }
                             ed.setCancelled(true);
@@ -94,7 +93,6 @@ public class TournamentListener implements Listener {
                         }
 
                         ps.setHealth(20.0);
-                        //removeFromTournament(ps);
 
                         api.removeTag(ps, match.getWinner());
                         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
@@ -104,7 +102,6 @@ public class TournamentListener implements Listener {
                         break;
                     }
                 }
-                System.out.println(ps.getName() + " was damaged and could not find match");
                 removeFromTournament(ps);
                 break;
             default:
@@ -115,7 +112,7 @@ public class TournamentListener implements Listener {
     private boolean isDead(EntityDamageByEntityEvent evt) {
         Player ps = (Player) evt.getEntity();
 
-        return ps.getHealth() <= evt.getDamage();
+        return ps.getHealth() <= evt.getFinalDamage();
     }
 
     private void removeFromTournament(Player ps) {

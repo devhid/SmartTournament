@@ -1,13 +1,12 @@
 package net.ihid.smarttournament;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
-import java.util.function.Consumer;
 
 /**
  * Created by Mikey on 6/7/2016.
@@ -22,14 +21,16 @@ public class SavedPlayerState {
     private final float saturation;
     private final float exhaustion;
 
+    /* Inventory */
+    private final ItemStack[] contents, armorContents;
+
     /* Exp */
     private final float exp;
 
     /* Health */
     private final double health;
 
-    /* Location */
-    private final Location location;
+    /* Velocity */
     private final Vector velocity;
 
     /* Effects */
@@ -45,11 +46,13 @@ public class SavedPlayerState {
         this.saturation = player.getSaturation();
         this.exhaustion = player.getExhaustion();
 
+        this.contents = player.getInventory().getContents();
+        this.armorContents = player.getInventory().getArmorContents();
+
         this.exp = player.getExp();
 
         this.health = player.getHealth();
 
-        this.location = player.getLocation();
         this.velocity = player.getVelocity();
 
         this.effects = player.getActivePotionEffects();
@@ -84,6 +87,9 @@ public class SavedPlayerState {
 
         player.setExp(exp);
 
+        player.getInventory().setContents(contents);
+        player.getInventory().setArmorContents(armorContents);
+
         player.setHealth(health);
 
         for (PotionEffect e : player.getActivePotionEffects()) {
@@ -93,6 +99,8 @@ public class SavedPlayerState {
         player.addPotionEffects(effects);
 
         player.setGameMode(gameMode);
+
+        player.setVelocity(velocity);
 
         reverted = true; // exception in teleportation handler isnt our fault
     }

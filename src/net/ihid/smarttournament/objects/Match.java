@@ -32,7 +32,7 @@ public class Match {
     public Match(Player initiator, Player opponent) {
         this.initiator = initiator;
         this.opponent = opponent;
-        this.duration = 20L /*ticks*/ * 60 /*seconds*/ * 3 /*minutes*/;
+        this.duration = 20L /*ticks*/ * 10 /*seconds*/ /** 3 /*minutes*/;
         this.isRunning = true;
     }
 

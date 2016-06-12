@@ -3,6 +3,7 @@ package net.ihid.smarttournament.managers;
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -55,8 +56,8 @@ public class TournamentManager {
         config.set(path + ".x", loc.getBlockX());
         config.set(path + ".y", loc.getBlockY());
         config.set(path + ".z", loc.getBlockZ());
-        config.set(path + ".pitch", loc.getPitch());
         config.set(path + ".yaw", loc.getYaw());
+        config.set(path + ".pitch", loc.getPitch());
 
         TournamentPlugin.i.getRawConfig().saveConfig();
 
@@ -64,13 +65,13 @@ public class TournamentManager {
 
     public Location getSpectatorArea() {
         final YamlConfiguration config = TournamentPlugin.i.getConfig();
-        final String path = "spectator.";
+        final String path = "spectator";
 
-        return new Location(Bukkit.getWorld(config.getString(path + "world")),
-                config.getInt(path + "x"),
-                config.getInt(path + "y"),
-                config.getInt(path + "z"),
-                (float) config.getDouble(path + "yaw"),
-                (float) config.getDouble(path + "pitch"));
+        return new Location(Bukkit.getWorld(config.getString(path + ".world")),
+                config.getInt(path + ".x"),
+                config.getInt(path + ".y"),
+                config.getInt(path + ".z"),
+                (float) config.getDouble(path + ".yaw"),
+                (float) config.getDouble(path + ".pitch"));
     }
 }

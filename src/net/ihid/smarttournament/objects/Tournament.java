@@ -27,7 +27,7 @@ public class Tournament {
         TournamentPlugin.getTournamentAPI().getArenas().clear();
         TournamentPlugin.getTournamentAPI().loadArenas();
 
-        new PreTournamentTask(this).runTaskTimer(TournamentPlugin.i, 0L, 20L); // use enum way for config (look at phone bookmark)
+        new PreTournamentTask(this).runTaskTimer(TournamentPlugin.i, 0L, 20L);
     }
 
     public void end() {

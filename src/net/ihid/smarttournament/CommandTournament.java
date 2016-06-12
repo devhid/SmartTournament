@@ -1,6 +1,7 @@
 package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.config.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -85,7 +86,7 @@ public class CommandTournament implements CommandExecutor {
                     ps.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
-                
+
                 if(!api.getPlayers().contains(ps)) {
                     ps.sendMessage(Lang.NOT_IN_TOURNAMENT.toString());
                     return true;
@@ -110,6 +111,7 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_STARTING_BROADCAST.toString());
                 sender.sendMessage(Lang.TOURNAMENT_START_SUCCESS.toString());
                 api.startTournament();
                 break;
@@ -121,7 +123,9 @@ public class CommandTournament implements CommandExecutor {
                     sender.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
-                sender.sendMessage(ChatUtil.color(""));
+
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_END_BROADCAST.toString());
+                sender.sendMessage(Lang.TOURNAMENT_END_SUCCESS.toString());
                 api.endTournament();
                 break;
 
@@ -149,7 +153,7 @@ public class CommandTournament implements CommandExecutor {
                         return true;
                     }
 
-                    sender.sendMessage("&4You have successfully set the arena: " + arenaName + ".");
+                    sender.sendMessage(Lang.ARENA_SET_SUCCESS.toString().replace("{arena}", arenaName));
                     api.setLocation(arenaName, ps, num);
                     return true;
                 }
@@ -166,22 +170,22 @@ public class CommandTournament implements CommandExecutor {
         try {
             num = Integer.parseInt(number);
         } catch(NumberFormatException ex) {
-            throw new CommandException(ChatUtil.color("&4Tournament &8// &cYou must enter a positive integer for the third argument."));
+            throw new CommandException(Lang.INVALID_NUMBER.toString());
         }
     }
 
     private void checkPerm(CommandSender cs, String perm) {
         if (!cs.hasPermission(perm))
-            throw new CommandException("&4Tournament &8// &cYou do not have permission to execute this command.");
+            throw new CommandException(Lang.NO_PERMISSION.toString());
     }
 
     private void checkArgs(String[] args, int min) {
         if (args.length < min)
-            throw new CommandException("&4Tournament &8// &cImproper usage. Type /tournament start | end | join | leave | setspawn <arena> <num>.");
+            throw new CommandException(Lang.IMPROPER_USAGE.toString());
     }
 
     private void checkPlayer(CommandSender cs) {
         if (!(cs instanceof Player))
-            throw new CommandException("&4Tournament &8// &cThis command is not usable from the console.");
+            throw new CommandException(Lang.INVALID_SENDER.toString());
     }
 }
