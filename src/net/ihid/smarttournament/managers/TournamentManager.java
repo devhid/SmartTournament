@@ -16,7 +16,6 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class TournamentManager {
-
     @Getter
     private Tournament tournament;
 
@@ -71,7 +70,7 @@ public class TournamentManager {
                 config.getInt(path + "x"),
                 config.getInt(path + "y"),
                 config.getInt(path + "z"),
-                config.getInt(path + "yaw"),
-                config.getInt(path + "pitch"));
+                (float) config.getDouble(path + "yaw"),
+                (float) config.getDouble(path + "pitch"));
     }
 }

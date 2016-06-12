@@ -1,7 +1,7 @@
 package net.ihid.smarttournament;
 
-import com.jackproehl.plugins.CombatLog;
 import lombok.Getter;
+import net.ihid.smarttournament.config.PluginConfig;
 import net.ihid.smarttournament.managers.MainManager;
 import net.minelink.ctplus.CombatTagPlus;
 import org.bukkit.Bukkit;
