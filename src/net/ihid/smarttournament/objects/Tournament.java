@@ -24,10 +24,10 @@ public class Tournament {
     }
 
     public void start() {
-        TournamentPlugin.getTournamentAPI().getArenas().clear();
+        reset(false);
         TournamentPlugin.getTournamentAPI().loadArenas();
 
-        new PreTournamentTask(this).runTaskTimer(TournamentPlugin.i, 0L, 20L);
+        new PreTournamentTask(this).runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
     }
 
     public void end() {
@@ -35,14 +35,17 @@ public class Tournament {
             tournamentTask.cancel();
         }
 
-        reset();
+        reset(true);
         setStage(TournamentStage.NON_ACTIVE);
     }
 
-    public void reset() {
+    public void reset(boolean includePlayers) {
         TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
-        api.getPlayers().clear();
+        if(includePlayers) {
+            api.getPlayers().clear();
+        }
+
         api.getWinners().clear();
         api.getMatches().clear();
         api.getArenas().clear();

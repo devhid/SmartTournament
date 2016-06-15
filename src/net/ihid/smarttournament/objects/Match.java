@@ -3,6 +3,7 @@ package net.ihid.smarttournament.objects;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
+import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.tasks.MatchTask;
 import org.bukkit.entity.Player;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class Match {
     public Match(Player initiator, Player opponent) {
         this.initiator = initiator;
         this.opponent = opponent;
-        this.duration = 20L /*ticks*/ * 10 /*seconds*/ /** 3 /*minutes*/;
+        this.duration = 20L /*ticks*/ * TournamentPlugin.getInstance().getConfig().getInt("configuration.match-duration") /*seconds*/;
         this.isRunning = true;
     }
 

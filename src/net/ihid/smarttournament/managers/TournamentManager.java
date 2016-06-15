@@ -1,6 +1,7 @@
 package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
+import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
@@ -17,6 +18,8 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class TournamentManager {
+    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+
     @Getter
     private Tournament tournament;
 
@@ -28,7 +31,24 @@ public class TournamentManager {
     }
 
     public boolean isInTournament(Player player) {
-       return players.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return players.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+    }
+
+    public void addToTournament(Player player) {
+        players.add(player);
+    }
+
+    public void removeFromTournament(Player player) {
+        TournamentAPI api = TournamentPlugin.getTournamentAPI();
+
+        if (api.getWinners().contains(player)) {
+            api.getWinners().remove(player);
+        }
+
+        if (api.getPlayers().contains(player)) {
+            api.getPlayers().remove(player);
+        }
+
     }
 
     public void startTournament() {
@@ -48,10 +68,11 @@ public class TournamentManager {
     }
 
     public void setSpectatorArea(Player player) {
-        final YamlConfiguration config = TournamentPlugin.i.getConfig();
-        final String path = "spectator";
+        YamlConfiguration config = plugin.getConfig();
 
         Location loc = player.getLocation();
+        String path = "spectator";
+
         config.set(path + ".world", loc.getWorld().getName());
         config.set(path + ".x", loc.getBlockX());
         config.set(path + ".y", loc.getBlockY());
@@ -59,19 +80,18 @@ public class TournamentManager {
         config.set(path + ".yaw", loc.getYaw());
         config.set(path + ".pitch", loc.getPitch());
 
-        TournamentPlugin.i.getRawConfig().saveConfig();
+        plugin.getRawConfig().saveConfig();
 
     }
 
     public Location getSpectatorArea() {
-        final YamlConfiguration config = TournamentPlugin.i.getConfig();
-        final String path = "spectator";
+        YamlConfiguration config = plugin.getConfig();
 
-        return new Location(Bukkit.getWorld(config.getString(path + ".world")),
-                config.getInt(path + ".x"),
-                config.getInt(path + ".y"),
-                config.getInt(path + ".z"),
-                (float) config.getDouble(path + ".yaw"),
-                (float) config.getDouble(path + ".pitch"));
+        return new Location(Bukkit.getWorld(config.getString("spectator.world")),
+                config.getInt("spectator.x"),
+                config.getInt("spectator.y"),
+                config.getInt("spectator.z"),
+                (float) config.getDouble("spectator.yaw"),
+                (float) config.getDouble("spectator.pitch"));
     }
 }

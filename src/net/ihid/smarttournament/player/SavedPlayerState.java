@@ -1,4 +1,4 @@
-package net.ihid.smarttournament;
+package net.ihid.smarttournament.player;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashSet;
@@ -54,7 +55,7 @@ public class TournamentListener implements Listener {
         switch(api.getTournament().getStage()) {
             case WAITING:
                 if(evt.getEventName().equals("PlayerQuitEvent")) {
-                    removeFromTournament(ps);
+                    api.removeFromTournament(ps);
                 } else {
                     EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
 
@@ -92,20 +93,22 @@ public class TournamentListener implements Listener {
                             match.setWinner(match.getInitiator());
                         }
 
-                        ps.setHealth(20.0);
-
-                        api.removeTag(ps, match.getWinner());
-                        match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
-
                         api.addWinner(match.getWinner());
                         api.endMatch(match);
                         break;
                     }
                 }
-                removeFromTournament(ps);
+                api.removeFromTournament(ps);
                 break;
             default:
                 break;
+        }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent evt) {
+        if(api.isInTournament(evt.getPlayer())) {
+            evt.setCancelled(true);
         }
     }
 
@@ -113,16 +116,6 @@ public class TournamentListener implements Listener {
         Player ps = (Player) evt.getEntity();
 
         return ps.getHealth() <= evt.getFinalDamage();
-    }
-
-    private void removeFromTournament(Player ps) {
-        if(api.getWinners().contains(ps)) {
-            api.getWinners().remove(ps);
-        }
-
-        if(api.getPlayers().contains(ps)) {
-            api.getPlayers().remove(ps);
-        }
     }
 
     /*@EventHandler

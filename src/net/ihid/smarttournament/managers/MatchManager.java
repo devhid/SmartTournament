@@ -2,17 +2,15 @@ package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
 import net.ihid.smarttournament.ChatUtil;
-import net.ihid.smarttournament.InventoryManager;
-import net.ihid.smarttournament.SavedPlayerState;
+import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.player.NewPlayerState;
+import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.tasks.MatchTask;
 import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 
 import java.util.*;
@@ -21,6 +19,13 @@ import java.util.*;
  * Created by Mikey on 4/24/2016.
  */
 public class MatchManager {
+    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
+
+    private NewPlayerState nps = new NewPlayerState();
+
+    @Getter
+    private TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
+
     @Getter
     private final List<Match> matches = new ArrayList<>();
 
@@ -35,8 +40,7 @@ public class MatchManager {
     }
 
     public void teleportPlayers(Match match) {
-        final TagManager tagManager = TournamentPlugin.getCombatTag().getTagManager();
-        match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
+        removeTag(match.getInitiator(), match.getOpponent());
 
         match.getInitiator().teleport(match.getArena().getFirstLoc());
         match.getOpponent().teleport(match.getArena().getSecondLoc());
@@ -49,29 +53,28 @@ public class MatchManager {
         matches.add(match);
 
         mapStates(states, match);
-        match.toSet().forEach(InventoryManager::equip);
+        match.toSet().forEach(player -> nps.modifyPlayer(player));
 
         MatchTask task = new MatchTask(match);
         match.setMatchTask(task);
 
-        task.runTaskLater(TournamentPlugin.i, match.getDuration());
+        task.runTaskLater(TournamentPlugin.getInstance(), match.getDuration());
     }
 
     public void endMatch(Match match) {
         Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &c" + match.getWinner().getName() + " &7has won the fight!"));
 
-        final TagManager tagManager = TournamentPlugin.getCombatTag().getTagManager();
-        match.toSet().stream().filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
+        removeTag(match.getInitiator(), match.getOpponent());
+        match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
 
+        matches.remove(match);
         unmapStates(states, match);
 
         match.reset();
-        matches.remove(match);
     }
 
     public void removeTag(Player... ps) {
-        final TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
-        Arrays.stream(ps).filter(player -> tm.isTagged(player.getUniqueId())).forEach(player -> tm.untag(player.getUniqueId()));
+        Arrays.stream(ps).filter(player -> player != null && tm.isTagged(player.getUniqueId())).forEach(player -> tm.untag(player.getUniqueId()));
     }
 
     private void mapStates(HashMap<Player, SavedPlayerState> states, Match match) {
@@ -85,5 +88,8 @@ public class MatchManager {
 
         SavedPlayerState op = states.get(match.getOpponent());
         op.revert();
+
+        states.remove(match.getInitiator());
+        states.remove(match.getOpponent());
     }
 }

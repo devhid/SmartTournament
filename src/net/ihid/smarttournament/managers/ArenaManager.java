@@ -16,6 +16,8 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class ArenaManager {
+    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+
     @Getter
     private List<Arena> arenas = new ArrayList<>();
 
@@ -33,10 +35,11 @@ public class ArenaManager {
     }
 
     public void setLocation(String arenaName, Player player, int num) {
-        final YamlConfiguration config = TournamentPlugin.i.getConfig();
-        final String path = "arenas." + arenaName + "." + num;
+        YamlConfiguration config = plugin.getConfig();
 
         Location loc = player.getLocation();
+        String path = "arenas." + arenaName + "." + num;
+
         config.set(path + ".world", loc.getWorld().getName());
         config.set(path + ".x", loc.getBlockX());
         config.set(path + ".y", loc.getBlockY());
@@ -44,12 +47,11 @@ public class ArenaManager {
         config.set(path + ".yaw", loc.getYaw());
         config.set(path + ".pitch", loc.getPitch());
 
-        TournamentPlugin.i.getRawConfig().saveConfig();
-        TournamentPlugin.i.getRawConfig().reloadConfig();
+        plugin.getRawConfig().saveConfig();
     }
 
     public void loadArenas() {
-        YamlConfiguration config = TournamentPlugin.i.getConfig();
+        YamlConfiguration config = plugin.getConfig();
         
         for(String str: config.getConfigurationSection("arenas").getKeys(false)) {
             String path = "arenas." + str + ".";
@@ -67,6 +69,7 @@ public class ArenaManager {
                     config.getInt(path + "2.z"),
                     (float)config.getDouble(path + "2.yaw"),
                     (float)config.getDouble(path + "2.pitch"));
+
             arenas.add(new Arena(str, firstLoc, secondLoc));
         }
     }

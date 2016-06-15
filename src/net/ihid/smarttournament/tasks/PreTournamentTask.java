@@ -27,11 +27,11 @@ public class PreTournamentTask extends BukkitRunnable {
                 tournament.end();
                 Bukkit.broadcastMessage(Lang.NOT_ENOUGH_PLAYERS.toString());
             } else {
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_HAS_STARTED_BROADCAST.toString());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
                 TournamentTask task = new TournamentTask(tournament);
                 tournament.setTournamentTask(task);
 
-                task.runTaskTimer(TournamentPlugin.i, 0L, 20L);
+                task.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
             }
             cancel();
         }

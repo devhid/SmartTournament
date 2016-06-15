@@ -79,6 +79,14 @@ public class TournamentAPI {
         return mainManager.getTournamentManager().isInTournament(player);
     }
 
+    public void addToTournament(Player player) {
+        mainManager.getTournamentManager().addToTournament(player);
+    }
+
+    public void removeFromTournament(Player player) {
+        mainManager.getTournamentManager().removeFromTournament(player);
+    }
+
     public void startTournament() {
         mainManager.getTournamentManager().startTournament();
     }

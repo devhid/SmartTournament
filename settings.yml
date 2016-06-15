@@ -5,32 +5,92 @@
 #========================================================================================================#
 
 configuration:
-   tournament_delay: 120
+   prefix: "&4Tournament &8//&a "
+   prefix-enabled: true
+   tournament-start-delay: 10
+   match-duration: 180
+   minimum-players-to-start: 2
+   when-fighting:
+      ensure-max-health: true
+      ensure-max-hunger: true
+      ensure-max-saturation: true
+      ensure-min-exhaustion: true
+      ensure-survival-gamemode: true
+      prevent-drop-items: true
+
+      effects:
+      - SPEED: 2
+      - INCREASE_DAMAGE: 1
+      armor:
+         0:
+            material: DIAMOND_HELMET
+            enchantments:
+            - PROTECTION_ENVIRONMENTAL: 2
+         1:
+            material: DIAMOND_CHESTPLATE
+            enchantments:
+            - PROTECTION_ENVIRONMENTAL: 2
+         2:
+            material: DIAMOND_LEGGINGS
+            enchantments:
+            - PROTECTION_ENVIRONMENTAL: 2
+         3:
+            material: DIAMOND_BOOTS
+            enchantments:
+            - PROTECTION_ENVIRONMENTAL: 2
+      inventory:
+         0:
+            material: DIAMOND_SWORD
+            material-id:
+            amount: 1
+            enchantments:
+            - DAMAGE_ALL: 2
+            slot-numbers:
+            - 0
+         1:
+            material: POTION
+            material-id: 16421
+            amount: 1
+            enchantments: {}
+            - DAMAGE_ALL: 2
+            slot-numbers:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+
+   cmd-whitelist: {}
 
 messages:
-    prefix: "&4Tournament &8//&a "
     no-permission: "&cYou do not have permission to execute this command."
     improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <num> | setspawn spectator."
     invalid-sender: "&cInvalid sender. You must be a player to perform this command."
     invalid-number: "&cInvalid number. You must enter a positive integer."
     severe-error: "&cSevere error. Please contact an administrator."
     no-tournaments-running: "&cThere are currently no tournaments running."
-    tournament-already-started: "&cThe tournament has already started."
-    already-in-tournament: "&cYou are already in the tournament."
     not-enough-players: "&eThere are not enough players for this tournament to start."
-    joined-tournament-success: "&aYou have successfully joined the tournament."
+    already-in-tournament: "&cYou are already in the tournament."
     not-in-tournament: "&cYou are currently not in a tournament."
-    left-tournament-success: "&aYou have successfully left the tournament."
-    tournament-areas-not-set: "&cThe spectator or arena areas are not set."
+    match-idle-broadcast: "&a{initiator}&7 and &a{opponent} &7have both been eliminated for idling."
     spectator-area-set: "&aYou have successfully set the spectator area."
+    arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
+    arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
+    tournament-already-started: "&cThe tournament has already started."
+    tournament-areas-not-set: "&cThe spectator or arena areas are not set."
+    tournament-joined-success: "&aYou have successfully joined the tournament."
+    tournament-joined-broadcast: "&e{username} &7has joined the tournament."
+    tournament-left-success: "&aYou have successfully left the tournament."
     tournament-start-success: "&aYou have successfully started the tournament."
-    tournament-start-broadcast: "&eA tournament has just started! Type /tournament join to join the tournament."
+    tournament-pre-start-broadcast: "&eA 1v1 tournament is going to begin soon."
+    tournament-post-start-broadcast: "&eThe tournament has started! Type /tournament join to join the tournament."
     tournament-end-success: "&aYou have successfully ended the tournament."
     tournament-end-broadcast: "&eThe tournament has forcibly been ended."
     tournament-end-error: "&cThe tournament has ended due to an error."
-    match-idle-broadcast: "&a{initiator}&7 and &a{opponent} &7have both been eliminated for idling."
-    arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
-    arena-set-success: "&aYou have successfully set the arena: {arena}."
+
 spectator:
 
 arenas:

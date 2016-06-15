@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
  * Created by Mikey on 4/25/2016.
  */
 public class CommandTournament implements CommandExecutor {
-    private TournamentPlugin plugin;
-
+    private TournamentPlugin plugin = TournamentPlugin.getInstance();
     private TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
     public CommandTournament(TournamentPlugin instance) {
@@ -70,10 +69,16 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                api.getPlayers().add(ps);
+                if(!hasEmptyInventory(ps)) {
+                    ps.sendMessage(""); // add message to lang.
+                    return true;
+                }
+
+                api.addToTournament(ps);
                 api.removeTag(ps);
 
-                ps.sendMessage(Lang.JOINED_TOURNAMENT_SUCCESS.toString());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", ps.getName()));
+                ps.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
                 ps.teleport(api.getSpectatorArea());
 
                 break;
@@ -92,9 +97,8 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                ps.sendMessage(Lang.LEFT_TOURNAMENT_SUCCESS.toString());
-                api.getPlayers().remove(ps);
-                api.getWinners().remove(ps);
+                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
+                api.removeFromTournament(ps);
                 break;
 
             case "start":
@@ -105,14 +109,15 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                if(TournamentPlugin.i.getConfig().get("arenas") == null ||
-                        TournamentPlugin.i.getConfig().get("spectator") == null) {
+                if(plugin.getConfig().get("arenas") == null ||
+                        plugin.getConfig().get("spectator") == null) {
                     sender.sendMessage(Lang.TOURNAMENT_AREAS_NOT_SET.toString());
                     return true;
                 }
 
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_STARTING_BROADCAST.toString());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_PRE_START_BROADCAST.toString());
                 sender.sendMessage(Lang.TOURNAMENT_START_SUCCESS.toString());
+                
                 api.startTournament();
                 break;
 
@@ -126,6 +131,7 @@ public class CommandTournament implements CommandExecutor {
 
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_END_BROADCAST.toString());
                 sender.sendMessage(Lang.TOURNAMENT_END_SUCCESS.toString());
+                
                 api.endTournament();
                 break;
 
@@ -146,14 +152,14 @@ public class CommandTournament implements CommandExecutor {
                     String arenaName = args[1];
 
                     checkNum(args[2]);
-                    int num = Integer.parseInt(args[2]);
+                    Integer num = Integer.parseInt(args[2]);
 
                     if(num < 1 || num > 2) {
                         ps.sendMessage(Lang.ARENA_INVALID_POSITION.toString());
                         return true;
                     }
 
-                    sender.sendMessage(Lang.ARENA_SET_SUCCESS.toString().replace("{arena}", arenaName));
+                    sender.sendMessage(Lang.ARENA_SET_SUCCESS.toString().replace("{arena}", arenaName).replace("{position}", num.toString()));
                     api.setLocation(arenaName, ps, num);
                     return true;
                 }
@@ -163,6 +169,10 @@ public class CommandTournament implements CommandExecutor {
                 throw new CommandException(Lang.IMPROPER_USAGE.toString());
         }
         return false;
+    }
+
+    private boolean hasEmptyInventory(Player player) {
+        return player.getInventory().getContents().length == 0 && player.getInventory().getArmorContents().length == 0;
     }
 
     private void checkNum(String number) {
