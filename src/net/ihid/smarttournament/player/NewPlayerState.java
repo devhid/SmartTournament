@@ -1,17 +1,15 @@
 package net.ihid.smarttournament.player;
 
-import com.google.common.collect.ImmutableSet;
 import net.ihid.smarttournament.TournamentPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,17 +26,31 @@ public class NewPlayerState {
     }
 
     public void setDefaultState(Player player) {
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-        player.setExhaustion(0);
-        player.setSaturation(20);
-        player.setGameMode(GameMode.SURVIVAL);
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-max-health")) {
+            player.setHealth(20.0);
+        }
+
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-max-hunger")) {
+            player.setFoodLevel(20);
+        }
+
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-min-exhaustion")) {
+            player.setExhaustion(0);
+        }
+
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-max-saturation")) {
+            player.setSaturation(20);
+        }
+
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-survival-gamemode")) {
+            player.setGameMode(GameMode.SURVIVAL);
+        }
     }
 
     private void addInventory(Player player) {
         for(String slot: plugin.getConfig().getConfigurationSection("configuration.when-fighting.inventory").getKeys(false)) {
             String path = "configuration.when-fighting.inventory." + slot + ".";
-            ItemStack item = new ItemStack(Material.getMaterial(path + ".material"), plugin.getConfig().getInt(path + ".amount"),
+            ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString(path + ".material")), plugin.getConfig().getInt(path + ".amount"),
                     (short) plugin.getConfig().getInt(path + ".material-id"));
 
             for(String enc: plugin.getConfig().getConfigurationSection(path + "enchantments").getKeys(false)) {
@@ -47,11 +59,11 @@ public class NewPlayerState {
                     System.err.println("Invalid enchantment type. Please check if you spelt the enchantments correctly.");
                     break;
                 }
-                int level = plugin.getConfig().getInt(path);
+                int level = plugin.getConfig().getInt(path + "enchantments." + enc);
 
                 item.addUnsafeEnchantment(enchantment, level);
             }
-            List<Integer> slots = plugin.getConfig().getIntegerList(path + ".slots");
+            List<Integer> slots = plugin.getConfig().getIntegerList(path + "slot-numbers");
 
             for(int i = 0; i < slots.size(); i++) {
                 player.getInventory().setItem(slots.get(i), item);
@@ -61,11 +73,11 @@ public class NewPlayerState {
 
     private void addArmor(Player player) {
         ItemStack[] armorContents = new ItemStack[4];
-        int count = 0;
+        int count = 3;
 
         for(String slot: plugin.getConfig().getConfigurationSection("configuration.when-fighting.armor").getKeys(false)) {
             String path = "configuration.when-fighting.armor." + slot + ".";
-            ItemStack armor = new ItemStack(Material.getMaterial(path + ".material"), 1);
+            ItemStack armor = new ItemStack(Material.getMaterial(plugin.getConfig().getString(path + "material")), 1);
 
             Set<String> enchants = plugin.getConfig().getConfigurationSection(path + "enchantments").getKeys(false);
 
@@ -76,25 +88,28 @@ public class NewPlayerState {
                         System.err.println("Invalid enchantment type. Please check if you spelt the enchantments correctly.");
                         break;
                     }
-                    int level = plugin.getConfig().getInt(path);
+                    int level = plugin.getConfig().getInt(path + "enchantments." + enc);
                     armor.addUnsafeEnchantment(enchantment, level);
                 }
             }
             armorContents[count] = armor;
-            count++;
+            count--;
         }
 
         player.getInventory().setArmorContents(armorContents);
     }
 
     private void addEffects(Player player) {
-        for(String effect: plugin.getConfig().getConfigurationSection("configuration.when-fighting.effects").getKeys(false)) {
+        Set<String> effects = plugin.getConfig().getConfigurationSection("configuration.when-fighting.effects").getKeys(false);
+
+        for(String effect: effects) {
             String path = "configuration.when-fighting.effects." + effect;
 
             PotionEffectType type = PotionEffectType.getByName(effect.toUpperCase());
             int level = plugin.getConfig().getInt(path)!=1 ? plugin.getConfig().getInt(path)-2: 0;
+            int duration = plugin.getConfig().getInt("configuration.match-duration");
 
-            player.addPotionEffect(new PotionEffect(type, Integer.MAX_VALUE, level));
+            player.addPotionEffect(new PotionEffect(type, duration, level));
         }
     }
 }

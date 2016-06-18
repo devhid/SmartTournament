@@ -2,10 +2,12 @@ package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.config.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
 /**
@@ -70,7 +72,7 @@ public class CommandTournament implements CommandExecutor {
                 }
 
                 if(!hasEmptyInventory(ps)) {
-                    ps.sendMessage(""); // add message to lang.
+                    ps.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString()); // add message to lang.
                     return true;
                 }
 
@@ -172,7 +174,23 @@ public class CommandTournament implements CommandExecutor {
     }
 
     private boolean hasEmptyInventory(Player player) {
-        return player.getInventory().getContents().length == 0 && player.getInventory().getArmorContents().length == 0;
+        for(ItemStack item: player.getInventory().getContents()) {
+            if(item != null) {
+                if(item.getType() != Material.AIR) {
+                    return false;
+                }
+            }
+        }
+
+        for(ItemStack item: player.getInventory().getArmorContents()) {
+            if(item != null) {
+                if(item.getType() != Material.AIR) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private void checkNum(String number) {

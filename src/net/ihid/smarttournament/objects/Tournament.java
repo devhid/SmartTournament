@@ -7,6 +7,8 @@ import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
 import net.ihid.smarttournament.tasks.TournamentTask;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 /**
  * Created by Mikey on 4/24/2016.
@@ -41,6 +43,15 @@ public class Tournament {
 
     public void reset(boolean includePlayers) {
         TournamentAPI api = TournamentPlugin.getTournamentAPI();
+
+        /*for(Player player: Bukkit.getOnlinePlayers()) {
+            if(api.isInTournament(player)) {
+                if(api.getPlayerStates().containsKey(player)) {
+                    api.getPlayerStates().get(player).revert();
+                    api.getPlayerStates().remove(player);
+                }
+            }
+        }*/
 
         if(includePlayers) {
             api.getPlayers().clear();

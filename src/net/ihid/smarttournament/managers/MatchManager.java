@@ -3,6 +3,7 @@ package net.ihid.smarttournament.managers;
 import lombok.Getter;
 import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.player.NewPlayerState;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.objects.Match;
@@ -20,11 +21,10 @@ import java.util.*;
  */
 public class MatchManager {
     private TournamentAPI api = TournamentPlugin.getTournamentAPI();
-
-    private NewPlayerState nps = new NewPlayerState();
+    private TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
 
     @Getter
-    private TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
+    private final NewPlayerState nps = new NewPlayerState();
 
     @Getter
     private final List<Match> matches = new ArrayList<>();
@@ -47,13 +47,15 @@ public class MatchManager {
     }
 
     public void startMatch(Match match) {
-        Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &c" + match.getInitiator().getName() + " &7and&c " + match.getOpponent().getName() + " &7are now fighting."));
+        Bukkit.broadcastMessage(Lang.MATCH_START_BROADCAST.toString()
+                .replace("{initiator}", match.getInitiator().getName())
+                .replace("{opponent}", match.getOpponent().getName()));
 
         teleportPlayers(match);
         matches.add(match);
 
         mapStates(states, match);
-        match.toSet().forEach(player -> nps.modifyPlayer(player));
+        match.toSet().forEach(nps::modifyPlayer);
 
         MatchTask task = new MatchTask(match);
         match.setMatchTask(task);
@@ -62,7 +64,7 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
-        Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &c" + match.getWinner().getName() + " &7has won the fight!"));
+        Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         removeTag(match.getInitiator(), match.getOpponent());
         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));

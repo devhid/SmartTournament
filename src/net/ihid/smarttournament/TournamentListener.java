@@ -92,6 +92,7 @@ public class TournamentListener implements Listener {
                         } else {
                             match.setWinner(match.getInitiator());
                         }
+                        match.toSet().forEach(api::setDefaultState);
 
                         api.addWinner(match.getWinner());
                         api.endMatch(match);
@@ -107,7 +108,7 @@ public class TournamentListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent evt) {
-        if(api.isInTournament(evt.getPlayer())) {
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.prevent-drop-items") && api.isInTournament(evt.getPlayer())) {
             evt.setCancelled(true);
         }
     }

@@ -12,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Created by Mikey on 4/24/2016.
  */
 public class TournamentPlugin extends JavaPlugin {
+    public static TournamentPlugin i;
+
     @Getter
     private static MainManager mainManager;
 
@@ -23,6 +25,7 @@ public class TournamentPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        i = this;
         saveDefault();
 
         mainManager = new MainManager();

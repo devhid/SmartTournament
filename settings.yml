@@ -10,6 +10,16 @@ configuration:
    tournament-start-delay: 10
    match-duration: 180
    minimum-players-to-start: 2
+   countdown-values:
+   - 120
+   - 60
+   - 30
+   - 15
+   - 10
+   - 5
+   - 3
+   - 2
+   - 1
    when-fighting:
       ensure-max-health: true
       ensure-max-hunger: true
@@ -19,40 +29,40 @@ configuration:
       prevent-drop-items: true
 
       effects:
-      - SPEED: 2
-      - INCREASE_DAMAGE: 1
+         SPEED: 2
+         INCREASE_DAMAGE: 1
       armor:
          0:
             material: DIAMOND_HELMET
             enchantments:
-            - PROTECTION_ENVIRONMENTAL: 2
+               PROTECTION_ENVIRONMENTAL: 2
          1:
             material: DIAMOND_CHESTPLATE
             enchantments:
-            - PROTECTION_ENVIRONMENTAL: 2
+               PROTECTION_ENVIRONMENTAL: 2
          2:
             material: DIAMOND_LEGGINGS
             enchantments:
-            - PROTECTION_ENVIRONMENTAL: 2
+               PROTECTION_ENVIRONMENTAL: 2
          3:
             material: DIAMOND_BOOTS
             enchantments:
-            - PROTECTION_ENVIRONMENTAL: 2
+               PROTECTION_ENVIRONMENTAL: 2
       inventory:
          0:
             material: DIAMOND_SWORD
             material-id:
             amount: 1
             enchantments:
-            - DAMAGE_ALL: 2
+               DAMAGE_ALL: 2
             slot-numbers:
             - 0
          1:
             material: POTION
             material-id: 16421
             amount: 1
-            enchantments: {}
-            - DAMAGE_ALL: 2
+            enchantments:
+              DAMAGE_ALL: 2
             slot-numbers:
             - 1
             - 2
@@ -75,12 +85,16 @@ messages:
     not-enough-players: "&eThere are not enough players for this tournament to start."
     already-in-tournament: "&cYou are already in the tournament."
     not-in-tournament: "&cYou are currently not in a tournament."
+    match-start-broadcast: "&c{initiator} &7and &c{opponent} &7are now fighting."
+    match-winner-broadcast: "{winner} has won the match!"
     match-idle-broadcast: "&a{initiator}&7 and &a{opponent} &7have both been eliminated for idling."
     spectator-area-set: "&aYou have successfully set the spectator area."
     arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
     arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
+    require-empty-inventory: "&cYou must empty your inventory and armor contents before joining."
     tournament-already-started: "&cThe tournament has already started."
     tournament-areas-not-set: "&cThe spectator or arena areas are not set."
+    tournament-countdown-broadcast: "&7The tournament will begin in &c{countdown} &7second(s)."
     tournament-joined-success: "&aYou have successfully joined the tournament."
     tournament-joined-broadcast: "&e{username} &7has joined the tournament."
     tournament-left-success: "&aYou have successfully left the tournament."
@@ -90,6 +104,7 @@ messages:
     tournament-end-success: "&aYou have successfully ended the tournament."
     tournament-end-broadcast: "&eThe tournament has forcibly been ended."
     tournament-end-error: "&cThe tournament has ended due to an error."
+    tournament-winner-broadcast: "&e{winner} &7has won the tournament!"
 
 spectator:
 

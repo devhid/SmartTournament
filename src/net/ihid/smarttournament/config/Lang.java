@@ -17,12 +17,16 @@ public enum Lang {
     NOT_ENOUGH_PLAYERS("messages.not-enough-players"),
     ALREADY_IN_TOURNAMENT("messages.already-in-tournament"),
     NOT_IN_TOURNAMENT("messages.not-in-tournament"),
+    MATCH_START_BROADCAST("messages.match-start-broadcast"),
+    MATCH_WINNER_BROADCAST("messages.match-winner-broadcast"),
     MATCH_IDLE_BROADCAST("messages.match-idle-broadcast"),
     SPECTATOR_AREA_SET("messages.spectator-area-set"),
     ARENA_INVALID_POSITION("messages.arena-invalid-position"),
     ARENA_SET_SUCCESS("messages.arena-set-success"),
+    REQUIRE_EMPTY_INVENTORY("messages.require-empty-inventory"),
     TOURNAMENT_ALREADY_STARTED("messages.tournament-already-started"),
     TOURNAMENT_AREAS_NOT_SET("messages.tournament-areas-not-set"),
+    TOURNAMENT_COUNTDOWN_BROADCAST("messages.tournament-countdown-broadcast"),
     TOURNAMENT_JOINED_SUCCESS("messages.tournament-joined-success"), // changed
     TOURNAMENT_JOINED_BROADCAST("messages.tournament-joined-broadcast"), //changed
     TOURNAMENT_LEFT_SUCCESS("messages.tournament-left-success"), // changed
@@ -31,8 +35,8 @@ public enum Lang {
     TOURNAMENT_POST_START_BROADCAST("messages.tournament-post-start-broadcast"),
     TOURNAMENT_END_SUCCESS("messages.tournament-end-success"),
     TOURNAMENT_END_BROADCAST("messages.tournament-end-broadcast"),
-    TOURNAMENT_END_ERROR("messages.tournament-end-error");
-
+    TOURNAMENT_END_ERROR("messages.tournament-end-error"),
+    TOURNAMENT_WINNER_BROADCAST("messages.tournament-winner-broadcast");
 
     private final String path;
     private YamlConfiguration config = TournamentPlugin.getInstance().getConfig();

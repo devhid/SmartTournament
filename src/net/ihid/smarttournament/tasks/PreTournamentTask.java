@@ -12,18 +12,20 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Created by Mikey on 4/25/2016.
  */
 public class PreTournamentTask extends BukkitRunnable {
+    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+
     private Tournament tournament;
     private int countdown;
 
     public PreTournamentTask(Tournament tournament) {
         this.tournament = tournament;
-        this.countdown = 10;
+        this.countdown = plugin.getConfig().getInt("configuration.tournament-start-delay");
         tournament.setStage(TournamentStage.WAITING);
     }
 
     public void run() {
         if(countdown == 0) {
-            if(TournamentPlugin.getTournamentAPI().getPlayers().size() < 2) { // configure minimum starting players
+            if(TournamentPlugin.getTournamentAPI().getPlayers().size() < plugin.getConfig().getInt("configuration.minimum-players-to-start")) { // configure minimum starting players
                 tournament.end();
                 Bukkit.broadcastMessage(Lang.NOT_ENOUGH_PLAYERS.toString());
             } else {
@@ -36,8 +38,8 @@ public class PreTournamentTask extends BukkitRunnable {
             cancel();
         }
 
-        else if(countdown == 120 || countdown == 60 || countdown == 30 || countdown == 10 || countdown == 3 || countdown == 2 || countdown == 1) {
-            Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &7The tournament will begin in&c " + countdown + " &7second(s)."));
+        else if(plugin.getConfig().getIntegerList("configuration.countdown-values").contains(countdown)) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_COUNTDOWN_BROADCAST.toString().replace("{countdown}", String.valueOf(countdown)));
         }
 
         countdown--;

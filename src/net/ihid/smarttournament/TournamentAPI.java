@@ -5,9 +5,11 @@ import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
+import net.ihid.smarttournament.player.SavedPlayerState;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ import java.util.List;
 public class TournamentAPI {
     private final MainManager mainManager = TournamentPlugin.getMainManager();
 
-    /** arena methods **/
+    /** Arena **/
     public boolean isOccupied(Arena arena) {
         return mainManager.getArenaManager().isOccupied(arena);
     }
@@ -37,13 +39,17 @@ public class TournamentAPI {
         mainManager.getArenaManager().loadArenas();
     }
 
-    /** match methods **/
+    /** Match **/
     public List<Match> getMatches() {
         return mainManager.getMatchManager().getMatches();
     }
 
     public List<Player> getWinners() {
         return mainManager.getMatchManager().getWinners();
+    }
+
+    public HashMap<Player, SavedPlayerState> getPlayerStates() {
+        return mainManager.getMatchManager().getStates();
     }
 
     public void addWinner(Player player) {
@@ -66,7 +72,7 @@ public class TournamentAPI {
         mainManager.getMatchManager().removeTag(ps);
     }
 
-    /** tournament methods **/
+    /** Tournament **/
     public Tournament getTournament() {
         return mainManager.getTournamentManager().getTournament();
     }
@@ -105,5 +111,10 @@ public class TournamentAPI {
 
     public void setSpectatorArea(Player player) {
         mainManager.getTournamentManager().setSpectatorArea(player);
+    }
+
+    /** Miscellaneous **/
+    public void setDefaultState(Player player) {
+        mainManager.getMatchManager().getNps().setDefaultState(player);
     }
 }

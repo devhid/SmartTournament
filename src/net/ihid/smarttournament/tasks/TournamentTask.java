@@ -57,7 +57,7 @@ public class TournamentTask extends BukkitRunnable {
         }
 
         else if(winners.size() == 1 && api.getMatches().size() == 0) {
-            Bukkit.broadcastMessage(ChatUtil.color("&4Tournament &8// &e" + winners.get(0).getName() + " has won the tournament!"));
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_WINNER_BROADCAST.toString().replace("{winner}", winners.get(0).getName()));
             tournament.end();
         }
 
