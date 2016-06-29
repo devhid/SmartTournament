@@ -10,6 +10,8 @@ import net.ihid.smarttournament.tasks.TournamentTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+
 /**
  * Created by Mikey on 4/24/2016.
  */
@@ -21,6 +23,9 @@ public class Tournament {
     @Getter @Setter
     private TournamentTask tournamentTask;
 
+    @Getter
+    private PreTournamentTask preTournamentTask;
+
     public Tournament() {
         this.stage = TournamentStage.NON_ACTIVE;
     }
@@ -29,10 +34,15 @@ public class Tournament {
         reset(false);
         TournamentPlugin.getTournamentAPI().loadArenas();
 
-        new PreTournamentTask(this).runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
+        preTournamentTask = new PreTournamentTask(this);
+        preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
     }
 
     public void end() {
+        if(preTournamentTask != null) {
+            preTournamentTask.cancel();
+        }
+
         if(tournamentTask != null) {
             tournamentTask.cancel();
         }
@@ -41,19 +51,19 @@ public class Tournament {
         setStage(TournamentStage.NON_ACTIVE);
     }
 
-    public void reset(boolean includePlayers) {
+    public void reset(boolean end) {
         TournamentAPI api = TournamentPlugin.getTournamentAPI();
+        Collection<? extends Player> online = Bukkit.getOnlinePlayers();
 
-        /*for(Player player: Bukkit.getOnlinePlayers()) {
-            if(api.isInTournament(player)) {
+        if(end) {
+            online.stream().filter(api::isInTournament).forEach(player -> {
                 if(api.getPlayerStates().containsKey(player)) {
                     api.getPlayerStates().get(player).revert();
                     api.getPlayerStates().remove(player);
                 }
-            }
-        }*/
+                player.teleport(api.getWorldSpawn());
+            });
 
-        if(includePlayers) {
             api.getPlayers().clear();
         }
 

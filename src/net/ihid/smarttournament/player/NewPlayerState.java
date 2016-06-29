@@ -109,7 +109,7 @@ public class NewPlayerState {
             int level = plugin.getConfig().getInt(path)!=1 ? plugin.getConfig().getInt(path)-2: 0;
             int duration = plugin.getConfig().getInt("configuration.match-duration");
 
-            player.addPotionEffect(new PotionEffect(type, duration, level));
+            player.addPotionEffect(new PotionEffect(type, 20 * duration, level));
         }
     }
 }

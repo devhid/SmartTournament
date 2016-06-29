@@ -20,8 +20,7 @@ import java.util.*;
  * Created by Mikey on 4/24/2016.
  */
 public class MatchManager {
-    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
-    private TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
+    private final TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
 
     @Getter
     private final NewPlayerState nps = new NewPlayerState();
@@ -64,6 +63,7 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
+        TournamentAPI api = TournamentPlugin.getTournamentAPI();
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         removeTag(match.getInitiator(), match.getOpponent());

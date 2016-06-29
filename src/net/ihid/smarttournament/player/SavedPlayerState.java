@@ -102,7 +102,7 @@ public class SavedPlayerState {
 
         player.setVelocity(velocity);
 
-        reverted = true; // exception in teleportation handler isnt our fault
+        reverted = true;
     }
 
     public boolean isReverted() {

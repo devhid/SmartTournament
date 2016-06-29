@@ -24,6 +24,7 @@ public enum Lang {
     ARENA_INVALID_POSITION("messages.arena-invalid-position"),
     ARENA_SET_SUCCESS("messages.arena-set-success"),
     REQUIRE_EMPTY_INVENTORY("messages.require-empty-inventory"),
+    WORLD_SPAWN_SET("messages.world-spawn-set"),
     TOURNAMENT_ALREADY_STARTED("messages.tournament-already-started"),
     TOURNAMENT_AREAS_NOT_SET("messages.tournament-areas-not-set"),
     TOURNAMENT_COUNTDOWN_BROADCAST("messages.tournament-countdown-broadcast"),
@@ -35,7 +36,6 @@ public enum Lang {
     TOURNAMENT_POST_START_BROADCAST("messages.tournament-post-start-broadcast"),
     TOURNAMENT_END_SUCCESS("messages.tournament-end-success"),
     TOURNAMENT_END_BROADCAST("messages.tournament-end-broadcast"),
-    TOURNAMENT_END_ERROR("messages.tournament-end-error"),
     TOURNAMENT_WINNER_BROADCAST("messages.tournament-winner-broadcast");
 
     private final String path;

@@ -61,9 +61,9 @@ public class TournamentTask extends BukkitRunnable {
             tournament.end();
         }
 
-        else if(api.getMatches().size() == 0) {
+        /*else if(api.getMatches().size() == 0) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_END_ERROR.toString());
             tournament.end();
-        }
+        }*/
     }
 }

@@ -15,9 +15,6 @@ public class TournamentPlugin extends JavaPlugin {
     public static TournamentPlugin i;
 
     @Getter
-    private static MainManager mainManager;
-
-    @Getter
     private static TournamentAPI tournamentAPI;
 
     @Getter
@@ -28,7 +25,6 @@ public class TournamentPlugin extends JavaPlugin {
         i = this;
         saveDefault();
 
-        mainManager = new MainManager();
         tournamentAPI = new TournamentAPI();
 
         loadCommands();
@@ -37,7 +33,9 @@ public class TournamentPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        if(tournamentAPI.isTournamentRunning()) {
+            tournamentAPI.getTournament().end();
+        }
     }
 
     private void loadCommands() {

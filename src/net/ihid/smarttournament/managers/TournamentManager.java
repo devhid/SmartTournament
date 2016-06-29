@@ -66,22 +66,44 @@ public class TournamentManager {
     public boolean isTournamentRunning() {
         return tournament.getStage() != TournamentStage.NON_ACTIVE;
     }
+    
+    public void setWorldSpawn(Player player) {
+        YamlConfiguration config = plugin.getConfig();
+        Location loc = player.getLocation();
+
+        config.set("world-spawn.world", loc.getWorld().getName());
+        config.set("world-spawn.x", loc.getBlockX());
+        config.set("world-spawn.y", loc.getBlockY());
+        config.set("world-spawn.z", loc.getBlockZ());
+        config.set("world-spawn.yaw", loc.getYaw());
+        config.set("world-spawn.pitch", loc.getPitch());
+
+        plugin.getRawConfig().saveConfig();
+    }
+    
+    public Location getWorldSpawn() {
+        YamlConfiguration config = plugin.getConfig();
+
+        return new Location(Bukkit.getWorld(config.getString("world-spawn.world")),
+                config.getInt("world-spawn.x"),
+                config.getInt("world-spawn.y"),
+                config.getInt("world-spawn.z"),
+                (float) config.getDouble("world-spawn.yaw"),
+                (float) config.getDouble("world-spawn.pitch"));
+    }
 
     public void setSpectatorArea(Player player) {
         YamlConfiguration config = plugin.getConfig();
-
         Location loc = player.getLocation();
-        String path = "spectator";
 
-        config.set(path + ".world", loc.getWorld().getName());
-        config.set(path + ".x", loc.getBlockX());
-        config.set(path + ".y", loc.getBlockY());
-        config.set(path + ".z", loc.getBlockZ());
-        config.set(path + ".yaw", loc.getYaw());
-        config.set(path + ".pitch", loc.getPitch());
+        config.set("spectator.world", loc.getWorld().getName());
+        config.set("spectator.x", loc.getBlockX());
+        config.set("spectator.y", loc.getBlockY());
+        config.set("spectator.z", loc.getBlockZ());
+        config.set("spectator.yaw", loc.getYaw());
+        config.set("spectator.pitch", loc.getPitch());
 
         plugin.getRawConfig().saveConfig();
-
     }
 
     public Location getSpectatorArea() {

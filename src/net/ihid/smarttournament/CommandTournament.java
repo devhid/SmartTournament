@@ -112,7 +112,8 @@ public class CommandTournament implements CommandExecutor {
                 }
 
                 if(plugin.getConfig().get("arenas") == null ||
-                        plugin.getConfig().get("spectator") == null) {
+                        plugin.getConfig().get("spectator") == null ||
+                        plugin.getConfig().get("world-spawn") == null) {
                     sender.sendMessage(Lang.TOURNAMENT_AREAS_NOT_SET.toString());
                     return true;
                 }
@@ -143,10 +144,15 @@ public class CommandTournament implements CommandExecutor {
 
                 checkPerm(sender, "smarttournament.setspawn");
                 if(args.length == 2) {
-                    if(args[1].equalsIgnoreCase("spectator")) {
+                    if(args[1].equalsIgnoreCase("-spectator")) {
                         sender.sendMessage(Lang.SPECTATOR_AREA_SET.toString());
                         api.setSpectatorArea(ps);
                         return true;
+                    }
+
+                    if(args[1].equalsIgnoreCase("-world")) {
+                        sender.sendMessage(Lang.WORLD_SPAWN_SET.toString());
+                        api.setWorldSpawn(ps);
                     }
                 }
 

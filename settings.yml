@@ -77,7 +77,7 @@ configuration:
 
 messages:
     no-permission: "&cYou do not have permission to execute this command."
-    improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <num> | setspawn spectator."
+    improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <num> | setspawn -spectator|-world."
     invalid-sender: "&cInvalid sender. You must be a player to perform this command."
     invalid-number: "&cInvalid number. You must enter a positive integer."
     severe-error: "&cSevere error. Please contact an administrator."
@@ -92,19 +92,21 @@ messages:
     arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
     arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
     require-empty-inventory: "&cYou must empty your inventory and armor contents before joining."
+    world-spawn-set: "&aYou have successfully set the world spawn point."
     tournament-already-started: "&cThe tournament has already started."
-    tournament-areas-not-set: "&cThe spectator or arena areas are not set."
+    tournament-areas-not-set: "&cYou must set the world spawn point, spectator area, and arena area(s) first."
     tournament-countdown-broadcast: "&7The tournament will begin in &c{countdown} &7second(s)."
     tournament-joined-success: "&aYou have successfully joined the tournament."
     tournament-joined-broadcast: "&e{username} &7has joined the tournament."
     tournament-left-success: "&aYou have successfully left the tournament."
     tournament-start-success: "&aYou have successfully started the tournament."
-    tournament-pre-start-broadcast: "&eA 1v1 tournament is going to begin soon."
-    tournament-post-start-broadcast: "&eThe tournament has started! Type /tournament join to join the tournament."
+    tournament-pre-start-broadcast: "&eA 1v1 tournament is going to begin. Type /tournament join to join the tournament."
+    tournament-post-start-broadcast: "&eThe tournament has started!"
     tournament-end-success: "&aYou have successfully ended the tournament."
     tournament-end-broadcast: "&eThe tournament has forcibly been ended."
-    tournament-end-error: "&cThe tournament has ended due to an error."
     tournament-winner-broadcast: "&e{winner} &7has won the tournament!"
+
+world-spawn:
 
 spectator:
 

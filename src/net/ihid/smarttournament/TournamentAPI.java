@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Mikey on 5/8/2016.
  */
 public class TournamentAPI {
-    private final MainManager mainManager = TournamentPlugin.getMainManager();
+    private final MainManager mainManager = new MainManager();
 
     /** Arena **/
     public boolean isOccupied(Arena arena) {
@@ -103,6 +103,14 @@ public class TournamentAPI {
 
     public boolean isTournamentRunning() {
         return mainManager.getTournamentManager().isTournamentRunning();
+    }
+
+    public void setWorldSpawn(Player player) {
+        mainManager.getTournamentManager().setWorldSpawn(player);
+    }
+
+    public Location getWorldSpawn() {
+        return mainManager.getTournamentManager().getWorldSpawn();
     }
 
     public Location getSpectatorArea() {

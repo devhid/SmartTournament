@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class ArenaManager {
-    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+    private final TournamentPlugin plugin = TournamentPlugin.getInstance();
 
     @Getter
     private List<Arena> arenas = new ArrayList<>();

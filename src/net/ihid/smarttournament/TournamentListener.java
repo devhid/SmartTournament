@@ -73,11 +73,7 @@ public class TournamentListener implements Listener {
                             PlayerQuitEvent pq = (PlayerQuitEvent) evt;
                             ps = pq.getPlayer();
                         } else {
-                            EntityDamageByEntityEvent ed = null;
-
-                            if(evt instanceof EntityDamageByEntityEvent) {
-                                ed = (EntityDamageByEntityEvent) evt;
-                            }
+                            EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
 
                             ps = (Player) ed.getEntity();
 
@@ -86,13 +82,7 @@ public class TournamentListener implements Listener {
                             }
                             ed.setCancelled(true);
                         }
-
-                        if (ps == match.getInitiator()) {
-                            match.setWinner(match.getOpponent());
-                        } else {
-                            match.setWinner(match.getInitiator());
-                        }
-                        match.toSet().forEach(api::setDefaultState);
+                        match.setWinner((ps == match.getInitiator()) ? match.getOpponent() : match.getInitiator());
 
                         api.addWinner(match.getWinner());
                         api.endMatch(match);
@@ -118,23 +108,4 @@ public class TournamentListener implements Listener {
 
         return ps.getHealth() <= evt.getFinalDamage();
     }
-
-    /*@EventHandler
-    public void onCommand(PlayerCommandPreprocessEvent evt) {
-        if(!api.isTournamentRunning()) {
-            return;
-        }
-
-        if(api.isInTournament(evt.getPlayer())) {
-            switch(evt.getMessage().) {
-                case "leave":
-                    break;
-                case "join":
-                    break;
-                default:
-                    evt.getPlayer().sendMessage("You cannot use any commands while in a tournament.");
-                    evt.setCancelled(true);
-            }
-        }
-    }*/
 }
