@@ -3,6 +3,7 @@ main: net.ihid.smarttournament.TournamentPlugin
 author: Hid
 description: Starts a 1v1 tournament for players to fight.
 version: 1.0
+softdepend: [CombatTagPlus]
 
 commands:
     tournament:

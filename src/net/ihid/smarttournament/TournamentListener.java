@@ -25,11 +25,11 @@ import java.util.Set;
  */
 public class TournamentListener implements Listener {
     private TournamentPlugin plugin;
-    private TournamentAPI api;
+    private TournamentAPI tournamentAPI;
 
     public TournamentListener(TournamentPlugin instance) {
         plugin = instance;
-        api = TournamentPlugin.getTournamentAPI();
+        tournamentAPI = TournamentPlugin.getTournamentAPI();
     }
 
     @EventHandler
@@ -46,30 +46,30 @@ public class TournamentListener implements Listener {
     }
 
     private void manageEvent(Event evt, Player ps) {
-        if(!api.isTournamentRunning()) {
+        if(!tournamentAPI.isTournamentRunning()) {
             return;
         }
 
-        if(!api.isInTournament(ps)) {
+        if(!tournamentAPI.isInTournament(ps)) {
             return;
         }
 
-        switch(api.getTournament().getStage()) {
+        switch(tournamentAPI.getTournament().getStage()) {
             case WAITING:
                 if(evt.getEventName().equals("PlayerQuitEvent")) {
-                    api.removeFromTournament(ps);
+                    tournamentAPI.removeFromTournament(ps);
                 } else {
                     EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
 
                     if(isDead(ed)) {
                         ed.setCancelled(true);
-                        ed.getEntity().teleport(api.getSpectatorArea());
+                        ed.getEntity().teleport(tournamentAPI.getSpectatorArea());
                     }
                 }
                 break;
             case ACTIVE:
 
-                for(Match match : api.getMatches()) {
+                for(Match match : tournamentAPI.getMatches()) {
                     if(match.toSet().contains(ps)) {
                         if(evt.getEventName().equals("PlayerQuitEvent")) {
                             PlayerQuitEvent pq = (PlayerQuitEvent) evt;
@@ -85,12 +85,12 @@ public class TournamentListener implements Listener {
                         }
                         match.setWinner((ps == match.getInitiator()) ? match.getOpponent() : match.getInitiator());
 
-                        api.addWinner(match.getWinner());
-                        api.endMatch(match);
+                        tournamentAPI.addWinner(match.getWinner());
+                        tournamentAPI.endMatch(match);
                         break;
                     }
                 }
-                api.removeFromTournament(ps);
+                tournamentAPI.removeFromTournament(ps);
                 break;
             default:
                 break;
@@ -99,14 +99,14 @@ public class TournamentListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent evt) {
-        if(plugin.getConfig().getBoolean("configuration.when-fighting.prevent-drop-items") && api.isInTournament(evt.getPlayer())) {
+        if(plugin.getConfig().getBoolean("configuration.when-fighting.prevent-drop-items") && tournamentAPI.isInTournament(evt.getPlayer())) {
             evt.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent evt) {
-        if(api.isInTournament(evt.getPlayer())) {
+        if(tournamentAPI.isInTournament(evt.getPlayer())) {
             Player player = evt.getPlayer();
 
             if(evt.getMessage().charAt(0) == '/') {

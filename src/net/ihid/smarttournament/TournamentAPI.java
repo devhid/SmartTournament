@@ -19,6 +19,10 @@ public class TournamentAPI {
     private final MainManager mainManager = new MainManager();
 
     /** Arena **/
+    public void clearArenas() {
+        mainManager.getArenaManager().clearArenas();
+    }
+
     public boolean isOccupied(Arena arena) {
         return mainManager.getArenaManager().isOccupied(arena);
     }
@@ -57,7 +61,7 @@ public class TournamentAPI {
     }
 
     public HashMap<Player, SavedPlayerState> getPlayerStates() {
-        return mainManager.getMatchManager().getStates();
+        return mainManager.getMatchManager().getPlayerStates();
     }
 
     public void addWinner(Player player) {
@@ -90,7 +94,7 @@ public class TournamentAPI {
     }
 
     public void clearParticipants() {
-        mainManager.getTournamentManager().clearPlayers();
+        mainManager.getTournamentManager().clearParticipants();
     }
 
     public boolean isInTournament(Player player) {
@@ -135,6 +139,6 @@ public class TournamentAPI {
 
     /** Miscellaneous **/
     public void setDefaultState(Player player) {
-        mainManager.getMatchManager().getNps().setDefaultState(player);
+        mainManager.getMatchManager().getNewPlayerState().setDefaultState(player);
     }
 }

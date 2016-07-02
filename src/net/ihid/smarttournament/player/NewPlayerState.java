@@ -16,7 +16,11 @@ import java.util.Set;
  * Created by Mikey on 6/14/2016.
  */
 public class NewPlayerState {
-    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+    private TournamentPlugin plugin;
+
+    public NewPlayerState() {
+        plugin = TournamentPlugin.getInstance();
+    }
 
     public void modifyPlayer(Player player) {
         setDefaultState(player);

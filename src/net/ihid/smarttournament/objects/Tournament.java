@@ -18,6 +18,7 @@ import java.util.HashMap;
  * Created by Mikey on 4/24/2016.
  */
 public class Tournament {
+    private TournamentAPI tournamentAPI;
 
     @Getter @Setter
     private TournamentStage stage;
@@ -29,12 +30,13 @@ public class Tournament {
     private PreTournamentTask preTournamentTask;
 
     public Tournament() {
+        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
         this.stage = TournamentStage.NON_ACTIVE;
     }
 
     public void start() {
         reset(false);
-        TournamentPlugin.getTournamentAPI().loadArenas();
+        tournamentAPI.loadArenas();
 
         preTournamentTask = new PreTournamentTask(this);
         preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
@@ -54,25 +56,24 @@ public class Tournament {
     }
 
     public void reset(boolean end) {
-        TournamentAPI api = TournamentPlugin.getTournamentAPI();
         Collection<? extends Player> online = Bukkit.getOnlinePlayers();
 
         if(end) {
-            online.stream().filter(api::isInTournament).forEach(player -> {
-                HashMap<Player, SavedPlayerState> playerStates = api.getPlayerStates();
+            online.stream().filter(tournamentAPI::isInTournament).forEach(player -> {
+                HashMap<Player, SavedPlayerState> playerStates = tournamentAPI.getPlayerStates();
 
                 if(playerStates.containsKey(player)) {
                     playerStates.get(player).revert();
                     playerStates.remove(player);
                 }
 
-                player.teleport(api.getWorldSpawn());
+                player.teleport(tournamentAPI.getWorldSpawn());
             });
-            api.getParticipants().clear();
+            tournamentAPI.clearParticipants();
         }
 
-        api.getWinners().clear();
-        api.getMatches().clear();
-        api.getArenas().clear();
+        tournamentAPI.clearWinners();
+        tournamentAPI.clearMatches();
+        tournamentAPI.clearArenas();
     }
 }

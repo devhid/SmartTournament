@@ -16,10 +16,19 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class ArenaManager {
-    private final TournamentPlugin plugin = TournamentPlugin.getInstance();
+    private final TournamentPlugin plugin;
 
     @Getter
-    private List<Arena> arenas = new ArrayList<>();
+    private List<Arena> arenas;
+
+    public ArenaManager() {
+        plugin = TournamentPlugin.getInstance();
+        arenas = new ArrayList<>();
+    }
+
+    public void clearArenas() {
+        arenas.clear();
+    }
 
     public boolean isOccupied(Arena arena) {
         return arena.isOccupied();

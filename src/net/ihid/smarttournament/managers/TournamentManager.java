@@ -18,41 +18,46 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class TournamentManager {
-    private TournamentPlugin plugin = TournamentPlugin.getInstance();
+    private TournamentPlugin plugin;
+    private TournamentAPI tournamentAPI;
 
     @Getter
-    private Tournament tournament;
+    private final Tournament tournament;
 
     @Getter
-    private final List<Player> participants = new ArrayList<>();
+    private final List<Player> participants;
 
     public TournamentManager() {
-        tournament = new Tournament();
+        this.plugin = TournamentPlugin.getInstance();
+        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
+        this.tournament = new Tournament();
+        this.participants = new ArrayList<>();
     }
 
-    public void clearPlayers() {
+    public void clearParticipants() {
         participants.clear();
     }
 
     public boolean isInTournament(Player player) {
-        return participants.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return participants.contains(player) || tournamentAPI.getWinners().contains(player) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
     public void addToTournament(Player player) {
         participants.add(player);
     }
 
-    public void removeFromTournament(Player player) {
+    public void removeFromTournament(Player... participants) {
         TournamentAPI api = TournamentPlugin.getTournamentAPI();
 
-        if (api.getWinners().contains(player)) {
-            api.getWinners().remove(player);
-        }
+        for(Player player: participants) {
+            if (api.getWinners().contains(player)) {
+                api.getWinners().remove(player);
+            }
 
-        if (api.getParticipants().contains(player)) {
-            api.getParticipants().remove(player);
+            if (api.getParticipants().contains(player)) {
+                api.getParticipants().remove(player);
+            }
         }
-
     }
 
     public void startTournament() {

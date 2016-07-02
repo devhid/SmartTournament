@@ -20,19 +20,29 @@ import java.util.*;
  * Created by Mikey on 4/24/2016.
  */
 public class MatchManager {
-    private final TagManager tm = TournamentPlugin.getCombatTag().getTagManager();
+    private TagManager tagManager;
 
     @Getter
-    private final NewPlayerState nps = new NewPlayerState();
+    private final NewPlayerState newPlayerState;
 
     @Getter
-    private final List<Match> matches = new ArrayList<>();
+    private final List<Match> matches;
 
     @Getter
-    private final List<Player> winners = new ArrayList<>();
+    private final List<Player> winners;
 
     @Getter
-    private final HashMap<Player, SavedPlayerState> states = new HashMap<>();
+    private final HashMap<Player, SavedPlayerState> playerStates;
+
+    public MatchManager() {
+        if(TournamentPlugin.getCombatTag() != null) {
+            tagManager = TournamentPlugin.getCombatTag().getTagManager();
+        }
+        this.newPlayerState = new NewPlayerState();
+        this.matches = new ArrayList<>();
+        this.winners = new ArrayList<>();
+        this.playerStates = new HashMap<>();
+    }
 
     public void addWinner(Player player) {
         winners.add(player);
@@ -61,8 +71,8 @@ public class MatchManager {
         teleportPlayers(match);
         matches.add(match);
 
-        mapStates(states, match);
-        match.toSet().forEach(nps::modifyPlayer);
+        mapStates(playerStates, match);
+        match.toSet().forEach(newPlayerState::modifyPlayer);
 
         MatchTask task = new MatchTask(match);
         match.setMatchTask(task);
@@ -78,13 +88,15 @@ public class MatchManager {
         match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
 
         matches.remove(match);
-        unmapStates(states, match);
+        unmapStates(playerStates, match);
 
         match.reset();
     }
 
     public void removeTag(Player... ps) {
-        Arrays.stream(ps).filter(player -> player != null && tm.isTagged(player.getUniqueId())).forEach(player -> tm.untag(player.getUniqueId()));
+        if(TournamentPlugin.getCombatTag() != null) {
+            Arrays.stream(ps).filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
+        }
     }
 
     private void mapStates(HashMap<Player, SavedPlayerState> states, Match match) {

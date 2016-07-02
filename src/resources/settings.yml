@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.0                                                                                           #
+# version: 1.0.1                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -52,7 +52,7 @@ configuration:
       inventory:
          0:
             material: DIAMOND_SWORD
-            material-id:
+            material-id: 0
             amount: 1
             enchantments:
                DAMAGE_ALL: 2
