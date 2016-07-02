@@ -49,6 +49,10 @@ public class NewPlayerState {
         if(plugin.getConfig().getBoolean("configuration.when-fighting.ensure-survival-gamemode")) {
             player.setGameMode(GameMode.SURVIVAL);
         }
+
+        for(PotionEffect effect: player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
     }
 
     private void addInventory(Player player) {

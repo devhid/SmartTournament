@@ -62,8 +62,7 @@ configuration:
             material: POTION
             material-id: 16421
             amount: 1
-            enchantments:
-              DAMAGE_ALL: 2
+            enchantments: {}
             slot-numbers:
             - 1
             - 2
