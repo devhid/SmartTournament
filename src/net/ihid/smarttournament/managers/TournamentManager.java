@@ -14,9 +14,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mikey on 4/25/2016.
- */
 public class TournamentManager {
     private TournamentPlugin plugin;
     private TournamentAPI tournamentAPI;
@@ -27,7 +24,7 @@ public class TournamentManager {
     @Getter
     private final List<Player> participants;
 
-    public TournamentManager() {
+    TournamentManager() {
         this.plugin = TournamentPlugin.getInstance();
         this.tournamentAPI = TournamentPlugin.getTournamentAPI();
         this.tournament = new Tournament();
@@ -42,7 +39,7 @@ public class TournamentManager {
         return participants.contains(player) || tournamentAPI.getWinners().contains(player) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
-    public void addToTournament(Player player) {
+    public void addParticipant(Player player) {
         participants.add(player);
     }
 

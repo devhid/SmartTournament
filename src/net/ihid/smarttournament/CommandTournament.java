@@ -10,14 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-/**
- * Created by Mikey on 4/25/2016.
- */
-public class CommandTournament implements CommandExecutor {
+class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
     private TournamentAPI tournamentAPI;
 
-    public CommandTournament(TournamentPlugin instance) {
+    CommandTournament(TournamentPlugin instance) {
         plugin = instance;
         tournamentAPI = TournamentPlugin.getTournamentAPI();
     }
@@ -79,7 +76,7 @@ public class CommandTournament implements CommandExecutor {
                     }
                 }
 
-                tournamentAPI.addToTournament(ps);
+                tournamentAPI.addParticipant(ps);
                 tournamentAPI.removeTag(ps);
 
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", ps.getName()));
@@ -203,9 +200,8 @@ public class CommandTournament implements CommandExecutor {
     }
 
     private void checkNum(String number) {
-        int num;
         try {
-            num = Integer.parseInt(number);
+            int num = Integer.parseInt(number);
         } catch(NumberFormatException ex) {
             throw new CommandException(Lang.INVALID_NUMBER.toString());
         }
