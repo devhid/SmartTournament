@@ -38,6 +38,14 @@ public class MatchManager {
         winners.add(player);
     }
 
+    public void clearWinners() {
+        winners.clear();
+    }
+
+    public void clearMatches() {
+        matches.clear();
+    }
+
     public void teleportPlayers(Match match) {
         removeTag(match.getInitiator(), match.getOpponent());
 

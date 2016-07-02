@@ -48,6 +48,14 @@ public class TournamentAPI {
         return mainManager.getMatchManager().getWinners();
     }
 
+    public void clearMatches() {
+        mainManager.getMatchManager().clearMatches();
+    }
+
+    public void clearWinners() {
+        mainManager.getMatchManager().clearWinners();
+    }
+
     public HashMap<Player, SavedPlayerState> getPlayerStates() {
         return mainManager.getMatchManager().getStates();
     }
@@ -77,8 +85,12 @@ public class TournamentAPI {
         return mainManager.getTournamentManager().getTournament();
     }
 
-    public List<Player> getPlayers() {
-        return mainManager.getTournamentManager().getPlayers();
+    public List<Player> getParticipants() {
+        return mainManager.getTournamentManager().getParticipants();
+    }
+
+    public void clearParticipants() {
+        mainManager.getTournamentManager().clearPlayers();
     }
 
     public boolean isInTournament(Player player) {

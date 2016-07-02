@@ -25,7 +25,7 @@ public class PreTournamentTask extends BukkitRunnable {
 
     public void run() {
         if(countdown == 0) {
-            if(TournamentPlugin.getTournamentAPI().getPlayers().size() < plugin.getConfig().getInt("configuration.minimum-players-to-start")) { // configure minimum starting players
+            if(TournamentPlugin.getTournamentAPI().getParticipants().size() < plugin.getConfig().getInt("configuration.minimum-players-to-start")) { // configure minimum starting players
                 tournament.end();
                 Bukkit.broadcastMessage(Lang.NOT_ENOUGH_PLAYERS.toString());
             } else {

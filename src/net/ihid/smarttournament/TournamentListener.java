@@ -3,6 +3,7 @@ package net.ihid.smarttournament;
 import com.jackproehl.plugins.CombatLog;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -23,16 +25,16 @@ import java.util.Set;
  */
 public class TournamentListener implements Listener {
     private TournamentPlugin plugin;
-
-    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
+    private TournamentAPI api;
 
     public TournamentListener(TournamentPlugin instance) {
         plugin = instance;
+        api = TournamentPlugin.getTournamentAPI();
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent evt) {
-        manageQuitOrDeath(evt, evt.getPlayer());
+        manageEvent(evt, evt.getPlayer());
     }
 
     @EventHandler
@@ -40,10 +42,10 @@ public class TournamentListener implements Listener {
         if(!(evt.getEntity() instanceof Player)) {
             return;
         }
-        manageQuitOrDeath(evt, (Player) evt.getEntity());
+        manageEvent(evt, (Player) evt.getEntity());
     }
 
-    private void manageQuitOrDeath(Event evt, Player ps) {
+    private void manageEvent(Event evt, Player ps) {
         if(!api.isTournamentRunning()) {
             return;
         }
@@ -74,7 +76,6 @@ public class TournamentListener implements Listener {
                             ps = pq.getPlayer();
                         } else {
                             EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) evt;
-
                             ps = (Player) ed.getEntity();
 
                             if(!isDead(ed)) {
@@ -103,9 +104,21 @@ public class TournamentListener implements Listener {
         }
     }
 
-    private boolean isDead(EntityDamageByEntityEvent evt) {
-        Player ps = (Player) evt.getEntity();
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent evt) {
+        if(api.isInTournament(evt.getPlayer())) {
+            Player player = evt.getPlayer();
 
-        return ps.getHealth() <= evt.getFinalDamage();
+            if(evt.getMessage().charAt(0) == '/') {
+                if(!plugin.getConfig().getStringList("configuration.cmd-whitelist").stream().anyMatch(s -> s.trim().equalsIgnoreCase(evt.getMessage().trim().split(" ")[0]))) {
+                    player.sendMessage(Lang.COMMAND_USE_DENIED.toString());
+                    evt.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    private boolean isDead(EntityDamageByEntityEvent evt) {
+        return ((Player) evt.getEntity()).getHealth() <= evt.getFinalDamage();
     }
 }

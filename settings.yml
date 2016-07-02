@@ -7,9 +7,10 @@
 configuration:
    prefix: "&4Tournament &8//&a "
    prefix-enabled: true
-   tournament-start-delay: 10
+   tournament-start-delay: 60
    match-duration: 180
    minimum-players-to-start: 2
+   force-player-clear-inventory: true
    countdown-values:
    - 120
    - 60
@@ -73,11 +74,19 @@ configuration:
             - 7
             - 8
 
-   cmd-whitelist: {}
+   cmd-whitelist:
+   - /tournament
+   - /st
+   - /stournament
+   - /smartt
+   - /tourney
+   - /stourney
+   - /msg
+   - /r
 
 messages:
     no-permission: "&cYou do not have permission to execute this command."
-    improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <num> | setspawn -spectator|-world."
+    improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <1|2> | setspawn <-spectator|-world>."
     invalid-sender: "&cInvalid sender. You must be a player to perform this command."
     invalid-number: "&cInvalid number. You must enter a positive integer."
     severe-error: "&cSevere error. Please contact an administrator."
@@ -93,6 +102,7 @@ messages:
     arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
     require-empty-inventory: "&cYou must empty your inventory and armor contents before joining."
     world-spawn-set: "&aYou have successfully set the world spawn point."
+    command-use-denied: "&cYou cannot use this command in the tournament."
     tournament-already-started: "&cThe tournament has already started."
     tournament-areas-not-set: "&cYou must set the world spawn point, spectator area, and arena area(s) first."
     tournament-countdown-broadcast: "&7The tournament will begin in &c{countdown} &7second(s)."

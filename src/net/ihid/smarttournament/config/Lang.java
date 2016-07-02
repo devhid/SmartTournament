@@ -25,12 +25,13 @@ public enum Lang {
     ARENA_SET_SUCCESS("messages.arena-set-success"),
     REQUIRE_EMPTY_INVENTORY("messages.require-empty-inventory"),
     WORLD_SPAWN_SET("messages.world-spawn-set"),
+    COMMAND_USE_DENIED("messages.command-use-denied"),
     TOURNAMENT_ALREADY_STARTED("messages.tournament-already-started"),
     TOURNAMENT_AREAS_NOT_SET("messages.tournament-areas-not-set"),
     TOURNAMENT_COUNTDOWN_BROADCAST("messages.tournament-countdown-broadcast"),
-    TOURNAMENT_JOINED_SUCCESS("messages.tournament-joined-success"), // changed
-    TOURNAMENT_JOINED_BROADCAST("messages.tournament-joined-broadcast"), //changed
-    TOURNAMENT_LEFT_SUCCESS("messages.tournament-left-success"), // changed
+    TOURNAMENT_JOINED_SUCCESS("messages.tournament-joined-success"),
+    TOURNAMENT_JOINED_BROADCAST("messages.tournament-joined-broadcast"),
+    TOURNAMENT_LEFT_SUCCESS("messages.tournament-left-success"),
     TOURNAMENT_START_SUCCESS("messages.tournament-start-success"),
     TOURNAMENT_PRE_START_BROADCAST("messages.tournament-pre-start-broadcast"),
     TOURNAMENT_POST_START_BROADCAST("messages.tournament-post-start-broadcast"),
@@ -46,6 +47,6 @@ public enum Lang {
     }
 
     public String toString() {
-        return ChatUtil.color( (config.getBoolean("configuration.prefix-enabled") ? config.getString("configuration.prefix") : "" ) + config.getString(path));
+        return ChatUtil.color((config.getBoolean("configuration.prefix-enabled") ? config.getString("configuration.prefix") : "" ) + config.getString(path));
     }
 }

@@ -5,12 +5,14 @@ import lombok.Setter;
 import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
 import net.ihid.smarttournament.tasks.TournamentTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Created by Mikey on 4/24/2016.
@@ -57,14 +59,16 @@ public class Tournament {
 
         if(end) {
             online.stream().filter(api::isInTournament).forEach(player -> {
-                if(api.getPlayerStates().containsKey(player)) {
-                    api.getPlayerStates().get(player).revert();
-                    api.getPlayerStates().remove(player);
+                HashMap<Player, SavedPlayerState> playerStates = api.getPlayerStates();
+
+                if(playerStates.containsKey(player)) {
+                    playerStates.get(player).revert();
+                    playerStates.remove(player);
                 }
+
                 player.teleport(api.getWorldSpawn());
             });
-
-            api.getPlayers().clear();
+            api.getParticipants().clear();
         }
 
         api.getWinners().clear();

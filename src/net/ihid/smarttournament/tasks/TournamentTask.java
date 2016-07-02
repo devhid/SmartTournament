@@ -22,14 +22,14 @@ public class TournamentTask extends BukkitRunnable {
 
     private Tournament tournament;
 
-    private List<Player> winners, players;
+    private List<Player> winners, participants;
 
     public TournamentTask(Tournament tournament) {
         this.tournament = tournament;
         tournament.setStage(TournamentStage.ACTIVE);
 
         winners = api.getWinners();
-        players = api.getPlayers();
+        participants = api.getParticipants();
     }
 
     public void run() {
@@ -39,20 +39,20 @@ public class TournamentTask extends BukkitRunnable {
             return;
         }
 
-        if(players.size() > 1) {
-            Match match = new Match(players.remove(0), players.remove(0));
+        if(participants.size() > 1) {
+            Match match = new Match(participants.remove(0), participants.remove(0));
             match.setArena(arena);
 
             arena.setOccupied(true);
             api.startMatch(match);
         }
 
-        else if(players.size() == 1) {
-            winners.add(players.remove(0));
+        else if(participants.size() == 1) {
+            winners.add(participants.remove(0));
         }
 
         else if(winners.size() > 1) {
-            players.addAll(winners);
+            participants.addAll(winners);
             winners.clear();
         }
 

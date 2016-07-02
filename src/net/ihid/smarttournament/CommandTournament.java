@@ -14,11 +14,12 @@ import org.bukkit.inventory.ItemStack;
  * Created by Mikey on 4/25/2016.
  */
 public class CommandTournament implements CommandExecutor {
-    private TournamentPlugin plugin = TournamentPlugin.getInstance();
-    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
+    private TournamentPlugin plugin;
+    private TournamentAPI api;
 
     public CommandTournament(TournamentPlugin instance) {
         plugin = instance;
+        api = TournamentPlugin.getTournamentAPI();
     }
 
     private class CommandException extends RuntimeException {
@@ -66,14 +67,16 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                if(api.getPlayers().contains(ps)) {
+                if(api.isInTournament(ps)) {
                     ps.sendMessage(Lang.ALREADY_IN_TOURNAMENT.toString());
                     return true;
                 }
 
-                if(!hasEmptyInventory(ps)) {
-                    ps.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString()); // add message to lang.
-                    return true;
+                if(plugin.getConfig().getBoolean("configuration.force-player-clear-inventory")) {
+                    if (!hasEmptyInventory(ps)) {
+                        ps.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString());
+                        return true;
+                    }
                 }
 
                 api.addToTournament(ps);
@@ -94,7 +97,7 @@ public class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                if(!api.getPlayers().contains(ps)) {
+                if(!api.isInTournament(ps)) {
                     ps.sendMessage(Lang.NOT_IN_TOURNAMENT.toString());
                     return true;
                 }
@@ -156,7 +159,7 @@ public class CommandTournament implements CommandExecutor {
                     }
                 }
 
-                if(args.length == 3) {//  /st setspawn <arena name> <num>
+                if(args.length == 3) {
                     String arenaName = args[1];
 
                     checkNum(args[2]);

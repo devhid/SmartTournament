@@ -24,18 +24,22 @@ public class TournamentManager {
     private Tournament tournament;
 
     @Getter
-    private final List<Player> players = new ArrayList<>();
+    private final List<Player> participants = new ArrayList<>();
 
     public TournamentManager() {
         tournament = new Tournament();
     }
 
+    public void clearPlayers() {
+        participants.clear();
+    }
+
     public boolean isInTournament(Player player) {
-        return players.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return participants.contains(player) || TournamentPlugin.getTournamentAPI().getWinners().contains(player) || TournamentPlugin.getTournamentAPI().getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
     public void addToTournament(Player player) {
-        players.add(player);
+        participants.add(player);
     }
 
     public void removeFromTournament(Player player) {
@@ -45,8 +49,8 @@ public class TournamentManager {
             api.getWinners().remove(player);
         }
 
-        if (api.getPlayers().contains(player)) {
-            api.getPlayers().remove(player);
+        if (api.getParticipants().contains(player)) {
+            api.getParticipants().remove(player);
         }
 
     }
