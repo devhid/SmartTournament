@@ -172,8 +172,8 @@ public class TournamentAPI {
     /*
         Removes player from tournament.
      */
-    public void removeFromTournament(Player player) {
-        mainManager.getTournamentManager().removeFromTournament(player);
+    public void removeFromTournament(Player... participants) {
+        mainManager.getTournamentManager().removeFromTournament(participants);
     }
 
     /*
