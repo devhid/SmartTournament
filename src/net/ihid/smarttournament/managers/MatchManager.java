@@ -23,21 +23,22 @@ public class MatchManager {
     private TagManager tagManager;
 
     @Getter
-    private final NewPlayerState newPlayerState;
+    private NewPlayerState newPlayerState;
 
     @Getter
-    private final List<Match> matches;
+    private List<Match> matches;
 
     @Getter
-    private final List<Player> winners;
+    private List<Player> winners;
 
     @Getter
-    private final HashMap<Player, SavedPlayerState> playerStates;
+    private HashMap<Player, SavedPlayerState> playerStates;
 
     public MatchManager() {
-        if(TournamentPlugin.getCombatTag() != null) {
-            tagManager = TournamentPlugin.getCombatTag().getTagManager();
+        if (TournamentPlugin.getCombatTag() != null) {
+            this.tagManager = TournamentPlugin.getCombatTag().getTagManager();
         }
+
         this.newPlayerState = new NewPlayerState();
         this.matches = new ArrayList<>();
         this.winners = new ArrayList<>();
@@ -59,8 +60,8 @@ public class MatchManager {
     public void teleportPlayers(Match match) {
         removeTag(match.getInitiator(), match.getOpponent());
 
-        match.getInitiator().teleport(match.getArena().getFirstLoc());
-        match.getOpponent().teleport(match.getArena().getSecondLoc());
+        match.getInitiator().teleport(match.getArena().getFirstLocation());
+        match.getOpponent().teleport(match.getArena().getSecondLocation());
     }
 
     public void startMatch(Match match) {
@@ -81,11 +82,10 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
-        TournamentAPI api = TournamentPlugin.getTournamentAPI();
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         removeTag(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(api.getSpectatorArea()));
+        match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
 
         matches.remove(match);
         unmapStates(playerStates, match);
@@ -93,8 +93,21 @@ public class MatchManager {
         match.reset();
     }
 
+    public void endIdleMatch(Match match) {
+        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
+
+        removeTag(match.getInitiator(), match.getOpponent());
+        match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
+
+        matches.remove(match);
+        unmapStates(playerStates, match);
+
+        match.reset();
+        TournamentPlugin.getTournamentAPI().removeFromTournament(match.getInitiator(), match.getOpponent());
+    }
+
     public void removeTag(Player... ps) {
-        if(TournamentPlugin.getCombatTag() != null) {
+        if (TournamentPlugin.getCombatTag() != null) {
             Arrays.stream(ps).filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
         }
     }

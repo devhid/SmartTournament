@@ -16,8 +16,8 @@ public class MainManager {
     private ArenaManager arenaManager;
 
     public MainManager() {
-        tournamentManager = new TournamentManager();
-        matchManager = new MatchManager();
-        arenaManager = new ArenaManager();
+        this.tournamentManager = new TournamentManager();
+        this.matchManager = new MatchManager();
+        this.arenaManager = new ArenaManager();
     }
 }

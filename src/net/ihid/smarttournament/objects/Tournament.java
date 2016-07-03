@@ -18,8 +18,6 @@ import java.util.HashMap;
  * Created by Mikey on 4/24/2016.
  */
 public class Tournament {
-    private TournamentAPI tournamentAPI;
-
     @Getter @Setter
     private TournamentStage stage;
 
@@ -30,13 +28,12 @@ public class Tournament {
     private PreTournamentTask preTournamentTask;
 
     public Tournament() {
-        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
         this.stage = TournamentStage.NON_ACTIVE;
     }
 
     public void start() {
         reset(false);
-        tournamentAPI.loadArenas();
+        TournamentPlugin.getTournamentAPI().loadArenas();
 
         preTournamentTask = new PreTournamentTask(this);
         preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
@@ -55,7 +52,8 @@ public class Tournament {
         setStage(TournamentStage.NON_ACTIVE);
     }
 
-    public void reset(boolean end) {
+    private void reset(boolean end) {
+        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         Collection<? extends Player> online = Bukkit.getOnlinePlayers();
 
         if(end) {

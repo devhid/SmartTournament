@@ -16,14 +16,16 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class ArenaManager {
-    private final TournamentPlugin plugin;
+    private TournamentPlugin plugin;
+    private YamlConfiguration config;
 
     @Getter
     private List<Arena> arenas;
 
     public ArenaManager() {
-        plugin = TournamentPlugin.getInstance();
-        arenas = new ArrayList<>();
+        this.plugin = TournamentPlugin.getInstance();
+        this.config = plugin.getConfig();
+        this.arenas = new ArrayList<>();
     }
 
     public void clearArenas() {
@@ -44,8 +46,6 @@ public class ArenaManager {
     }
 
     public void setLocation(String arenaName, Player player, int num) {
-        YamlConfiguration config = plugin.getConfig();
-
         Location loc = player.getLocation();
         String path = "arenas." + arenaName + "." + num;
 
@@ -60,26 +60,24 @@ public class ArenaManager {
     }
 
     public void loadArenas() {
-        YamlConfiguration config = plugin.getConfig();
-        
         for(String str: config.getConfigurationSection("arenas").getKeys(false)) {
             String path = "arenas." + str + ".";
 
-            Location firstLoc = new Location(Bukkit.getWorld(config.getString(path + "1.world")),
+            Location firstLocation = new Location(Bukkit.getWorld(config.getString(path + "1.world")),
                     config.getInt(path + "1.x"),
                     config.getInt(path + "1.y"),
                     config.getInt(path + "1.z"),
                     (float)config.getDouble(path + "1.yaw"),
                     (float)config.getDouble(path + "1.pitch"));
 
-            Location secondLoc = new Location(Bukkit.getWorld(config.getString(path + "2.world")),
+            Location secondLocation = new Location(Bukkit.getWorld(config.getString(path + "2.world")),
                     config.getInt(path + "2.x"),
                     config.getInt(path + "2.y"),
                     config.getInt(path + "2.z"),
                     (float)config.getDouble(path + "2.yaw"),
                     (float)config.getDouble(path + "2.pitch"));
 
-            arenas.add(new Arena(str, firstLoc, secondLoc));
+            arenas.add(new Arena(str, firstLocation, secondLocation));
         }
     }
 }

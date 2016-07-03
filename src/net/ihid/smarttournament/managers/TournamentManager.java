@@ -16,26 +16,28 @@ import java.util.List;
 
 public class TournamentManager {
     private TournamentPlugin plugin;
-    private TournamentAPI tournamentAPI;
+    private YamlConfiguration config;
 
     @Getter
-    private final Tournament tournament;
+    private Tournament tournament;
 
     @Getter
-    private final List<Player> participants;
+    private List<Player> participants;
 
-    TournamentManager() {
+    public TournamentManager() {
         this.plugin = TournamentPlugin.getInstance();
-        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
+        this.config = plugin.getConfig();
         this.tournament = new Tournament();
         this.participants = new ArrayList<>();
     }
+
 
     public void clearParticipants() {
         participants.clear();
     }
 
     public boolean isInTournament(Player player) {
+        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         return participants.contains(player) || tournamentAPI.getWinners().contains(player) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
@@ -44,15 +46,14 @@ public class TournamentManager {
     }
 
     public void removeFromTournament(Player... participants) {
-        TournamentAPI api = TournamentPlugin.getTournamentAPI();
-
+        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         for(Player player: participants) {
-            if (api.getWinners().contains(player)) {
-                api.getWinners().remove(player);
+            if (tournamentAPI.getWinners().contains(player)) {
+                tournamentAPI.getWinners().remove(player);
             }
 
-            if (api.getParticipants().contains(player)) {
-                api.getParticipants().remove(player);
+            if (tournamentAPI.getParticipants().contains(player)) {
+                tournamentAPI.getParticipants().remove(player);
             }
         }
     }
@@ -74,8 +75,7 @@ public class TournamentManager {
     }
     
     public void setWorldSpawn(Player player) {
-        YamlConfiguration config = plugin.getConfig();
-        Location loc = player.getLocation();
+        final Location loc = player.getLocation();
 
         config.set("world-spawn.world", loc.getWorld().getName());
         config.set("world-spawn.x", loc.getBlockX());
@@ -88,8 +88,6 @@ public class TournamentManager {
     }
     
     public Location getWorldSpawn() {
-        YamlConfiguration config = plugin.getConfig();
-
         return new Location(Bukkit.getWorld(config.getString("world-spawn.world")),
                 config.getInt("world-spawn.x"),
                 config.getInt("world-spawn.y"),
@@ -99,8 +97,7 @@ public class TournamentManager {
     }
 
     public void setSpectatorArea(Player player) {
-        YamlConfiguration config = plugin.getConfig();
-        Location loc = player.getLocation();
+        final Location loc = player.getLocation();
 
         config.set("spectator.world", loc.getWorld().getName());
         config.set("spectator.x", loc.getBlockX());
@@ -113,8 +110,6 @@ public class TournamentManager {
     }
 
     public Location getSpectatorArea() {
-        YamlConfiguration config = plugin.getConfig();
-
         return new Location(Bukkit.getWorld(config.getString("spectator.world")),
                 config.getInt("spectator.x"),
                 config.getInt("spectator.y"),

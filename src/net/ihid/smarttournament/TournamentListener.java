@@ -1,35 +1,23 @@
 package net.ihid.smarttournament;
 
-import com.jackproehl.plugins.CombatLog;
-import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Match;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import java.util.HashSet;
-import java.util.Set;
 
-/**
- * Created by Mikey on 4/26/2016.
- */
 public class TournamentListener implements Listener {
     private TournamentPlugin plugin;
     private TournamentAPI tournamentAPI;
 
     public TournamentListener(TournamentPlugin instance) {
-        plugin = instance;
-        tournamentAPI = TournamentPlugin.getTournamentAPI();
+        this.plugin = instance;
+        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
     }
 
     @EventHandler
@@ -106,14 +94,25 @@ public class TournamentListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent evt) {
-        if(tournamentAPI.isInTournament(evt.getPlayer())) {
-            Player player = evt.getPlayer();
+        if(plugin.getConfig().getBoolean("configuration.disable-commands-in-tournament")) {
+            if (!tournamentAPI.isTournamentRunning()) {
+                return;
+            }
 
-            if(evt.getMessage().charAt(0) == '/') {
-                if(!plugin.getConfig().getStringList("configuration.cmd-whitelist").stream().anyMatch(s -> s.trim().equalsIgnoreCase(evt.getMessage().trim().split(" ")[0]))) {
-                    player.sendMessage(Lang.COMMAND_USE_DENIED.toString());
-                    evt.setCancelled(true);
+            if (tournamentAPI.isInTournament(evt.getPlayer())) {
+                Player player = evt.getPlayer();
+
+                if(player.hasPermission("smarttournament.chatbypass")) {
+                    return;
                 }
+
+                if (evt.getMessage().charAt(0) == '/') {
+                    if (!plugin.getConfig().getStringList("configuration.cmd-whitelist").stream().anyMatch(s -> s.trim().equalsIgnoreCase(evt.getMessage().trim().split(" ")[0]))) {
+                        player.sendMessage(Lang.COMMAND_USE_DENIED.toString());
+                        evt.setCancelled(true);
+                    }
+                }
+
             }
         }
     }

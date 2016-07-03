@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,7 +18,7 @@ public class NewPlayerState {
     private TournamentPlugin plugin;
 
     public NewPlayerState() {
-        plugin = TournamentPlugin.getInstance();
+        this.plugin = TournamentPlugin.getInstance();
     }
 
     public void modifyPlayer(Player player) {
@@ -60,6 +59,7 @@ public class NewPlayerState {
             String path = "configuration.when-fighting.inventory." + slot + ".";
             ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString(path + ".material")), plugin.getConfig().getInt(path + ".amount"),
                     (short) plugin.getConfig().getInt(path + ".material-id"));
+
 
             for(String enc: plugin.getConfig().getConfigurationSection(path + "enchantments").getKeys(false)) {
                 Enchantment enchantment = Enchantment.getByName(enc.toUpperCase());

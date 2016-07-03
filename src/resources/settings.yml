@@ -11,6 +11,7 @@ configuration:
    match-duration: 180
    minimum-players-to-start: 2
    force-player-clear-inventory: true
+   disable-commands-in-tournament: true
    countdown-values:
    - 120
    - 60

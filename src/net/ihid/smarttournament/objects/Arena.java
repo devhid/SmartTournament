@@ -16,20 +16,20 @@ public class Arena {
     @Getter
     private String arenaName;
 
-    @Getter @Setter
-    private Location firstLoc, secondLoc;
-
     @Setter @Getter
     private boolean occupied;
 
-    public Arena(String arenaName, Location firstLoc, Location secondLoc) {
-        this.arenaName = arenaName;
-        this.firstLoc = firstLoc;
-        this.secondLoc = secondLoc;
+    @Getter @Setter
+    private Location firstLocation, secondLocation;
+
+    public Arena(String arenaName, Location firstLocation, Location secondLocation) {
         this.occupied = false;
+        this.arenaName = arenaName;
+        this.firstLocation = firstLocation;
+        this.secondLocation = secondLocation;
     }
 
     public Set<Location> toSet() {
-        return Sets.newHashSet(firstLoc, secondLoc);
+        return Sets.newHashSet(firstLocation, secondLocation);
     }
 }

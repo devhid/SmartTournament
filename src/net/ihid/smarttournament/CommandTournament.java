@@ -14,9 +14,9 @@ class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
     private TournamentAPI tournamentAPI;
 
-    CommandTournament(TournamentPlugin instance) {
-        plugin = instance;
-        tournamentAPI = TournamentPlugin.getTournamentAPI();
+    public CommandTournament(TournamentPlugin instance) {
+        this.plugin = instance;
+        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
     }
 
     private class CommandException extends RuntimeException {
@@ -99,8 +99,9 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
                 tournamentAPI.removeFromTournament(ps);
+                ps.teleport(tournamentAPI.getWorldSpawn());
+                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
                 break;
 
             case "start":

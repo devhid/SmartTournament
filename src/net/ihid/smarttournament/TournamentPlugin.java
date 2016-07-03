@@ -6,17 +6,19 @@ import net.ihid.smarttournament.managers.MainManager;
 import net.minelink.ctplus.CombatTagPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Created by Mikey on 4/24/2016.
- */
 public class TournamentPlugin extends JavaPlugin {
     @Getter
     private static TournamentAPI tournamentAPI;
 
     @Getter
-    private final PluginConfig rawConfig = new PluginConfig(this, "settings.yml");
+    private final PluginConfig rawConfig;
+
+    public TournamentPlugin() {
+        this.rawConfig = new PluginConfig(this, "settings.yml");
+    }
 
     @Override
     public void onEnable() {
@@ -30,9 +32,7 @@ public class TournamentPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if(tournamentAPI.isTournamentRunning()) {
-            tournamentAPI.getTournament().end();
-        }
+        tournamentAPI.endTournament();
     }
 
     private void loadCommands() {
@@ -47,8 +47,13 @@ public class TournamentPlugin extends JavaPlugin {
         rawConfig.saveDefaultConfig();
     }
 
-    public static CombatTagPlus getCombatTag() {
-        return (CombatTagPlus) Bukkit.getServer().getPluginManager().getPlugin("CombatTagPlus");
+    public static CombatTagPlus getCombatTag() throws NoClassDefFoundError {
+        try {
+            return (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+        } catch(NoClassDefFoundError error) {
+
+        }
+        return null;
     }
 
     @Override

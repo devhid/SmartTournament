@@ -18,22 +18,20 @@ import java.util.List;
  * Created by Mikey on 4/25/2016.
  */
 public class TournamentTask extends BukkitRunnable {
-    private TournamentAPI api = TournamentPlugin.getTournamentAPI();
-
+    private TournamentAPI tournamentAPI;
     private Tournament tournament;
-
     private List<Player> winners, participants;
 
     public TournamentTask(Tournament tournament) {
+        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
         this.tournament = tournament;
+        this.winners = tournamentAPI.getWinners();
+        this.participants = tournamentAPI.getParticipants();
         tournament.setStage(TournamentStage.ACTIVE);
-
-        winners = api.getWinners();
-        participants = api.getParticipants();
     }
 
     public void run() {
-        Arena arena = api.getAvailableArena();
+        Arena arena = tournamentAPI.getAvailableArena();
 
         if(arena == null) {
             return;
@@ -44,7 +42,7 @@ public class TournamentTask extends BukkitRunnable {
             match.setArena(arena);
 
             arena.setOccupied(true);
-            api.startMatch(match);
+            tournamentAPI.startMatch(match);
         }
 
         else if(participants.size() == 1) {
@@ -56,14 +54,9 @@ public class TournamentTask extends BukkitRunnable {
             winners.clear();
         }
 
-        else if(winners.size() == 1 && api.getMatches().size() == 0) {
+        else if(winners.size() == 1 && tournamentAPI.getMatches().size() == 0) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_WINNER_BROADCAST.toString().replace("{winner}", winners.get(0).getName()));
             tournament.end();
         }
-
-        /*else if(api.getMatches().size() == 0) {
-            Bukkit.broadcastMessage(Lang.TOURNAMENT_END_ERROR.toString());
-            tournament.end();
-        }*/
     }
 }

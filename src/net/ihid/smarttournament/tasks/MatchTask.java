@@ -1,6 +1,5 @@
 package net.ihid.smarttournament.tasks;
 
-import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.config.Lang;
@@ -26,9 +25,7 @@ public class MatchTask extends BukkitRunnable {
             return;
         }
 
-        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
-        tournamentAPI.removeFromTournament(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(tournamentAPI.getSpectatorArea()));
+        tournamentAPI.endIdleMatch(match);
         cancel();
     }
 }

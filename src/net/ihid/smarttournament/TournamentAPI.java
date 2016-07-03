@@ -1,6 +1,5 @@
 package net.ihid.smarttournament;
 
-import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
@@ -13,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TournamentAPI {
-    private final MainManager mainManager;
+    private MainManager mainManager;
 
     public TournamentAPI() {
-        mainManager = new MainManager();
+        this.mainManager = new MainManager();
     }
 
     /** Arena **/
@@ -127,6 +126,13 @@ public class TournamentAPI {
     }
 
     /*
+        Ends an idle match.
+     */
+    public void endIdleMatch(Match match) {
+        mainManager.getMatchManager().endIdleMatch(match);
+    }
+
+    /*
         Removes combat tag of specified player(s).
      */
     public void removeTag(Player... ps) {
@@ -231,5 +237,9 @@ public class TournamentAPI {
      */
     public void setDefaultState(Player player) {
         mainManager.getMatchManager().getNewPlayerState().setDefaultState(player);
+    }
+
+    public String toString() {
+        return "TournamentAPI is not null.";
     }
 }

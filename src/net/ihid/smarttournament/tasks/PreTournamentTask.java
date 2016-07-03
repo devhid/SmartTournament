@@ -12,12 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Created by Mikey on 4/25/2016.
  */
 public class PreTournamentTask extends BukkitRunnable {
-    private TournamentPlugin plugin = TournamentPlugin.getInstance();
-
+    private TournamentPlugin plugin;
     private Tournament tournament;
     private int countdown;
 
     public PreTournamentTask(Tournament tournament) {
+        this.plugin = TournamentPlugin.getInstance();
         this.tournament = tournament;
         this.countdown = plugin.getConfig().getInt("configuration.tournament-start-delay");
         tournament.setStage(TournamentStage.WAITING);
