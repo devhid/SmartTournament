@@ -51,7 +51,7 @@ public class TournamentPlugin extends JavaPlugin {
         try {
             return (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
         } catch(NoClassDefFoundError error) {
-
+            System.out.print("WARN: Optional dependency CombatTagPlus was not found.");
         }
         return null;
     }

@@ -37,12 +37,7 @@ public class ArenaManager {
     }
 
     public Arena getAvailableArena() {
-        for(Arena arena: arenas) {
-            if(!isOccupied(arena)) {
-                return arena;
-            }
-        }
-        return null;
+        return arenas.stream().filter(arena -> !isOccupied(arena)).findAny().get();
     }
 
     public void setLocation(String arenaName, Player player, int num) {

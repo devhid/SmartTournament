@@ -2,6 +2,7 @@ package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
 import net.ihid.smarttournament.ChatUtil;
+import net.ihid.smarttournament.MatchEndEvent;
 import net.ihid.smarttournament.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.player.NewPlayerState;
@@ -82,6 +83,7 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
+        //Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         removeTag(match.getInitiator(), match.getOpponent());
@@ -94,6 +96,7 @@ public class MatchManager {
     }
 
     public void endIdleMatch(Match match) {
+        //Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
         removeTag(match.getInitiator(), match.getOpponent());
