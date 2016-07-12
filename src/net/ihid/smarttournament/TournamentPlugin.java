@@ -1,12 +1,11 @@
 package net.ihid.smarttournament;
 
 import lombok.Getter;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.PluginConfig;
-import net.ihid.smarttournament.managers.MainManager;
 import net.minelink.ctplus.CombatTagPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TournamentPlugin extends JavaPlugin {

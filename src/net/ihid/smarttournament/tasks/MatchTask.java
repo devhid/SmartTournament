@@ -1,10 +1,8 @@
 package net.ihid.smarttournament.tasks;
 
-import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Match;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**

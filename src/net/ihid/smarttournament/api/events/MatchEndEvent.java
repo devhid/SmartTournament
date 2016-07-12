@@ -1,4 +1,4 @@
-package net.ihid.smarttournament;
+package net.ihid.smarttournament.api.events;
 
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.event.Event;

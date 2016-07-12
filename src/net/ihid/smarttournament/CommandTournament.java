@@ -1,5 +1,6 @@
 package net.ihid.smarttournament;
 
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 
 class CommandTournament implements CommandExecutor {
@@ -181,7 +184,17 @@ class CommandTournament implements CommandExecutor {
     }
 
     private boolean hasEmptyInventory(Player player) {
-        for(ItemStack item: player.getInventory().getContents()) {
+        final ItemStack[] contents = player.getInventory().getContents();
+        final ItemStack[] armorContents = player.getInventory().getArmorContents();
+
+        if(Arrays.stream(contents).filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR)) {
+            return false;
+        }
+
+        if(Arrays.stream(armorContents).filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR)) {
+            return false;
+        }
+        /*for(ItemStack item: player.getInventory().getContents()) {
             if(item != null) {
                 if(item.getType() != Material.AIR) {
                     return false;
@@ -195,7 +208,7 @@ class CommandTournament implements CommandExecutor {
                     return false;
                 }
             }
-        }
+        }*/
 
         return true;
     }

@@ -2,7 +2,7 @@ package net.ihid.smarttournament.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.player.SavedPlayerState;

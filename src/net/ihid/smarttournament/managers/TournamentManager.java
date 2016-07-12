@@ -1,10 +1,9 @@
 package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
-import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
-import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

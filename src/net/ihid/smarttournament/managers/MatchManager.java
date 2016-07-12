@@ -1,9 +1,8 @@
 package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
-import net.ihid.smarttournament.ChatUtil;
-import net.ihid.smarttournament.MatchEndEvent;
-import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.api.events.MatchEndEvent;
+import net.ihid.smarttournament.api.events.MatchStartEvent;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.player.NewPlayerState;
 import net.ihid.smarttournament.player.SavedPlayerState;
@@ -66,6 +65,7 @@ public class MatchManager {
     }
 
     public void startMatch(Match match) {
+        //Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_START_BROADCAST.toString()
                 .replace("{initiator}", match.getInitiator().getName())
                 .replace("{opponent}", match.getOpponent().getName()));

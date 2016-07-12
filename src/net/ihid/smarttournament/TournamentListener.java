@@ -1,5 +1,7 @@
 package net.ihid.smarttournament;
 
+import net.ihid.smarttournament.api.TournamentAPI;
+import net.ihid.smarttournament.api.events.MatchEndEvent;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;

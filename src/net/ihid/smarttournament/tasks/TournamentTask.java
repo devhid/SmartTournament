@@ -1,8 +1,7 @@
 package net.ihid.smarttournament.tasks;
 
-import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.TournamentAPI;
+import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.objects.Arena;

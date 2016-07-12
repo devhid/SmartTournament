@@ -9,15 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://A:/Users/Mikey/Folders/ENHANCED_PRISON/plugins/CombatLog-1.8.11-fix.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Maven: net.minelink:CombatTagPlus:1.2.4-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.mcstats.bukkit:metrics-lite:R8-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-API:1.2.4-SNAPSHOT" level="project" />

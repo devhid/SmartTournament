@@ -1,4 +1,4 @@
-package net.ihid.smarttournament;
+package net.ihid.smarttournament.api;
 
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Arena;
@@ -237,9 +237,5 @@ public class TournamentAPI {
      */
     public void setDefaultState(Player player) {
         mainManager.getMatchManager().getNewPlayerState().setDefaultState(player);
-    }
-
-    public String toString() {
-        return "TournamentAPI is not null.";
     }
 }
