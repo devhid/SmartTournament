@@ -15,6 +15,8 @@ public class TournamentPlugin extends JavaPlugin {
     @Getter
     private final PluginConfig rawConfig;
 
+    private static CombatTagPlus combatTag;
+
     public TournamentPlugin() {
         this.rawConfig = new PluginConfig(this, "settings.yml");
     }
@@ -27,6 +29,12 @@ public class TournamentPlugin extends JavaPlugin {
 
         loadCommands();
         loadListeners();
+
+        try {
+            combatTag = (CombatTagPlus) Bukkit.getServer().getPluginManager().getPlugin("CombatTagPlus");
+        } catch(NoClassDefFoundError error) {
+            System.out.println("[SmartTournament] WARN: Optional dependency CombatTagPlus was not found.");
+        }
     }
 
     @Override
@@ -48,9 +56,9 @@ public class TournamentPlugin extends JavaPlugin {
 
     public static CombatTagPlus getCombatTag() throws NoClassDefFoundError {
         try {
-            return (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
+            return combatTag;
         } catch(NoClassDefFoundError error) {
-            System.out.print("WARN: Optional dependency CombatTagPlus was not found.");
+
         }
         return null;
     }

@@ -37,6 +37,7 @@ public enum Lang {
     TOURNAMENT_POST_START_BROADCAST("messages.tournament-post-start-broadcast"),
     TOURNAMENT_END_SUCCESS("messages.tournament-end-success"),
     TOURNAMENT_END_BROADCAST("messages.tournament-end-broadcast"),
+    TOURNAMENT_NO_WINNER_BROADCAST("messages.tournament-no-winner-broadcast"),
     TOURNAMENT_WINNER_BROADCAST("messages.tournament-winner-broadcast");
 
     private final String path;

@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.0.3                                                                                         #
+# version: 1.1.0                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -114,6 +114,7 @@ messages:
     tournament-post-start-broadcast: "&eThe tournament has started!"
     tournament-end-success: "&aYou have successfully ended the tournament."
     tournament-end-broadcast: "&eThe tournament has forcibly been ended."
+    tournament-no-winner-broadcast: "&eUnfortunately, no one has won this tournament."
     tournament-winner-broadcast: "&e{winner} &7has won the tournament!"
 
 world-spawn:

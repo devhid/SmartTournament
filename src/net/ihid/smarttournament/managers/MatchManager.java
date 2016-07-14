@@ -65,7 +65,7 @@ public class MatchManager {
     }
 
     public void startMatch(Match match) {
-        //Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
+        Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_START_BROADCAST.toString()
                 .replace("{initiator}", match.getInitiator().getName())
                 .replace("{opponent}", match.getOpponent().getName()));
@@ -83,8 +83,11 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
-        //Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
-        Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
+        Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+
+        if(TournamentPlugin.getTournamentAPI().getParticipants().size() > 0) {
+            Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
+        }
 
         removeTag(match.getInitiator(), match.getOpponent());
         match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
@@ -96,8 +99,12 @@ public class MatchManager {
     }
 
     public void endIdleMatch(Match match) {
-        //Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+        Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
+
+        if(TournamentPlugin.getTournamentAPI().getWinners().size() == 0 && TournamentPlugin.getTournamentAPI().getParticipants().size() == 0) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+        }
 
         removeTag(match.getInitiator(), match.getOpponent());
         match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));

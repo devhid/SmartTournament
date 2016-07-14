@@ -95,15 +95,13 @@ public class TournamentManager {
                 (float) config.getDouble("world-spawn.pitch"));
     }
 
-    public void setSpectatorArea(Player player) {
-        final Location loc = player.getLocation();
-
-        config.set("spectator.world", loc.getWorld().getName());
-        config.set("spectator.x", loc.getBlockX());
-        config.set("spectator.y", loc.getBlockY());
-        config.set("spectator.z", loc.getBlockZ());
-        config.set("spectator.yaw", loc.getYaw());
-        config.set("spectator.pitch", loc.getPitch());
+    public void setSpectatorArea(Location location) {
+        config.set("spectator.world", location.getWorld().getName());
+        config.set("spectator.x", location.getBlockX());
+        config.set("spectator.y", location.getBlockY());
+        config.set("spectator.z", location.getBlockZ());
+        config.set("spectator.yaw", location.getYaw());
+        config.set("spectator.pitch", location.getPitch());
 
         plugin.getRawConfig().saveConfig();
     }

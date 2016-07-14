@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Mikey on 4/25/2016.
@@ -36,8 +37,15 @@ public class ArenaManager {
         return arena.isOccupied();
     }
 
-    public Arena getAvailableArena() {
-        return arenas.stream().filter(arena -> !isOccupied(arena)).findAny().get();
+    public Arena getAvailableArena() throws NoSuchElementException {
+        Arena arena;
+
+        try {
+            arena = arenas.stream().filter(a -> !isOccupied(a)).findAny().get();
+        } catch(NoSuchElementException ex) {
+            return null;
+        }
+        return arena;
     }
 
     public void setLocation(String arenaName, Player player, int num) {
