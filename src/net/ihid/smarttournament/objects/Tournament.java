@@ -58,19 +58,20 @@ public class Tournament {
 
         if(end) {
             online.stream().filter(tournamentAPI::isInTournament).forEach(player -> {
-                HashMap<Player, SavedPlayerState> playerStates = tournamentAPI.getPlayerStates();
+                HashMap<String, SavedPlayerState> playerStates = tournamentAPI.getPlayerStates();
 
-                if(playerStates.containsKey(player)) {
-                    playerStates.get(player).revert();
-                    playerStates.remove(player);
+                if(playerStates.containsKey(player.getName())) {
+                    playerStates.get(player.getName()).revert();
+                    playerStates.remove(player.getName());
                 }
 
                 player.teleport(tournamentAPI.getWorldSpawn());
             });
             tournamentAPI.clearParticipants();
+            tournamentAPI.getMatches().forEach(match -> match.getMatchTask().cancel());
         }
 
-        tournamentAPI.clearWinners();
+        tournamentAPI.clearMatchWinners();
         tournamentAPI.clearMatches();
         tournamentAPI.clearArenas();
     }

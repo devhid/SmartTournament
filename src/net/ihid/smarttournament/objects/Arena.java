@@ -28,8 +28,4 @@ public class Arena {
         this.firstLocation = firstLocation;
         this.secondLocation = secondLocation;
     }
-
-    public Set<Location> toSet() {
-        return Sets.newHashSet(firstLocation, secondLocation);
-    }
 }

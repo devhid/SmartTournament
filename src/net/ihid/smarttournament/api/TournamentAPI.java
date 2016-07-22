@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class TournamentAPI {
     private MainManager mainManager;
@@ -86,8 +87,8 @@ public class TournamentAPI {
      *
      * @return list of Player objects signifying match winners.
      */
-    public List<Player> getWinners() {
-        return mainManager.getMatchManager().getWinners();
+    public List<UUID> getMatchWinners() {
+        return mainManager.getMatchManager().getMatchWinners();
     }
 
     /*
@@ -100,8 +101,31 @@ public class TournamentAPI {
     /*
      * Clears list containing winner elements.
      */
-    public void clearWinners() {
-        mainManager.getMatchManager().clearWinners();
+    public void clearMatchWinners() {
+        mainManager.getMatchManager().clearMatchWinners();
+    }
+
+    /*
+     * Checks if a player is currently inside a match.
+     *
+     * @param player who is being checked.
+     *
+     * @return true if player is inside a match, false if not.
+     */
+    public boolean isInMatch(Player player) {
+        return mainManager.getMatchManager().isInMatch(player);
+    }
+
+
+    /*
+     * Gets the match the player is currently in.
+     *
+     * @param player whose match object is being grabbed.
+     *
+     * @return Match object of a specific player.
+     */
+    public Match getMatch(Player player) {
+        return mainManager.getMatchManager().getMatch(player);
     }
 
     /*
@@ -109,7 +133,7 @@ public class TournamentAPI {
      *
      * @return map of player states.
      */
-    public HashMap<Player, SavedPlayerState> getPlayerStates() {
+    public HashMap<String, SavedPlayerState> getPlayerStates() {
         return mainManager.getMatchManager().getPlayerStates();
     }
 
@@ -118,8 +142,8 @@ public class TournamentAPI {
      *
      * @param player who is being added as a match winner.
      */
-    public void addWinner(Player player) {
-        mainManager.getMatchManager().addWinner(player);
+    public void addMatchWinner(Player player) {
+        mainManager.getMatchManager().addMatchWinner(player);
     }
 
     /*
@@ -182,7 +206,7 @@ public class TournamentAPI {
      *
      * @return list of player objects representing tournament participants.
      */
-    public List<Player> getParticipants() {
+    public List<UUID> getParticipants() {
         return mainManager.getTournamentManager().getParticipants();
     }
 

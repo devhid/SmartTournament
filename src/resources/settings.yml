@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.1.0                                                                                         #
+# version: 1.2.0                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -10,6 +10,7 @@ configuration:
    tournament-start-delay: 60
    match-duration: 180
    minimum-players-to-start: 2
+   maximum-players-allowed: 3
    force-player-clear-inventory: true
    disable-commands-in-tournament: true
    countdown-values:
@@ -92,6 +93,7 @@ messages:
     severe-error: "&cSevere error. Please contact an administrator."
     no-tournaments-running: "&cThere are currently no tournaments running."
     not-enough-players: "&eThere are not enough players for this tournament to start."
+    maximum-players-reached: "&cThe maximum number of allowed joins for this tournament has been reached."
     already-in-tournament: "&cYou are already in the tournament."
     not-in-tournament: "&cYou are currently not in a tournament."
     match-start-broadcast: "&c{initiator} &7and &c{opponent} &7are now fighting."
@@ -109,6 +111,7 @@ messages:
     tournament-joined-success: "&aYou have successfully joined the tournament."
     tournament-joined-broadcast: "&e{username} &7has joined the tournament."
     tournament-left-success: "&aYou have successfully left the tournament."
+    tournament-left-broadcast: "&e{username} &7has left the tournament."
     tournament-start-success: "&aYou have successfully started the tournament."
     tournament-pre-start-broadcast: "&eA 1v1 tournament is going to begin. Type /tournament join to join the tournament."
     tournament-post-start-broadcast: "&eThe tournament has started!"

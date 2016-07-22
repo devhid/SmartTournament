@@ -39,10 +39,10 @@ public class Match {
 
     public void reset() {
         arena.setOccupied(false);
-        arena = null;
+        setArena(null);
+        setRunning(false);
+        setWinner(null);
         matchTask.cancel();
-        isRunning = false;
-        winner = null;
     }
 
     public Set<Player> toSet() {

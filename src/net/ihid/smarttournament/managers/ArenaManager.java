@@ -12,13 +12,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Created by Mikey on 4/25/2016.
  */
 public class ArenaManager {
-    private TournamentPlugin plugin;
-    private YamlConfiguration config;
+    private final TournamentPlugin plugin;
+    private final YamlConfiguration config;
 
     @Getter
     private List<Arena> arenas;
@@ -37,27 +38,25 @@ public class ArenaManager {
         return arena.isOccupied();
     }
 
-    public Arena getAvailableArena() throws NoSuchElementException {
-        Arena arena;
-
-        try {
-            arena = arenas.stream().filter(a -> !isOccupied(a)).findAny().get();
-        } catch(NoSuchElementException ex) {
-            return null;
+    public Arena getAvailableArena() {
+        Optional<Arena> arena = arenas.stream().filter(a -> !isOccupied(a)).findAny();
+        
+        if(arena.isPresent()) {
+            return arena.get();
         }
-        return arena;
+        return null;
     }
 
-    public void setLocation(String arenaName, Player player, int num) {
-        Location loc = player.getLocation();
-        String path = "arenas." + arenaName + "." + num;
+    public void setLocation(String arenaName, Player player, int position) {
+        Location location = player.getLocation();
+        String path = "arenas." + arenaName + "." + position;
 
-        config.set(path + ".world", loc.getWorld().getName());
-        config.set(path + ".x", loc.getBlockX());
-        config.set(path + ".y", loc.getBlockY());
-        config.set(path + ".z", loc.getBlockZ());
-        config.set(path + ".yaw", loc.getYaw());
-        config.set(path + ".pitch", loc.getPitch());
+        config.set(path + ".world", location.getWorld().getName());
+        config.set(path + ".x", location.getBlockX());
+        config.set(path + ".y", location.getBlockY());
+        config.set(path + ".z", location.getBlockZ());
+        config.set(path + ".yaw", location.getYaw());
+        config.set(path + ".pitch", location.getPitch());
 
         plugin.getRawConfig().saveConfig();
     }

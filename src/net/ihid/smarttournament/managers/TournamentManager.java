@@ -12,16 +12,17 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TournamentManager {
-    private TournamentPlugin plugin;
-    private YamlConfiguration config;
+    private final TournamentPlugin plugin;
+    private final YamlConfiguration config;
 
     @Getter
     private Tournament tournament;
 
     @Getter
-    private List<Player> participants;
+    private List<UUID> participants;
 
     public TournamentManager() {
         this.plugin = TournamentPlugin.getInstance();
@@ -30,29 +31,28 @@ public class TournamentManager {
         this.participants = new ArrayList<>();
     }
 
-
     public void clearParticipants() {
         participants.clear();
     }
 
     public boolean isInTournament(Player player) {
         final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
-        return participants.contains(player) || tournamentAPI.getWinners().contains(player) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return participants.contains(player.getUniqueId()) || tournamentAPI.getMatchWinners().contains(player.getUniqueId()) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
     public void addParticipant(Player player) {
-        participants.add(player);
+        participants.add(player.getUniqueId());
     }
 
     public void removeFromTournament(Player... participants) {
         final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         for(Player player: participants) {
-            if (tournamentAPI.getWinners().contains(player)) {
-                tournamentAPI.getWinners().remove(player);
+            if (tournamentAPI.getMatchWinners().contains(player.getUniqueId())) {
+                tournamentAPI.getMatchWinners().remove(player.getUniqueId());
             }
 
-            if (tournamentAPI.getParticipants().contains(player)) {
-                tournamentAPI.getParticipants().remove(player);
+            if (tournamentAPI.getParticipants().contains(player.getUniqueId())) {
+                tournamentAPI.getParticipants().remove(player.getUniqueId());
             }
         }
     }

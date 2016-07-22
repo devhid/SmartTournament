@@ -2,6 +2,7 @@ package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
+import net.ihid.smarttournament.objects.Match;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -72,6 +73,13 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
+                int allowed = plugin.getConfig().getInt("configuration.maximum-players-allowed");
+
+                if(tournamentAPI.getParticipants().size() == allowed && allowed != -1 ) {
+                    ps.sendMessage(Lang.MAXIMUM_PLAYERS_REACHED.toString());
+                    return true;
+                }
+
                 if(plugin.getConfig().getBoolean("configuration.force-player-clear-inventory")) {
                     if (!hasEmptyInventory(ps)) {
                         ps.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString());
@@ -102,9 +110,19 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
+                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", ps.getName()));
+
+                if(tournamentAPI.isInMatch(ps)) {
+                    final Match match = tournamentAPI.getMatch(ps);
+                    match.setWinner( ps.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator() );
+
+                    tournamentAPI.addMatchWinner(match.getWinner());
+                    tournamentAPI.endMatch(tournamentAPI.getMatch(ps));
+                }
+
                 tournamentAPI.removeFromTournament(ps);
                 ps.teleport(tournamentAPI.getWorldSpawn());
-                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
                 break;
 
             case "start":
@@ -194,21 +212,6 @@ class CommandTournament implements CommandExecutor {
         if(Arrays.stream(armorContents).filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR)) {
             return false;
         }
-        /*for(ItemStack item: player.getInventory().getContents()) {
-            if(item != null) {
-                if(item.getType() != Material.AIR) {
-                    return false;
-                }
-            }
-        }
-
-        for(ItemStack item: player.getInventory().getArmorContents()) {
-            if(item != null) {
-                if(item.getType() != Material.AIR) {
-                    return false;
-                }
-            }
-        }*/
 
         return true;
     }
