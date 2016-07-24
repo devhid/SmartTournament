@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
 import net.ihid.smarttournament.tasks.TournamentTask;
@@ -18,6 +19,8 @@ import java.util.HashMap;
  * Created by Mikey on 4/24/2016.
  */
 public class Tournament {
+    private final MainManager mainManager;
+    
     @Getter @Setter
     private TournamentStage stage;
 
@@ -28,12 +31,16 @@ public class Tournament {
     private PreTournamentTask preTournamentTask;
 
     public Tournament() {
+        this.mainManager = TournamentPlugin.getMainManager();
+        if(mainManager == null) {
+            Bukkit.broadcastMessage("mainManager is null in Tournament class.");
+        }
         this.stage = TournamentStage.NON_ACTIVE;
     }
 
     public void start() {
         reset(false);
-        TournamentPlugin.getTournamentAPI().loadArenas();
+        mainManager.loadArenas();
 
         preTournamentTask = new PreTournamentTask(this);
         preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
@@ -53,26 +60,25 @@ public class Tournament {
     }
 
     private void reset(boolean end) {
-        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         Collection<? extends Player> online = Bukkit.getOnlinePlayers();
 
         if(end) {
-            online.stream().filter(tournamentAPI::isInTournament).forEach(player -> {
-                HashMap<String, SavedPlayerState> playerStates = tournamentAPI.getPlayerStates();
+            online.stream().filter(mainManager::isInTournament).forEach(player -> {
+                HashMap<String, SavedPlayerState> playerStates = mainManager.getPlayerStates();
 
                 if(playerStates.containsKey(player.getName())) {
                     playerStates.get(player.getName()).revert();
                     playerStates.remove(player.getName());
                 }
 
-                player.teleport(tournamentAPI.getWorldSpawn());
+                player.teleport(mainManager.getWorldSpawn());
             });
-            tournamentAPI.clearParticipants();
-            tournamentAPI.getMatches().forEach(match -> match.getMatchTask().cancel());
+            mainManager.clearParticipants();
+            mainManager.getMatches().forEach(match -> match.getMatchTask().cancel());
         }
 
-        tournamentAPI.clearMatchWinners();
-        tournamentAPI.clearMatches();
-        tournamentAPI.clearArenas();
+        mainManager.clearMatchWinners();
+        mainManager.clearMatches();
+        mainManager.clearArenas();
     }
 }

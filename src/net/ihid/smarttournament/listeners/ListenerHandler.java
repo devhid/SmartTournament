@@ -1,14 +1,12 @@
-package net.ihid.smarttournament.managers;
+package net.ihid.smarttournament.listeners;
 
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.listeners.*;
-import org.bukkit.event.Listener;
 
 /**
- * Created by Mikey on 7/21/2016.
+ * Created by Mikey on 7/23/2016.
  */
-public class ListenerManager {
+public class ListenerHandler {
     @Getter
     private CombatTagListener combatTagListener;
 
@@ -27,7 +25,7 @@ public class ListenerManager {
     @Getter
     private RandomDamageListener randomDamageListener;
 
-    public ListenerManager(TournamentPlugin plugin) {
+    public ListenerHandler(TournamentPlugin plugin) {
         this.combatTagListener = new CombatTagListener(plugin);
         this.commandListener = new CommandListener(plugin);
         this.itemDropListener = new ItemDropListener(plugin);

@@ -19,7 +19,8 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class MatchManager {
-    private TagManager tagManager;
+    private final TournamentPlugin plugin;
+    private final MainManager mainManager;
 
     @Getter
     private NewPlayerState newPlayerState;
@@ -33,10 +34,9 @@ public class MatchManager {
     @Getter
     private HashMap<String, SavedPlayerState> playerStates;
 
-    public MatchManager() {
-        CombatTagPlusHook ctpHook = TournamentPlugin.getHookManager().getCombatTagPlusHook();
-
-        this.tagManager = ctpHook.isEnabled() ? ctpHook.getTagManager() : null;
+    public MatchManager(MainManager mainManager) {
+        this.plugin = TournamentPlugin.getInstance();
+        this.mainManager = mainManager;
         this.newPlayerState = new NewPlayerState();
         this.matches = new ArrayList<>();
         this.matchWinners = new ArrayList<>();
@@ -60,11 +60,7 @@ public class MatchManager {
     }
 
     public Match getMatch(Player player) {
-        Optional<Match> match = matches.stream().filter(m -> m.toSet().contains(player)).findAny();
-        if(match.isPresent()) {
-            return match.get();
-        }
-        return null;
+        return matches.stream().filter(match -> match.toSet().contains(player)).findAny().orElse(null);
     }
 
     public void teleportPlayers(Match match) {
@@ -75,7 +71,7 @@ public class MatchManager {
     }
 
     public void startMatch(Match match) {
-        Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
+        plugin.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_START_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
         teleportPlayers(match);
@@ -91,11 +87,11 @@ public class MatchManager {
     }
 
     public void endMatch(Match match) {
-        Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+        plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         //removeTag(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
+        match.toSet().forEach(player -> player.teleport(mainManager.getSpectatorArea()));
 
         matches.remove(match);
         unmapStates(playerStates, match);
@@ -104,25 +100,26 @@ public class MatchManager {
     }
 
     public void endIdleMatch(Match match) {
-        Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+        plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
-        if(TournamentPlugin.getTournamentAPI().getMatchWinners().size() == 0 && TournamentPlugin.getTournamentAPI().getParticipants().size() < 1) {
+        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
         }
 
         //removeTag(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(TournamentPlugin.getTournamentAPI().getSpectatorArea()));
+        match.toSet().forEach(player -> player.teleport(mainManager.getSpectatorArea()));
 
         matches.remove(match);
         unmapStates(playerStates, match);
 
         match.reset();
-        TournamentPlugin.getTournamentAPI().removeFromTournament(match.getInitiator(), match.getOpponent());
+        mainManager.removeFromTournament(match.getInitiator(), match.getOpponent());
     }
 
     public void removeTag(Player... ps) {
-        if (tagManager != null) {
+        if (TournamentPlugin.getHookHandler().getCombatTagPlusHook().isEnabled()) {
+            final TagManager tagManager = TournamentPlugin.getHookHandler().getCombatTagPlusHook().getTagManager();
             Arrays.stream(ps).filter(player -> player != null && tagManager.isTagged(player.getUniqueId())).forEach(player -> tagManager.untag(player.getUniqueId()));
         }
     }

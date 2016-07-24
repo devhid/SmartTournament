@@ -1,16 +1,16 @@
 package net.ihid.smarttournament.hooks;
 
 import lombok.Getter;
-import net.minelink.ctplus.CombatTagPlus;
+import net.ihid.smarttournament.TournamentPlugin;
 
 /**
- * Created by Mikey on 7/20/2016.
+ * Created by Mikey on 7/23/2016.
  */
-public class HookManager {
+public class HookHandler {
     @Getter
     private CombatTagPlusHook combatTagPlusHook;
 
-    public HookManager() {
+    public HookHandler() {
         this.combatTagPlusHook = new CombatTagPlusHook();
     }
 }

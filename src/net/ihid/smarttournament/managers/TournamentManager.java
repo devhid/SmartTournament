@@ -13,8 +13,10 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class TournamentManager {
+    private final MainManager mainManager;
     private final TournamentPlugin plugin;
     private final YamlConfiguration config;
 
@@ -24,10 +26,10 @@ public class TournamentManager {
     @Getter
     private List<UUID> participants;
 
-    public TournamentManager() {
+    public TournamentManager(MainManager mainManager) {
         this.plugin = TournamentPlugin.getInstance();
+        this.mainManager = mainManager;
         this.config = plugin.getConfig();
-        this.tournament = new Tournament();
         this.participants = new ArrayList<>();
     }
 
@@ -36,8 +38,7 @@ public class TournamentManager {
     }
 
     public boolean isInTournament(Player player) {
-        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
-        return participants.contains(player.getUniqueId()) || tournamentAPI.getMatchWinners().contains(player.getUniqueId()) || tournamentAPI.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return participants.contains(player.getUniqueId()) || mainManager.getMatchWinners().contains(player.getUniqueId()) || mainManager.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
     }
 
     public void addParticipant(Player player) {
@@ -45,20 +46,20 @@ public class TournamentManager {
     }
 
     public void removeFromTournament(Player... participants) {
-        final TournamentAPI tournamentAPI = TournamentPlugin.getTournamentAPI();
         for(Player player: participants) {
-            if (tournamentAPI.getMatchWinners().contains(player.getUniqueId())) {
-                tournamentAPI.getMatchWinners().remove(player.getUniqueId());
+            if (mainManager.getMatchWinners().contains(player.getUniqueId())) {
+                mainManager.getMatchWinners().remove(player.getUniqueId());
             }
 
-            if (tournamentAPI.getParticipants().contains(player.getUniqueId())) {
-                tournamentAPI.getParticipants().remove(player.getUniqueId());
+            if (mainManager.getParticipants().contains(player.getUniqueId())) {
+                mainManager.getParticipants().remove(player.getUniqueId());
             }
         }
     }
 
     public void startTournament() {
         if(!isTournamentRunning()) {
+            tournament = new Tournament();
             tournament.start();
         }
     }
@@ -70,7 +71,7 @@ public class TournamentManager {
     }
 
     public boolean isTournamentRunning() {
-        return tournament.getStage() != TournamentStage.NON_ACTIVE;
+        return tournament != null && (tournament.getStage() != TournamentStage.NON_ACTIVE);
     }
     
     public void setWorldSpawn(Player player) {

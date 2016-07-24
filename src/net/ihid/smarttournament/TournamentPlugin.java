@@ -3,33 +3,27 @@ package net.ihid.smarttournament;
 import lombok.Getter;
 import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.PluginConfig;
-import net.ihid.smarttournament.hooks.HookManager;
-import net.ihid.smarttournament.listeners.CombatTagListener;
-import net.ihid.smarttournament.listeners.CommandListener;
-import net.ihid.smarttournament.listeners.ItemDropListener;
-import net.ihid.smarttournament.listeners.RandomDamageListener;
-import net.ihid.smarttournament.managers.ListenerManager;
-import net.minelink.ctplus.CombatTagPlus;
-import org.bukkit.Bukkit;
+import net.ihid.smarttournament.hooks.HookHandler;
+import net.ihid.smarttournament.listeners.ListenerHandler;
+import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Random;
 
 public class TournamentPlugin extends JavaPlugin {
     @Getter
     private static TournamentAPI tournamentAPI;
 
     @Getter
-    private static HookManager hookManager;
+    private static MainManager mainManager;
 
     @Getter
-    private ListenerManager listenerManager;
+    private static HookHandler hookHandler;
 
     @Getter
-    private final PluginConfig rawConfig;
+    private ListenerHandler listenerHandler;
+
+    @Getter
+    private PluginConfig rawConfig;
 
     public TournamentPlugin() {
         this.rawConfig = new PluginConfig(this, "settings.yml");
@@ -39,7 +33,9 @@ public class TournamentPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefault();
 
-        hookManager = new HookManager();
+        hookHandler = new HookHandler();
+
+        mainManager = new MainManager(this);
         tournamentAPI = new TournamentAPI();
 
         loadCommands();
@@ -48,7 +44,9 @@ public class TournamentPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        tournamentAPI.endTournament();
+        if(mainManager != null) {
+            mainManager.endTournament();
+        }
     }
 
     private void loadCommands() {
@@ -56,7 +54,7 @@ public class TournamentPlugin extends JavaPlugin {
     }
 
     private void loadListeners() {
-        listenerManager = new ListenerManager(this);
+        listenerHandler = new ListenerHandler(this);
     }
 
     private void saveDefault() {

@@ -2,6 +2,7 @@ package net.ihid.smarttournament;
 
 import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
+import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Match;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,11 +17,11 @@ import java.util.Arrays;
 
 class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
-    private TournamentAPI tournamentAPI;
+    private MainManager mainManager;
 
     public CommandTournament(TournamentPlugin instance) {
         this.plugin = instance;
-        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
+        this.mainManager = TournamentPlugin.getMainManager();
     }
 
     private class CommandException extends RuntimeException {
@@ -58,24 +59,24 @@ class CommandTournament implements CommandExecutor {
                 checkPlayer(sender);
                 ps = (Player) sender;
 
-                if(!tournamentAPI.isTournamentRunning()) {
+                if(!mainManager.isTournamentRunning()) {
                     ps.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
 
-                if(tournamentAPI.getTournament().getStage() == TournamentStage.ACTIVE) {
+                if(mainManager.getTournament().getStage() == TournamentStage.ACTIVE) {
                     ps.sendMessage(Lang.TOURNAMENT_ALREADY_STARTED.toString());
                     return true;
                 }
 
-                if(tournamentAPI.isInTournament(ps)) {
+                if(mainManager.isInTournament(ps)) {
                     ps.sendMessage(Lang.ALREADY_IN_TOURNAMENT.toString());
                     return true;
                 }
 
                 int allowed = plugin.getConfig().getInt("configuration.maximum-players-allowed");
 
-                if(tournamentAPI.getParticipants().size() == allowed && allowed != -1 ) {
+                if(mainManager.getParticipants().size() == allowed && allowed != -1 ) {
                     ps.sendMessage(Lang.MAXIMUM_PLAYERS_REACHED.toString());
                     return true;
                 }
@@ -87,12 +88,12 @@ class CommandTournament implements CommandExecutor {
                     }
                 }
 
-                tournamentAPI.addParticipant(ps);
-                tournamentAPI.removeTag(ps);
+                mainManager.addParticipant(ps);
+                mainManager.removeTag(ps);
 
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", ps.getName()));
                 ps.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
-                ps.teleport(tournamentAPI.getSpectatorArea());
+                ps.teleport(mainManager.getSpectatorArea());
 
                 break;
 
@@ -100,12 +101,12 @@ class CommandTournament implements CommandExecutor {
                 checkPlayer(sender);
                 ps = (Player) sender;
 
-                if(!tournamentAPI.isTournamentRunning()) {
+                if(!mainManager.isTournamentRunning()) {
                     ps.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
 
-                if(!tournamentAPI.isInTournament(ps)) {
+                if(!mainManager.isInTournament(ps)) {
                     ps.sendMessage(Lang.NOT_IN_TOURNAMENT.toString());
                     return true;
                 }
@@ -113,22 +114,22 @@ class CommandTournament implements CommandExecutor {
                 ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", ps.getName()));
 
-                if(tournamentAPI.isInMatch(ps)) {
-                    final Match match = tournamentAPI.getMatch(ps);
+                if(mainManager.isInMatch(ps)) {
+                    final Match match = mainManager.getMatch(ps);
                     match.setWinner( ps.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator() );
 
-                    tournamentAPI.addMatchWinner(match.getWinner());
-                    tournamentAPI.endMatch(tournamentAPI.getMatch(ps));
+                    mainManager.addMatchWinner(match.getWinner());
+                    mainManager.endMatch(mainManager.getMatch(ps));
                 }
 
-                tournamentAPI.removeFromTournament(ps);
-                ps.teleport(tournamentAPI.getWorldSpawn());
+                mainManager.removeFromTournament(ps);
+                ps.teleport(mainManager.getWorldSpawn());
                 break;
 
             case "start":
                 checkPerm(sender, "smarttournament.start");
 
-                if(tournamentAPI.isTournamentRunning()) {
+                if(mainManager.isTournamentRunning()) {
                     sender.sendMessage(Lang.TOURNAMENT_ALREADY_STARTED.toString());
                     return true;
                 }
@@ -143,13 +144,13 @@ class CommandTournament implements CommandExecutor {
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_PRE_START_BROADCAST.toString());
                 sender.sendMessage(Lang.TOURNAMENT_START_SUCCESS.toString());
                 
-                tournamentAPI.startTournament();
+                mainManager.startTournament();
                 break;
 
             case "end":
                 checkPerm(sender, "smarttournament.end");
 
-                if(!tournamentAPI.isTournamentRunning()) {
+                if(!mainManager.isTournamentRunning()) {
                     sender.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
@@ -157,7 +158,7 @@ class CommandTournament implements CommandExecutor {
                 Bukkit.broadcastMessage(Lang.TOURNAMENT_END_BROADCAST.toString());
                 sender.sendMessage(Lang.TOURNAMENT_END_SUCCESS.toString());
                 
-                tournamentAPI.endTournament();
+                mainManager.endTournament();
                 break;
 
             case "setspawn":
@@ -168,13 +169,13 @@ class CommandTournament implements CommandExecutor {
                 if(args.length == 2) {
                     if(args[1].equalsIgnoreCase("-spectator")) {
                         sender.sendMessage(Lang.SPECTATOR_AREA_SET.toString());
-                        tournamentAPI.setSpectatorArea(ps);
+                        mainManager.setSpectatorArea(ps);
                         return true;
                     }
 
                     if(args[1].equalsIgnoreCase("-world")) {
                         sender.sendMessage(Lang.WORLD_SPAWN_SET.toString());
-                        tournamentAPI.setWorldSpawn(ps);
+                        mainManager.setWorldSpawn(ps);
                     }
                 }
 
@@ -190,7 +191,7 @@ class CommandTournament implements CommandExecutor {
                     }
 
                     sender.sendMessage(Lang.ARENA_SET_SUCCESS.toString().replace("{arena}", arenaName).replace("{position}", num.toString()));
-                    tournamentAPI.setLocation(arenaName, ps, num);
+                    mainManager.setLocation(arenaName, ps, num);
                     return true;
                 }
                 break;

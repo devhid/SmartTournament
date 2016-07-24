@@ -2,6 +2,7 @@ package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.api.TournamentAPI;
+import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,35 +12,35 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
  * Created by Mikey on 7/21/2016.
  */
 public class PlayerDamageListener implements Listener {
-    private final TournamentAPI tournamentAPI;
+    private final MainManager mainManager;
 
     public PlayerDamageListener(TournamentPlugin plugin) {
-        this.tournamentAPI = TournamentPlugin.getTournamentAPI();
+        this.mainManager = TournamentPlugin.getMainManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent evt) {
-        if(tournamentAPI.isTournamentRunning()) {
+        if(mainManager.isTournamentRunning()) {
             if (!(evt.getEntity() instanceof Player)) {
                 return;
             }
 
-            if(!tournamentAPI.isInTournament((Player) evt.getEntity())) {
+            if(!mainManager.isInTournament((Player) evt.getEntity())) {
                 return;
             }
 
             Player player = (Player) evt.getEntity();
 
-            switch (tournamentAPI.getTournament().getStage()) {
+            switch (mainManager.getTournament().getStage()) {
                 case WAITING:
                     if (player.getHealth() <= evt.getFinalDamage()) {
                         evt.setCancelled(true);
-                        evt.getEntity().teleport(tournamentAPI.getSpectatorArea());
+                        evt.getEntity().teleport(mainManager.getSpectatorArea());
                     }
                     break;
                 case ACTIVE:
-                    tournamentAPI.getMatches().stream()
+                    mainManager.getMatches().stream()
                             .filter(match -> match.toSet().contains(player))
                             .findAny()
                             .ifPresent(match -> {
@@ -50,9 +51,9 @@ public class PlayerDamageListener implements Listener {
 
                                 match.setWinner(player.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator());
 
-                                tournamentAPI.removeFromTournament(player);
-                                tournamentAPI.addMatchWinner(match.getWinner());
-                                tournamentAPI.endMatch(match);
+                                mainManager.removeFromTournament(player);
+                                mainManager.addMatchWinner(match.getWinner());
+                                mainManager.endMatch(match);
                             });
                     break;
                 default:

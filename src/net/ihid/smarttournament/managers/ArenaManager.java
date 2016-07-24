@@ -24,8 +24,8 @@ public class ArenaManager {
     @Getter
     private List<Arena> arenas;
 
-    public ArenaManager() {
-        this.plugin = TournamentPlugin.getInstance();
+    public ArenaManager(TournamentPlugin plugin) {
+        this.plugin = plugin;
         this.config = plugin.getConfig();
         this.arenas = new ArrayList<>();
     }
@@ -39,12 +39,7 @@ public class ArenaManager {
     }
 
     public Arena getAvailableArena() {
-        Optional<Arena> arena = arenas.stream().filter(a -> !isOccupied(a)).findAny();
-        
-        if(arena.isPresent()) {
-            return arena.get();
-        }
-        return null;
+        return arenas.stream().filter(arena -> !isOccupied(arena)).findAny().orElse(null);
     }
 
     public void setLocation(String arenaName, Player player, int position) {

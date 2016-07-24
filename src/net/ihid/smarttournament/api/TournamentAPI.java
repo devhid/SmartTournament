@@ -1,6 +1,7 @@
 package net.ihid.smarttournament.api;
 
-import net.ihid.smarttournament.managers.MainManager;
+import net.ihid.smarttournament.TournamentPlugin;
+import net.ihid.smarttournament.managers.*;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
@@ -16,17 +17,10 @@ public class TournamentAPI {
     private MainManager mainManager;
 
     public TournamentAPI() {
-        this.mainManager = new MainManager();
+        this.mainManager = TournamentPlugin.getMainManager();
     }
 
     /** Arena **/
-    /*
-     * Clears list containing arena elements.
-     */
-    public void clearArenas() {
-        mainManager.getArenaManager().clearArenas();
-    }
-
     /*
      * Checks if specified arena is occupied.
      *
@@ -48,28 +42,12 @@ public class TournamentAPI {
     }
 
     /*
-     * Adds an arena in the config file with the arena name, player's location, and position.
-     *
-     * @param arenaName - name of arena, player - player who is setting location, position - either 1 or 2.
-     */
-    public void setLocation(String arenaName, Player player, int position) {
-        mainManager.getArenaManager().setLocation(arenaName, player, position);
-    }
-
-    /*
      * Returns list containing all arena elements.
      *
      * @return list of arena objects.
      */
     public List<Arena> getArenas() {
         return mainManager.getArenaManager().getArenas();
-    }
-
-    /*
-     * Adds arena elements into list formed from locations defined in config file.
-     */
-    public void loadArenas() {
-        mainManager.getArenaManager().loadArenas();
     }
 
     /** Match **/
@@ -116,7 +94,6 @@ public class TournamentAPI {
         return mainManager.getMatchManager().isInMatch(player);
     }
 
-
     /*
      * Gets the match the player is currently in.
      *
@@ -144,15 +121,6 @@ public class TournamentAPI {
      */
     public void addMatchWinner(Player player) {
         mainManager.getMatchManager().addMatchWinner(player);
-    }
-
-    /*
-     * Teleports players of a match to their locations inside the match's set arena.
-     *
-     * @param match - used to get its assigned arena.
-     */
-    public void teleportPlayers(Match match) {
-        mainManager.getMatchManager().teleportPlayers(match);
     }
 
     /*
@@ -186,6 +154,8 @@ public class TournamentAPI {
      * Removes combat tag of specified player(s).
      *
      * @param set containing player objects.
+     *
+     * @info Uses CombatTagPlus for tag removal.
      */
     public void removeTag(Player... players) {
         mainManager.getMatchManager().removeTag(players);
@@ -244,20 +214,6 @@ public class TournamentAPI {
      */
     public void removeFromTournament(Player... participants) {
         mainManager.getTournamentManager().removeFromTournament(participants);
-    }
-
-    /*
-     * Starts a tournament.
-     */
-    public void startTournament() {
-        mainManager.getTournamentManager().startTournament();
-    }
-
-    /*
-     * Ends a tournament.
-     */
-    public void endTournament() {
-        mainManager.getTournamentManager().endTournament();
     }
 
     /*
@@ -322,5 +278,6 @@ public class TournamentAPI {
      */
     public void setDefaultState(Player player) {
         mainManager.getMatchManager().getNewPlayerState().setDefaultState(player);
+
     }
 }
