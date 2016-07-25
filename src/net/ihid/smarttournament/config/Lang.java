@@ -40,7 +40,8 @@ public enum Lang {
     TOURNAMENT_END_SUCCESS("messages.tournament-end-success"),
     TOURNAMENT_END_BROADCAST("messages.tournament-end-broadcast"),
     TOURNAMENT_NO_WINNER_BROADCAST("messages.tournament-no-winner-broadcast"),
-    TOURNAMENT_WINNER_BROADCAST("messages.tournament-winner-broadcast");
+    TOURNAMENT_WINNER_BROADCAST("messages.tournament-winner-broadcast"),
+    TOURNAMENT_WINNER_REWARD_MESSAGE("messages.tournament-winner-reward-message");
 
     private final String path;
     private YamlConfiguration config = TournamentPlugin.getInstance().getConfig();

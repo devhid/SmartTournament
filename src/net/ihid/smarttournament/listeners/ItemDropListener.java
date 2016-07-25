@@ -38,6 +38,10 @@ public class ItemDropListener implements Listener {
             if(evt.getWhoClicked().getType() != EntityType.PLAYER) {
                 return;
             }
+
+            if(evt.getSlotType() == InventoryType.SlotType.OUTSIDE) {
+                return;
+            }
             
             if(evt.getClickedInventory().getType() != InventoryType.PLAYER) {
                 return;

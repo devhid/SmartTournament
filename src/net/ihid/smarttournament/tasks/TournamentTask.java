@@ -9,6 +9,7 @@ import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -60,6 +61,16 @@ public class TournamentTask extends BukkitRunnable {
 
         else if(matchWinners.size() == 1 && participants.size() < 1) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_WINNER_BROADCAST.toString().replace("{winner}", Bukkit.getPlayer(matchWinners.get(0)).getName()));
+
+            final YamlConfiguration config = TournamentPlugin.getInstance().getConfig();
+            final Player winner = Bukkit.getPlayer(matchWinners.get(0));
+
+            if(config.getBoolean("configuration.winner-rewards.message-enabled")) {
+                winner.sendMessage(Lang.TOURNAMENT_WINNER_REWARD_MESSAGE.toString());
+            }
+
+            config.getStringList("configuration.winner-rewards.reward-commands")
+                    .forEach(s -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s.replace("{username}", winner.getName())));
             tournament.end();
         }
     }

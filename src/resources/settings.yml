@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.2.0                                                                                         #
+# version: 1.2.2                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -23,6 +23,10 @@ configuration:
    - 3
    - 2
    - 1
+   winner-rewards:
+      message-enabled: true
+      reward-commands:
+      - eco give {username} 10000
    when-fighting:
       ensure-max-health: true
       ensure-max-hunger: true
@@ -119,6 +123,7 @@ messages:
     tournament-end-broadcast: "&eThe tournament has forcibly been ended."
     tournament-no-winner-broadcast: "&eUnfortunately, no one has won this tournament."
     tournament-winner-broadcast: "&e{winner} &7has won the tournament!"
+    tournament-winner-reward-message: "&dYou have received $10000 for winning this tournament!"
 
 world-spawn:
 
