@@ -2,51 +2,55 @@ package net.ihid.smarttournament.listeners;
 
 import com.shampaggon.crackshot.events.WeaponDamageEntityEvent;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
+import net.ihid.smarttournament.hooks.HookHandler;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
- * Created by Mikey on 7/21/2016.
+ * Created by Mikey on 8/19/2016.
  */
-class PlayerDamageListener implements Listener {
+class CrackShotDamageListener implements Listener {
     private final MainManager mainManager;
+    private final HookHandler hookHandler;
 
-    PlayerDamageListener(TournamentPlugin plugin) {
+    CrackShotDamageListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.hookHandler = TournamentPlugin.getHookHandler();
+
+        if(hookHandler.getCrackShotHook().isEnabled()) {
+            plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        }
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent evt) {
+    public void onCrackShotDamage(WeaponDamageEntityEvent evt) {
         if(mainManager.isTournamentRunning()) {
-            if (!(evt.getEntity() instanceof Player)) {
+            if(!(evt.getVictim() instanceof Player)) {
                 return;
             }
 
-            if(!mainManager.isInTournament((Player) evt.getEntity())) {
+            if(!mainManager.isInTournament((Player) evt.getVictim())) {
                 return;
             }
 
-            Player player = (Player) evt.getEntity();
+            Player player = (Player) evt.getVictim();
 
             switch (mainManager.getTournament().getStage()) {
                 case WAITING:
-                    if (player.getHealth() <= evt.getFinalDamage()) {
+                    if (player.getHealth() <= evt.getDamage()) {
                         evt.setCancelled(true);
-                        evt.getEntity().teleport(mainManager.getSpectatorArea());
+                        evt.getVictim().teleport(mainManager.getSpectatorArea());
                     }
+
                     break;
                 case ACTIVE:
                     mainManager.getMatches().stream()
                             .filter(match -> match.toSet().contains(player))
                             .findAny()
                             .ifPresent(match -> {
-                                if (player.getHealth() > evt.getFinalDamage()) {
+                                if (player.getHealth() > evt.getDamage()) {
                                     return;
                                 }
                                 evt.setCancelled(true);

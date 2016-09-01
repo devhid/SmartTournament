@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.2.2                                                                                         #
+# version: 1.2.8                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -10,7 +10,7 @@ configuration:
    tournament-start-delay: 60
    match-duration: 180
    minimum-players-to-start: 2
-   maximum-players-allowed: 3
+   maximum-players-allowed: -1
    force-player-clear-inventory: true
    disable-commands-in-tournament: true
    countdown-values:
@@ -131,4 +131,4 @@ spectator:
 
 arenas:
 
-
+player-logout-data: []

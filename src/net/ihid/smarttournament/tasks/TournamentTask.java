@@ -51,7 +51,6 @@ public class TournamentTask extends BukkitRunnable {
 
         else if(participants.size() == 1) {
             matchWinners.add(participants.remove(0));
-
         }
 
         else if(matchWinners.size() > 1 && participants.size() < 1) {
@@ -59,7 +58,7 @@ public class TournamentTask extends BukkitRunnable {
             matchWinners.clear();
         }
 
-        else if(matchWinners.size() == 1 && participants.size() < 1) {
+        else if(matchWinners.size() == 1 && participants.size() < 1 && mainManager.getMatches().size() == 0) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_WINNER_BROADCAST.toString().replace("{winner}", Bukkit.getPlayer(matchWinners.get(0)).getName()));
 
             final YamlConfiguration config = TournamentPlugin.getInstance().getConfig();

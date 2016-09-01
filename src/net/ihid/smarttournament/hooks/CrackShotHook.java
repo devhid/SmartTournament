@@ -1,24 +1,23 @@
 package net.ihid.smarttournament.hooks;
 
-import lombok.Getter;
+import com.shampaggon.crackshot.CSDirector;
+import com.shampaggon.crackshot.CSUtility;
 import net.minelink.ctplus.CombatTagPlus;
-import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**
- * Created by Mikey on 7/20/2016.
+ * Created by Mikey on 8/19/2016.
  */
-public class CombatTagPlusHook implements Hook {
+public class CrackShotHook implements Hook {
     private final PluginManager pluginManager;
     private final String pluginName;
 
-    CombatTagPlusHook() {
+    CrackShotHook() {
         this.pluginManager = Bukkit.getServer().getPluginManager();
-        this.pluginName = "CombatTagPlus";
+        this.pluginName = "CrackShot";
     }
-
     @Override
     public boolean isEnabled() {
         return pluginManager.getPlugin(pluginName) != null;
@@ -34,12 +33,7 @@ public class CombatTagPlusHook implements Hook {
         return pluginName;
     }
 
-    public CombatTagPlus get() {
-        return (CombatTagPlus) getPlugin();
+    public CSDirector get() {
+        return (CSDirector) getPlugin();
     }
-
-    public TagManager getTagManager() {
-        return get().getTagManager();
-    }
-
 }

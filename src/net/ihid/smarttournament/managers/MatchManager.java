@@ -91,7 +91,7 @@ public class MatchManager {
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
 
         //removeTag(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(mainManager.getSpectatorArea()));
+        match.getWinner().teleport(mainManager.getSpectatorArea());
 
         matches.remove(match);
         unmapStates(playerStates, match);
@@ -108,7 +108,7 @@ public class MatchManager {
         }
 
         //removeTag(match.getInitiator(), match.getOpponent());
-        match.toSet().forEach(player -> player.teleport(mainManager.getSpectatorArea()));
+        match.toSet().forEach(player -> player.teleport(mainManager.getWorldSpawn()));
 
         matches.remove(match);
         unmapStates(playerStates, match);

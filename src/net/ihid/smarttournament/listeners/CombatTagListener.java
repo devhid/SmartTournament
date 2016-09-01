@@ -11,11 +11,11 @@ import org.bukkit.event.Listener;
 /**
  * Created by Mikey on 7/20/2016.
  */
-public class CombatTagListener implements Listener {
+class CombatTagListener implements Listener {
     private final MainManager mainManager;
     private final HookHandler hookHandler;
 
-    public CombatTagListener(TournamentPlugin plugin) {
+    CombatTagListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
         this.hookHandler = TournamentPlugin.getHookHandler();
 

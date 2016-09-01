@@ -1,22 +1,22 @@
 package net.ihid.smarttournament.hooks;
 
-import lombok.Getter;
-import net.minelink.ctplus.CombatTagPlus;
-import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.kitteh.vanish.VanishManager;
+import org.kitteh.vanish.VanishPlugin;
 
 /**
- * Created by Mikey on 7/20/2016.
+ * Created by Mikey on 7/27/2016.
  */
-public class CombatTagPlusHook implements Hook {
+public class VanishNoPacketHook implements Hook {
     private final PluginManager pluginManager;
     private final String pluginName;
 
-    CombatTagPlusHook() {
+    VanishNoPacketHook() {
         this.pluginManager = Bukkit.getServer().getPluginManager();
-        this.pluginName = "CombatTagPlus";
+        this.pluginName = "VanishNoPacket";
     }
 
     @Override
@@ -34,12 +34,18 @@ public class CombatTagPlusHook implements Hook {
         return pluginName;
     }
 
-    public CombatTagPlus get() {
-        return (CombatTagPlus) getPlugin();
+    public VanishPlugin get() {
+        return (VanishPlugin) getPlugin();
     }
 
-    public TagManager getTagManager() {
-        return get().getTagManager();
+    public VanishManager getVanishManager() {
+        return get().getManager();
+    }
+
+    public void unvanish(Player player) {
+        if(getVanishManager().isVanished(player)) {
+            getVanishManager().reveal(player, true, false);
+        }
     }
 
 }

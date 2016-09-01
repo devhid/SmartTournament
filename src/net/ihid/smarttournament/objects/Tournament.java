@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
+import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
@@ -38,12 +39,20 @@ public class Tournament {
         this.stage = TournamentStage.NON_ACTIVE;
     }
 
-    public void start() {
+    public void start(boolean forced) {
         reset(false);
         mainManager.loadArenas();
 
-        preTournamentTask = new PreTournamentTask(this);
-        preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
+        if(forced) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
+            tournamentTask = new TournamentTask(this);
+            setTournamentTask(tournamentTask);
+
+            tournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 40L);
+        } else {
+            preTournamentTask = new PreTournamentTask(this);
+            preTournamentTask.runTaskTimer(TournamentPlugin.getInstance(), 0L, 20L);
+        }
     }
 
     public void end() {

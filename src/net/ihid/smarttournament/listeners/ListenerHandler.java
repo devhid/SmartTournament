@@ -23,7 +23,13 @@ public class ListenerHandler {
     private PlayerQuitListener playerQuitListener;
 
     @Getter
-    private RandomDamageListener randomDamageListener;
+    private BlockBreakListener blockBreakListener;
+
+    @Getter
+    private CrackShotDamageListener crackShotDamageListener;
+
+    @Getter
+    private PlayerJoinListener playerJoinListener;
 
     public ListenerHandler(TournamentPlugin plugin) {
         this.combatTagListener = new CombatTagListener(plugin);
@@ -31,6 +37,8 @@ public class ListenerHandler {
         this.itemDropListener = new ItemDropListener(plugin);
         this.playerDamageListener = new PlayerDamageListener(plugin);
         this.playerQuitListener = new PlayerQuitListener(plugin);
-        this.randomDamageListener = new RandomDamageListener(plugin);
+        this.blockBreakListener = new BlockBreakListener(plugin);
+        this.crackShotDamageListener = new CrackShotDamageListener(plugin);
+        this.playerJoinListener = new PlayerJoinListener(plugin);
     }
 }

@@ -9,13 +9,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Mikey on 7/21/2016.
  */
-public class PlayerQuitListener implements Listener {
+class PlayerQuitListener implements Listener {
+    private final TournamentPlugin plugin;
     private final MainManager mainManager;
 
-    public PlayerQuitListener(TournamentPlugin plugin) {
+    PlayerQuitListener(TournamentPlugin plugin) {
+        this.plugin = plugin;
         this.mainManager = TournamentPlugin.getMainManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -29,6 +34,14 @@ public class PlayerQuitListener implements Listener {
 
             final Player player = evt.getPlayer();
             mainManager.removeFromTournament(player);
+
+            List<String> list = plugin.getConfig().getStringList("player-logout-data");
+
+            if(!list.contains(player.getUniqueId().toString())) {
+                list.add(player.getUniqueId().toString());
+                plugin.getConfig().set("player-logout-data", list);
+                plugin.getRawConfig().saveConfig();
+            }
 
             if(mainManager.getTournament().getStage() == TournamentStage.ACTIVE) {
                 mainManager.getMatches().stream()

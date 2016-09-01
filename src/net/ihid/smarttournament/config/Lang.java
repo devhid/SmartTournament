@@ -25,6 +25,7 @@ public enum Lang {
     ARENA_INVALID_POSITION("messages.arena-invalid-position"),
     ARENA_SET_SUCCESS("messages.arena-set-success"),
     REQUIRE_EMPTY_INVENTORY("messages.require-empty-inventory"),
+    /*REQUIRE_START_BEFORE_FORCESTART("messages.require-start-before-forcestart"),*/
     WORLD_SPAWN_SET("messages.world-spawn-set"),
     COMMAND_USE_DENIED("messages.command-use-denied"),
     TOURNAMENT_ALREADY_STARTED("messages.tournament-already-started"),

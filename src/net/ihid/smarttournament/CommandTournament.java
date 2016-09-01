@@ -1,6 +1,5 @@
 package net.ihid.smarttournament;
 
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.objects.Match;
@@ -11,15 +10,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 
 class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
     private MainManager mainManager;
 
-    public CommandTournament(TournamentPlugin instance) {
+    private List<UUID> partCopy;
+
+    CommandTournament(TournamentPlugin instance) {
         this.plugin = instance;
         this.mainManager = TournamentPlugin.getMainManager();
     }
@@ -52,78 +58,81 @@ class CommandTournament implements CommandExecutor {
     }
 
     private boolean run(CommandSender sender, Command cmd, String label, String subCommand, String[] args) {
-        Player ps;
+        Player player;
 
         switch(subCommand) {
             case "join":
                 checkPlayer(sender);
-                ps = (Player) sender;
+                player = (Player) sender;
 
                 if(!mainManager.isTournamentRunning()) {
-                    ps.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
+                    player.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
 
                 if(mainManager.getTournament().getStage() == TournamentStage.ACTIVE) {
-                    ps.sendMessage(Lang.TOURNAMENT_ALREADY_STARTED.toString());
+                    player.sendMessage(Lang.TOURNAMENT_ALREADY_STARTED.toString());
                     return true;
                 }
 
-                if(mainManager.isInTournament(ps)) {
-                    ps.sendMessage(Lang.ALREADY_IN_TOURNAMENT.toString());
+                if(mainManager.isInTournament(player)) {
+                    player.sendMessage(Lang.ALREADY_IN_TOURNAMENT.toString());
                     return true;
                 }
 
                 int allowed = plugin.getConfig().getInt("configuration.maximum-players-allowed");
 
                 if(mainManager.getParticipants().size() == allowed && allowed != -1 ) {
-                    ps.sendMessage(Lang.MAXIMUM_PLAYERS_REACHED.toString());
+                    player.sendMessage(Lang.MAXIMUM_PLAYERS_REACHED.toString());
                     return true;
                 }
 
                 if(plugin.getConfig().getBoolean("configuration.force-player-clear-inventory")) {
-                    if (!hasEmptyInventory(ps)) {
-                        ps.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString());
+                    if (!hasEmptyInventory(player)) {
+                        player.sendMessage(Lang.REQUIRE_EMPTY_INVENTORY.toString());
                         return true;
                     }
                 }
 
-                mainManager.addParticipant(ps);
-                mainManager.removeTag(ps);
+                if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
+                    TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
+                }
+                mainManager.addParticipant(player);
+                mainManager.removeTag(player);
 
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", ps.getName()));
-                ps.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
-                ps.teleport(mainManager.getSpectatorArea());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", player.getName()));
+                player.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
+                player.teleport(mainManager.getSpectatorArea());
 
                 break;
 
             case "leave":
                 checkPlayer(sender);
-                ps = (Player) sender;
+                player = (Player) sender;
 
                 if(!mainManager.isTournamentRunning()) {
-                    ps.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
+                    player.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
                     return true;
                 }
 
-                if(!mainManager.isInTournament(ps)) {
-                    ps.sendMessage(Lang.NOT_IN_TOURNAMENT.toString());
+                if(!mainManager.isInTournament(player)) {
+                    player.sendMessage(Lang.NOT_IN_TOURNAMENT.toString());
                     return true;
                 }
 
-                ps.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", ps.getName()));
+                player.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", player.getName()));
 
-                if(mainManager.isInMatch(ps)) {
-                    final Match match = mainManager.getMatch(ps);
-                    match.setWinner( ps.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator() );
+                if(mainManager.isInMatch(player)) {
+                    final Match match = mainManager.getMatch(player);
+                    match.setWinner( player.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator() );
 
                     mainManager.addMatchWinner(match.getWinner());
-                    mainManager.endMatch(mainManager.getMatch(ps));
+                    mainManager.endMatch(mainManager.getMatch(player));
                 }
 
-                mainManager.removeFromTournament(ps);
-                ps.teleport(mainManager.getWorldSpawn());
+                mainManager.removeFromTournament(player);
+                player.teleport(mainManager.getWorldSpawn());
                 break;
 
             case "start":
@@ -163,19 +172,19 @@ class CommandTournament implements CommandExecutor {
 
             case "setspawn":
                 checkPlayer(sender);
-                ps = (Player) sender;
+                player = (Player) sender;
 
                 checkPerm(sender, "smarttournament.setspawn");
                 if(args.length == 2) {
                     if(args[1].equalsIgnoreCase("-spectator")) {
                         sender.sendMessage(Lang.SPECTATOR_AREA_SET.toString());
-                        mainManager.setSpectatorArea(ps);
+                        mainManager.setSpectatorArea(player);
                         return true;
                     }
 
                     if(args[1].equalsIgnoreCase("-world")) {
                         sender.sendMessage(Lang.WORLD_SPAWN_SET.toString());
-                        mainManager.setWorldSpawn(ps);
+                        mainManager.setWorldSpawn(player);
                     }
                 }
 
@@ -186,15 +195,32 @@ class CommandTournament implements CommandExecutor {
                     Integer num = Integer.parseInt(args[2]);
 
                     if(num < 1 || num > 2) {
-                        ps.sendMessage(Lang.ARENA_INVALID_POSITION.toString());
+                        player.sendMessage(Lang.ARENA_INVALID_POSITION.toString());
                         return true;
                     }
 
                     sender.sendMessage(Lang.ARENA_SET_SUCCESS.toString().replace("{arena}", arenaName).replace("{position}", num.toString()));
-                    mainManager.setLocation(arenaName, ps, num);
+                    mainManager.setLocation(arenaName, player, num);
                     return true;
                 }
                 break;
+            /*case "list":
+                checkPerm(sender, "smarttournament.list");
+
+                if(!mainManager.isTournamentRunning()) {
+                    sender.sendMessage(Lang.NO_TOURNAMENTS_RUNNING.toString());
+                    return true;
+                }
+
+                partCopy = new ArrayList<>(mainManager.getParticipants());
+                mainManager.getParticipants().
+            case "forcestart":
+                checkPerm(sender, "smarttournament.forcestart");
+
+                if(!mainManager.isTournamentRunning()) {
+                    sender.sendMessage(Lang.REQUIRE_START_BEFORE_FORCESTART.toString());
+                    return true;
+                }*/
 
             default:
                 throw new CommandException(Lang.IMPROPER_USAGE.toString());
@@ -203,18 +229,8 @@ class CommandTournament implements CommandExecutor {
     }
 
     private boolean hasEmptyInventory(Player player) {
-        final ItemStack[] contents = player.getInventory().getContents();
-        final ItemStack[] armorContents = player.getInventory().getArmorContents();
-
-        if(Arrays.stream(contents).filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR)) {
-            return false;
-        }
-
-        if(Arrays.stream(armorContents).filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR)) {
-            return false;
-        }
-
-        return true;
+        final Stream<ItemStack> contents = Stream.concat(Arrays.stream(player.getInventory().getContents()), Arrays.stream(player.getInventory().getArmorContents()));
+        return !contents.filter(itemStack -> itemStack != null).anyMatch(itemStack -> itemStack.getType() != Material.AIR);
     }
 
     private void checkNum(String number) {

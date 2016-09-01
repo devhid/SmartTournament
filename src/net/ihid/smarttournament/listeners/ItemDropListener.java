@@ -15,15 +15,15 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 /**
  * Created by Mikey on 7/20/2016.
  */
-public class ItemDropListener implements Listener {
+class ItemDropListener implements Listener {
     private final MainManager mainManager;
 
-    public ItemDropListener(TournamentPlugin plugin) {
+    ItemDropListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onDrop(PlayerDropItemEvent evt) {
         if (mainManager.isTournamentRunning()) {
             if (TournamentPlugin.getInstance().getConfig().getBoolean("configuration.when-fighting.prevent-drop-items") && mainManager.isInTournament(evt.getPlayer())) {

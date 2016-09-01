@@ -14,17 +14,17 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 /**
  * Created by Mikey on 7/20/2016.
  */
-public class CommandListener implements Listener {
+class CommandListener implements Listener {
     private final MainManager mainManager;
     private final YamlConfiguration config;
 
-    public CommandListener(TournamentPlugin plugin) {
+    CommandListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
         this.config = plugin.getConfig();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent evt) {
         if(config.getBoolean("configuration.disable-commands-in-tournament")) {
             if (!mainManager.isTournamentRunning()) {
