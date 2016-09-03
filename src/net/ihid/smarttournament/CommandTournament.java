@@ -95,8 +95,14 @@ class CommandTournament implements CommandExecutor {
                 }
 
                 if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
-                    TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
+                    if(plugin.getConfig().getBoolean("configuration.hide-spectators-mode-enabled")) {
+                        TournamentPlugin.getHookHandler().getVanishNoPacketHook().vanish(player);
+                        player.sendMessage("You're vanished.");
+                    } else {
+                        TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
+                    }
                 }
+
                 mainManager.addParticipant(player);
                 mainManager.removeTag(player);
 
@@ -129,6 +135,12 @@ class CommandTournament implements CommandExecutor {
 
                     mainManager.addMatchWinner(match.getWinner());
                     mainManager.endMatch(mainManager.getMatch(player));
+                }
+
+                if(plugin.getConfig().getBoolean("configuration.hide-spectators-mode-enabled")) {
+                    if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
+                        TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
+                    }
                 }
 
                 mainManager.removeFromTournament(player);

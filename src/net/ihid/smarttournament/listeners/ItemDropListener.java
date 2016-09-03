@@ -48,14 +48,7 @@ class ItemDropListener implements Listener {
             }
             
             if(mainManager.isInTournament((Player) evt.getWhoClicked())) {
-                switch (evt.getAction()) {
-                    case DROP_ONE_SLOT: evt.setCancelled(true); break;
-                    case DROP_ALL_SLOT: evt.setCancelled(true); break;
-                    case DROP_ONE_CURSOR: evt.setCancelled(true); break;
-                    case DROP_ALL_CURSOR: evt.setCancelled(true); break;
-                    default:
-                        break;
-                }
+                evt.setCancelled(true);
             }
         }
     }

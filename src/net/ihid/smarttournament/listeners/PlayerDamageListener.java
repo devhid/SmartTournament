@@ -54,6 +54,12 @@ class PlayerDamageListener implements Listener {
 
                                 match.setWinner(player.getName().equalsIgnoreCase(match.getInitiator().getName()) ? match.getOpponent() : match.getInitiator());
 
+                                if(!TournamentPlugin.getInstance().getConfig().getBoolean("configuration.keep-vanish-until-tournament-ends")) {
+                                    if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
+                                        TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
+                                    }
+                                }
+
                                 mainManager.removeFromTournament(player);
                                 mainManager.addMatchWinner(match.getWinner());
                                 mainManager.endMatch(match);

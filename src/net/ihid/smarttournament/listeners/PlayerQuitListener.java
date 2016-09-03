@@ -34,6 +34,7 @@ class PlayerQuitListener implements Listener {
 
             final Player player = evt.getPlayer();
             mainManager.removeFromTournament(player);
+            TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
 
             List<String> list = plugin.getConfig().getStringList("player-logout-data");
 

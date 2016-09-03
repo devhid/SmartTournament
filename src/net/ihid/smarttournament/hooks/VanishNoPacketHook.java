@@ -42,10 +42,18 @@ public class VanishNoPacketHook implements Hook {
         return get().getManager();
     }
 
+    public boolean isVanished(Player player) {
+        return getVanishManager().isVanished(player);
+    }
+
     public void unvanish(Player player) {
-        if(getVanishManager().isVanished(player)) {
+        if(isVanished(player)) {
             getVanishManager().reveal(player, true, false);
         }
+    }
+
+    public void vanish(Player player) {
+        getVanishManager().vanish(player, true, false);
     }
 
 }

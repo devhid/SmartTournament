@@ -6,6 +6,7 @@ import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
+import net.ihid.smarttournament.hooks.VanishNoPacketHook;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
@@ -21,7 +22,7 @@ import java.util.HashMap;
  */
 public class Tournament {
     private final MainManager mainManager;
-    
+
     @Getter @Setter
     private TournamentStage stage;
 
@@ -69,6 +70,12 @@ public class Tournament {
     }
 
     private void reset(boolean end) {
+        if (TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
+            mainManager.getTournamentManager().getOriginalParticipants().stream()
+                    .filter(uuid -> TournamentPlugin.getHookHandler().getVanishNoPacketHook().isVanished(Bukkit.getPlayer(uuid)))
+                    .forEach(uuid -> TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(Bukkit.getPlayer(uuid)));
+        }
+
         Collection<? extends Player> online = Bukkit.getOnlinePlayers();
 
         if(end) {

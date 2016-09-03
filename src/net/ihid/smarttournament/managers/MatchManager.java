@@ -74,6 +74,12 @@ public class MatchManager {
         plugin.getServer().getPluginManager().callEvent(new MatchStartEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_START_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
+        if(plugin.getConfig().getBoolean("configuration.hide-spectators-mode-enabled")) {
+            if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
+                match.toSet().forEach(player -> TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player));
+            }
+        }
+
         teleportPlayers(match);
         matches.add(match);
 
@@ -105,6 +111,7 @@ public class MatchManager {
 
         if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1) {
             Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+            mainManager.getTournament().end();
         }
 
         //removeTag(match.getInitiator(), match.getOpponent());

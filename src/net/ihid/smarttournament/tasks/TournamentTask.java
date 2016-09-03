@@ -30,6 +30,8 @@ public class TournamentTask extends BukkitRunnable {
         this.tournament = tournament;
         this.matchWinners = mainManager.getMatchWinners();
         this.participants = mainManager.getParticipants();
+
+        mainManager.getTournamentManager().getOriginalParticipants().addAll(participants);
         tournament.setStage(TournamentStage.ACTIVE);
     }
 
