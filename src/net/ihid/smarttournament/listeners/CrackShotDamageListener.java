@@ -2,24 +2,18 @@ package net.ihid.smarttournament.listeners;
 
 import com.shampaggon.crackshot.events.WeaponDamageEntityEvent;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.hooks.HookHandler;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-/**
- * Created by Mikey on 8/19/2016.
- */
 class CrackShotDamageListener implements Listener {
     private final MainManager mainManager;
-    private final HookHandler hookHandler;
 
     CrackShotDamageListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
-        this.hookHandler = TournamentPlugin.getHookHandler();
 
-        if(hookHandler.getCrackShotHook().isEnabled()) {
+        if(TournamentPlugin.getHookHandler().getCrackShotHook().isEnabled()) {
             plugin.getServer().getPluginManager().registerEvents(this, plugin);
         }
     }

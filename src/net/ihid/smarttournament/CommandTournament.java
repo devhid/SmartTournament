@@ -10,14 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-
 
 class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
@@ -97,7 +93,6 @@ class CommandTournament implements CommandExecutor {
                 if(TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
                     if(plugin.getConfig().getBoolean("configuration.hide-spectators-mode-enabled")) {
                         TournamentPlugin.getHookHandler().getVanishNoPacketHook().vanish(player);
-                        player.sendMessage("You're vanished.");
                     } else {
                         TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(player);
                     }

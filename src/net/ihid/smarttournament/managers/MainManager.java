@@ -8,23 +8,19 @@ import net.ihid.smarttournament.objects.Tournament;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Mikey on 4/29/2016.
- */
 public class MainManager {
     @Getter
-    private TournamentManager tournamentManager;
+    private final TournamentManager tournamentManager;
 
     @Getter
-    private MatchManager matchManager;
+    private final MatchManager matchManager;
 
     @Getter
-    private ArenaManager arenaManager;
+    private final ArenaManager arenaManager;
 
 
     public MainManager(TournamentPlugin plugin) {

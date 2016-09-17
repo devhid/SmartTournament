@@ -23,7 +23,7 @@ public class TournamentPlugin extends JavaPlugin {
     private ListenerHandler listenerHandler;
 
     @Getter
-    private PluginConfig rawConfig;
+    private final PluginConfig rawConfig;
 
     public TournamentPlugin() {
         this.rawConfig = new PluginConfig(this, "settings.yml");

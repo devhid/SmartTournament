@@ -2,24 +2,18 @@ package net.ihid.smarttournament.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.hooks.VanishNoPacketHook;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
 import net.ihid.smarttournament.tasks.TournamentTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import java.util.Collection;
 import java.util.HashMap;
 
-/**
- * Created by Mikey on 4/24/2016.
- */
 public class Tournament {
     private final MainManager mainManager;
 
@@ -34,9 +28,6 @@ public class Tournament {
 
     public Tournament() {
         this.mainManager = TournamentPlugin.getMainManager();
-        if(mainManager == null) {
-            Bukkit.broadcastMessage("mainManager is null in Tournament class.");
-        }
         this.stage = TournamentStage.NON_ACTIVE;
     }
 

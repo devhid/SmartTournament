@@ -1,18 +1,12 @@
 package net.ihid.smarttournament.listeners;
 
-import com.shampaggon.crackshot.events.WeaponDamageEntityEvent;
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 
-/**
- * Created by Mikey on 7/21/2016.
- */
 class PlayerDamageListener implements Listener {
     private final MainManager mainManager;
 

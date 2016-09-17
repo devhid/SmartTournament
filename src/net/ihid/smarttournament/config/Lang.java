@@ -4,9 +4,6 @@ import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-/**
- * Created by Mikey on 6/11/2016.
- */
 public enum Lang {
     NO_PERMISSION("messages.no-permission"),
     IMPROPER_USAGE("messages.improper-usage"),
@@ -45,10 +42,11 @@ public enum Lang {
     TOURNAMENT_WINNER_REWARD_MESSAGE("messages.tournament-winner-reward-message");
 
     private final String path;
-    private YamlConfiguration config = TournamentPlugin.getInstance().getConfig();
+    private final YamlConfiguration config;
 
     Lang(String path) {
         this.path = path;
+        this.config = TournamentPlugin.getInstance().getConfig();
     }
 
     public String toString() {

@@ -5,9 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 
-/**
- * Created by Mikey on 4/25/2016.
- */
 public class PluginConfig {
 
     private final String fileName;

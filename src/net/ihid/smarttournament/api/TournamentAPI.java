@@ -8,13 +8,12 @@ import net.ihid.smarttournament.objects.Tournament;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class TournamentAPI {
-    private MainManager mainManager;
+    private final MainManager mainManager;
 
     public TournamentAPI() {
         this.mainManager = TournamentPlugin.getMainManager();

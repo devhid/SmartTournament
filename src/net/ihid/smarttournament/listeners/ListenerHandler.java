@@ -3,9 +3,6 @@ package net.ihid.smarttournament.listeners;
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
 
-/**
- * Created by Mikey on 7/23/2016.
- */
 public class ListenerHandler {
     @Getter
     private CombatTagListener combatTagListener;

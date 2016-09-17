@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.3.0                                                                                         #
+# version: 1.3.1                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -10,11 +10,12 @@ configuration:
    tournament-start-delay: 60
    match-duration: 180
    minimum-players-to-start: 2
-   maximum-players-allowed: -1
+   maximum-players-allowed: 2
    force-player-clear-inventory: true
    disable-commands-in-tournament: true
    hide-spectators-mode-enabled: true
    keep-vanish-until-tournament-ends: false
+   start-when-max-players-reached: true
    countdown-values:
    - 120
    - 60

@@ -1,20 +1,15 @@
 package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-/**
- * Created by Mikey on 7/20/2016.
- */
 class ItemDropListener implements Listener {
     private final MainManager mainManager;
 

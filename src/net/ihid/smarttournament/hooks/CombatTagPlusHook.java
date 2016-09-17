@@ -1,15 +1,11 @@
 package net.ihid.smarttournament.hooks;
 
-import lombok.Getter;
 import net.minelink.ctplus.CombatTagPlus;
 import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-/**
- * Created by Mikey on 7/20/2016.
- */
 public class CombatTagPlusHook implements Hook {
     private final PluginManager pluginManager;
     private final String pluginName;

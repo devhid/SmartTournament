@@ -2,19 +2,13 @@ package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mikey on 7/21/2016.
- */
 class PlayerQuitListener implements Listener {
     private final TournamentPlugin plugin;
     private final MainManager mainManager;
@@ -22,6 +16,7 @@ class PlayerQuitListener implements Listener {
     PlayerQuitListener(TournamentPlugin plugin) {
         this.plugin = plugin;
         this.mainManager = TournamentPlugin.getMainManager();
+
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 

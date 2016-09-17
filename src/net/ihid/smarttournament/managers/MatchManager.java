@@ -4,8 +4,6 @@ import lombok.Getter;
 import net.ihid.smarttournament.api.events.MatchEndEvent;
 import net.ihid.smarttournament.api.events.MatchStartEvent;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.hooks.CombatTagPlusHook;
-import net.ihid.smarttournament.objects.Tournament;
 import net.ihid.smarttournament.player.NewPlayerState;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.objects.Match;
@@ -14,8 +12,6 @@ import net.ihid.smarttournament.tasks.MatchTask;
 import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-
 import java.util.*;
 
 public class MatchManager {
@@ -23,16 +19,16 @@ public class MatchManager {
     private final MainManager mainManager;
 
     @Getter
-    private NewPlayerState newPlayerState;
+    private final NewPlayerState newPlayerState;
 
     @Getter
-    private List<Match> matches;
+    private final List<Match> matches;
 
     @Getter
-    private List<UUID> matchWinners;
+    private final List<UUID> matchWinners;
 
     @Getter
-    private HashMap<String, SavedPlayerState> playerStates;
+    private final HashMap<String, SavedPlayerState> playerStates;
 
     public MatchManager(MainManager mainManager) {
         this.plugin = TournamentPlugin.getInstance();

@@ -1,15 +1,10 @@
 package net.ihid.smarttournament.hooks;
 
 import com.shampaggon.crackshot.CSDirector;
-import com.shampaggon.crackshot.CSUtility;
-import net.minelink.ctplus.CombatTagPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-/**
- * Created by Mikey on 8/19/2016.
- */
 public class CrackShotHook implements Hook {
     private final PluginManager pluginManager;
     private final String pluginName;

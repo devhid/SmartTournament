@@ -1,19 +1,13 @@
 package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.managers.MainManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-/**
- * Created by Mikey on 7/20/2016.
- */
 class CommandListener implements Listener {
     private final MainManager mainManager;
     private final YamlConfiguration config;

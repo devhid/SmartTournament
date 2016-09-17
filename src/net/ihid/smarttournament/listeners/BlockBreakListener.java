@@ -2,21 +2,15 @@ package net.ihid.smarttournament.listeners;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.managers.MainManager;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-/**
- * Created by Mikey on 8/4/2016.
- */
 class BlockBreakListener implements Listener {
     private final MainManager mainManager;
-    private final YamlConfiguration config;
 
     BlockBreakListener(TournamentPlugin plugin) {
         this.mainManager = TournamentPlugin.getMainManager();
-        this.config = plugin.getConfig();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 

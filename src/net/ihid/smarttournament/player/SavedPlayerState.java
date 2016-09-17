@@ -5,12 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-
 import java.util.Collection;
 
-/**
- * Created by Mikey on 6/7/2016.
- */
 public class SavedPlayerState {
 
     private final Player player;
