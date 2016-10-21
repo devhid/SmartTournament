@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class CommandTournament implements CommandExecutor {
@@ -211,6 +212,27 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
                 break;
+            case "end-match":
+                checkPerm(sender, "smarttournament.end-match");
+                if(args.length == 1) {
+                    if(mainManager.getMatches().size() == 1) {
+                        Bukkit.broadcastMessage("This match has been forcefully ended."); // switch to Lang.
+                        sender.sendMessage("You have successfully ended the current match"); // switch to Lang.
+                        mainManager.getMatchManager().endMatch(mainManager.getMatches().get(0));
+                    } else  {
+                        String matches = mainManager.getMatches()
+                                .stream()
+                                .map(match -> match.getMatchTask().getTaskId() + " - " + match.getInitiator().getName() + " vs " + match.getOpponent().getName())
+                                .collect(Collectors.joining(", "));
+                        sender.sendMessage("Please select which match to end: " + matches);
+                    }
+                }
+
+                checkArgs(args, 2);
+                Match match = mainManager.getMatchManager().getMatchById(Integer.parseInt(args[1]));
+                mainManager.getMatchManager().endMatch(match);
+                Bukkit.broadcastMessage("You have successfully ended the match between " + match.getInitiator().getName() + " and " + match.getOpponent().getName());
+                break;
             /*case "list":
                 checkPerm(sender, "smarttournament.list");
 
@@ -228,6 +250,7 @@ class CommandTournament implements CommandExecutor {
                     sender.sendMessage(Lang.REQUIRE_START_BEFORE_FORCESTART.toString());
                     return true;
                 }*/
+
 
             default:
                 throw new CommandException(Lang.IMPROPER_USAGE.toString());

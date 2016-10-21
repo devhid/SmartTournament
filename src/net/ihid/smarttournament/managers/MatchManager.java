@@ -88,6 +88,10 @@ public class MatchManager {
         task.runTaskLater(TournamentPlugin.getInstance(), match.getDuration());
     }
 
+    public Match getMatchById(int matchId) throws NullPointerException {
+        return matches.stream().filter(match -> match.getMatchTask().getTaskId() == matchId).findAny().orElse(null);
+    }
+
     public void endMatch(Match match) {
         plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
