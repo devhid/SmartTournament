@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PreTournamentTask extends BukkitRunnable {
-    private TournamentPlugin plugin;
-    private Tournament tournament;
+    private final TournamentPlugin plugin;
+    private final Tournament tournament;
     private int countdown;
 
     public PreTournamentTask(Tournament tournament) {

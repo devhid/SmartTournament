@@ -31,11 +31,11 @@ public class VanishNoPacketHook implements Hook {
         return pluginName;
     }
 
-    public VanishPlugin get() {
+    private VanishPlugin get() {
         return (VanishPlugin) getPlugin();
     }
 
-    public VanishManager getVanishManager() {
+    private VanishManager getVanishManager() {
         return get().getManager();
     }
 

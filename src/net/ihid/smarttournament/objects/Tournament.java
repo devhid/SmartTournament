@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
+import net.ihid.smarttournament.hooks.VanishNoPacketHook;
 import net.ihid.smarttournament.managers.MainManager;
 import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
@@ -13,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 public class Tournament {
     private final MainManager mainManager;
@@ -61,10 +64,14 @@ public class Tournament {
     }
 
     private void reset(boolean end) {
-        if (TournamentPlugin.getHookHandler().getVanishNoPacketHook().isEnabled()) {
-            mainManager.getTournamentManager().getOriginalParticipants().stream()
-                    .filter(uuid -> TournamentPlugin.getHookHandler().getVanishNoPacketHook().isVanished(Bukkit.getPlayer(uuid)))
-                    .forEach(uuid -> TournamentPlugin.getHookHandler().getVanishNoPacketHook().unvanish(Bukkit.getPlayer(uuid)));
+        final VanishNoPacketHook hook = TournamentPlugin.getHookHandler().getVanishNoPacketHook();
+
+        if (hook.isEnabled()) {
+            if(!mainManager.getTournamentManager().getOriginalParticipants().isEmpty()) {
+                mainManager.getTournamentManager().getOriginalParticipants().stream()
+                .filter(uuid -> Bukkit.getPlayer(uuid) != null && hook.isVanished(Bukkit.getPlayer(uuid)))
+                .forEach(uuid -> hook.unvanish(Bukkit.getPlayer(uuid)));
+            }
         }
 
         Collection<? extends Player> online = Bukkit.getOnlinePlayers();

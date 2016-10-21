@@ -21,18 +21,14 @@ public class TournamentManager {
     private Tournament tournament;
 
     @Getter
-    private List<UUID> participants, original;
+    private List<UUID> participants, originalParticipants;
 
     public TournamentManager(MainManager mainManager) {
         this.plugin = TournamentPlugin.getInstance();
         this.mainManager = mainManager;
         this.config = plugin.getConfig();
         this.participants = new ArrayList<>();
-        this.original = new ArrayList<>();
-    }
-
-    public List<UUID> getOriginalParticipants() {
-        return original;
+        this.originalParticipants = new ArrayList<>();
     }
 
     public void clearParticipants() {

@@ -5,7 +5,7 @@ import net.ihid.smarttournament.objects.Match;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MatchTask extends BukkitRunnable {
-    private Match match;
+    private final Match match;
 
     public MatchTask(Match match) {
         this.match = match;
