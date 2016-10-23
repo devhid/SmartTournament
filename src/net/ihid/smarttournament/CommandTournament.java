@@ -55,6 +55,17 @@ class CommandTournament implements CommandExecutor {
     }
 
     private boolean run(CommandSender sender, Command cmd, String label, String subCommand, String[] args) {
+        if(sender instanceof Player) {
+            Player player = (Player) sender;
+
+            if(plugin.getConfig().getBoolean("configuration.limit-plugin-to-specific-worlds")) {
+                if(!plugin.getConfig().getStringList("configuration.limited-worlds").contains(player.getWorld().getName())) {
+                    player.sendMessage(Lang.PLUGIN_DISABLED_IN_WORLD.toString());
+                    return true;
+                }
+            }
+        }
+
         Player player;
 
         switch(subCommand) {
@@ -212,13 +223,13 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
                 break;
-            case "end-match":
-                checkPerm(sender, "smarttournament.end-match");
+             /*case "end-match":
+                checkPerm(sender, "smarttournament.endmatch");
                 if(args.length == 1) {
                     if(mainManager.getMatches().size() == 1) {
                         Bukkit.broadcastMessage("This match has been forcefully ended."); // switch to Lang.
                         sender.sendMessage("You have successfully ended the current match"); // switch to Lang.
-                        mainManager.getMatchManager().endMatch(mainManager.getMatches().get(0));
+                        mainManager.getMatchManager().endIdleMatch(mainManager.getMatches().get(0));
                     } else  {
                         String matches = mainManager.getMatches()
                                 .stream()
@@ -230,10 +241,10 @@ class CommandTournament implements CommandExecutor {
 
                 checkArgs(args, 2);
                 Match match = mainManager.getMatchManager().getMatchById(Integer.parseInt(args[1]));
-                mainManager.getMatchManager().endMatch(match);
+                mainManager.getMatchManager().endIdleMatch(match);
                 Bukkit.broadcastMessage("You have successfully ended the match between " + match.getInitiator().getName() + " and " + match.getOpponent().getName());
                 break;
-            /*case "list":
+           case "list":
                 checkPerm(sender, "smarttournament.list");
 
                 if(!mainManager.isTournamentRunning()) {

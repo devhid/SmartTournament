@@ -9,6 +9,7 @@ public enum Lang {
     IMPROPER_USAGE("messages.improper-usage"),
     INVALID_SENDER("messages.invalid-sender"),
     INVALID_NUMBER("messages.invalid-number"),
+    PLUGIN_DISABLED_IN_WORLD("messages.plugin-disabled-in-world"),
     SEVERE_ERROR("messages.severe-error"),
     NO_TOURNAMENTS_RUNNING("messages.no-tournaments-running"),
     NOT_ENOUGH_PLAYERS("messages.not-enough-players"),
