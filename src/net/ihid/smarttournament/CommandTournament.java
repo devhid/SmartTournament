@@ -223,28 +223,35 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
                 break;
-             /*case "end-match":
+             case "end-match":
                 checkPerm(sender, "smarttournament.endmatch");
                 if(args.length == 1) {
                     if(mainManager.getMatches().size() == 1) {
-                        Bukkit.broadcastMessage("This match has been forcefully ended."); // switch to Lang.
-                        sender.sendMessage("You have successfully ended the current match"); // switch to Lang.
-                        mainManager.getMatchManager().endIdleMatch(mainManager.getMatches().get(0));
+                        sender.sendMessage(Lang.MATCH_CURRENT_FORCE_END_SUCCESS.toString());
+                        mainManager.getMatchManager().endMatchForcefully(mainManager.getMatches().get(0));
                     } else  {
                         String matches = mainManager.getMatches()
                                 .stream()
-                                .map(match -> match.getMatchTask().getTaskId() + " - " + match.getInitiator().getName() + " vs " + match.getOpponent().getName())
-                                .collect(Collectors.joining(", "));
-                        sender.sendMessage("Please select which match to end: " + matches);
+                                .map(match -> plugin.getConfig().getString("messages.match-force-end-select-format")
+                                        .replace("{matchID}", String.valueOf(match.getMatchTask().getTaskId()))
+                                        .replace("{initiator}", match.getInitiator().getName())
+                                        .replace("{opponent}", match.getOpponent().getName()))
+                                .collect(Collectors.joining(plugin.getConfig().getString("messages.match-force-end-select-separator")));
+                        sender.sendMessage(Lang.MATCH_FORCE_END_SELECT.toString().replace("{matches}", ChatUtil.color(matches)));
                     }
+                    return true;
                 }
 
                 checkArgs(args, 2);
+
                 Match match = mainManager.getMatchManager().getMatchById(Integer.parseInt(args[1]));
-                mainManager.getMatchManager().endIdleMatch(match);
-                Bukkit.broadcastMessage("You have successfully ended the match between " + match.getInitiator().getName() + " and " + match.getOpponent().getName());
+                mainManager.getMatchManager().endMatchForcefully(match);
+
+                sender.sendMessage(Lang.MATCH_SPECIFIC_FORCE_END_SUCCESS.toString()
+                        .replace("{initiator}", match.getInitiator().getName())
+                        .replace("{opponent}", match.getOpponent().getName()));
                 break;
-           case "list":
+           /*case "list":
                 checkPerm(sender, "smarttournament.list");
 
                 if(!mainManager.isTournamentRunning()) {
@@ -261,7 +268,6 @@ class CommandTournament implements CommandExecutor {
                     sender.sendMessage(Lang.REQUIRE_START_BEFORE_FORCESTART.toString());
                     return true;
                 }*/
-
 
             default:
                 throw new CommandException(Lang.IMPROPER_USAGE.toString());

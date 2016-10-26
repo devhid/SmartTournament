@@ -105,14 +105,9 @@ public class MatchManager {
         match.reset();
     }
 
-    public void endIdleMatch(Match match) {
+    public void endMatchForcefully(Match match) {
         plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
-        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
-
-        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1) {
-            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
-            mainManager.getTournament().end();
-        }
+        Bukkit.broadcastMessage(Lang.MATCH_FORCE_END_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
         //removeTag(match.getInitiator(), match.getOpponent());
         match.toSet().forEach(player -> player.teleport(mainManager.getWorldSpawn()));
@@ -122,6 +117,31 @@ public class MatchManager {
 
         match.reset();
         mainManager.removeFromTournament(match.getInitiator(), match.getOpponent());
+
+        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1 && mainManager.getMatches().size() < 1) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+            mainManager.getTournament().end();
+        }
+
+    }
+
+    public void endIdleMatch(Match match) {
+        plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
+
+        //removeTag(match.getInitiator(), match.getOpponent());
+        match.toSet().forEach(player -> player.teleport(mainManager.getWorldSpawn()));
+
+        matches.remove(match);
+        unmapStates(playerStates, match);
+
+        match.reset();
+        mainManager.removeFromTournament(match.getInitiator(), match.getOpponent());
+
+        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1 && mainManager.getMatches().size() < 1) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+            mainManager.getTournament().end();
+        }
     }
 
     public void removeTag(Player... ps) {

@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.3.3 | build # 38                                                                            #
+# version: 1.3.5 | build # 39                                                                            #
 #========================================================================================================#
 
 configuration:
@@ -96,7 +96,6 @@ configuration:
    limited-worlds:
    - world
 
-
 messages:
     no-permission: "&cYou do not have permission to execute this command."
     improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <1|2> | setspawn <-spectator|-world>."
@@ -112,6 +111,12 @@ messages:
     match-start-broadcast: "&c{initiator} &7and &c{opponent} &7are now fighting."
     match-winner-broadcast: "{winner} has won the match!"
     match-idle-broadcast: "&a{initiator}&7 and &a{opponent} &7have both been eliminated for idling."
+    match-current-force-end-success: "&aYou have forcefully ended the current match."
+    match-specific-force-end-success: "&aYou have forcefully ended the match between &e{initiator} &aand &e{opponent}&a."
+    match-force-end-select: "&7Please select which match to end: {matches}"
+    match-force-end-select-format: " \n&c#{matchID} &8- &a{initiator} &7vs. &a{opponent}"
+    match-force-end-select-separator: "&7, "
+    match-force-end-broadcast: "&7The match between &a{initiator}&7 and &a{opponent} &7has been forcefully ended."
     spectator-area-set: "&aYou have successfully set the spectator area."
     arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
     arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
