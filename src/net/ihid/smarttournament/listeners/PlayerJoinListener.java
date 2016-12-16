@@ -7,9 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.List;
 
-/**
- * Created by Mikey on 8/21/2016.
- */
 class PlayerJoinListener implements Listener {
     private TournamentPlugin plugin;
 

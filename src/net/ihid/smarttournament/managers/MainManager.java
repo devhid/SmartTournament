@@ -5,7 +5,7 @@ import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.objects.Arena;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
-import net.ihid.smarttournament.player.SavedPlayerState;
+import net.ihid.smarttournament.objects.player.SavedPlayerState;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Mikey on 4/29/2016.
- */
 public class MainManager {
     @Getter
     private TournamentManager tournamentManager;

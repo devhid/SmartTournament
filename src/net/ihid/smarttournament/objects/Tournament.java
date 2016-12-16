@@ -2,13 +2,11 @@ package net.ihid.smarttournament.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.hooks.VanishNoPacketHook;
 import net.ihid.smarttournament.managers.MainManager;
-import net.ihid.smarttournament.player.SavedPlayerState;
+import net.ihid.smarttournament.objects.player.SavedPlayerState;
 import net.ihid.smarttournament.tasks.PreTournamentTask;
 import net.ihid.smarttournament.tasks.TournamentTask;
 import org.bukkit.Bukkit;
@@ -37,7 +35,7 @@ public class Tournament {
         if(mainManager == null) {
             Bukkit.broadcastMessage("mainManager is null in Tournament class.");
         }
-        this.stage = TournamentStage.NON_ACTIVE;
+        this.stage = TournamentStage.INACTIVE;
     }
 
     public void start(boolean forced) {
@@ -45,6 +43,10 @@ public class Tournament {
         mainManager.loadArenas();
 
         if(forced) {
+            if(preTournamentTask != null) {
+                preTournamentTask.cancel();
+            }
+            
             Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
             tournamentTask = new TournamentTask(this);
             setTournamentTask(tournamentTask);
@@ -66,7 +68,7 @@ public class Tournament {
         }
 
         reset(true);
-        setStage(TournamentStage.NON_ACTIVE);
+        setStage(TournamentStage.INACTIVE);
     }
 
     private void reset(boolean end) {

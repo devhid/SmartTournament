@@ -1,7 +1,7 @@
 package net.ihid.smarttournament;
 
 public enum TournamentStage {
-    NON_ACTIVE,
+    INACTIVE,
     WAITING,
     ACTIVE
 }

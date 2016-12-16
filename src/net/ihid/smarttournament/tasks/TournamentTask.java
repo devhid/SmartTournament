@@ -1,7 +1,6 @@
 package net.ihid.smarttournament.tasks;
 
 import net.ihid.smarttournament.TournamentPlugin;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.config.Lang;
 import net.ihid.smarttournament.managers.MainManager;
@@ -15,11 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-/**
- * Created by Mikey on 4/25/2016.
- */
 public class TournamentTask extends BukkitRunnable {
     private MainManager mainManager;
     private Tournament tournament;

@@ -1,4 +1,4 @@
-package net.ihid.smarttournament.player;
+package net.ihid.smarttournament.objects.player;
 
 import net.ihid.smarttournament.TournamentPlugin;
 import org.bukkit.GameMode;
@@ -11,9 +11,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Mikey on 6/14/2016.
- */
 public class NewPlayerState {
     private TournamentPlugin plugin;
 

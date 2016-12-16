@@ -10,20 +10,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 class CommandTournament implements CommandExecutor {
     private TournamentPlugin plugin;
     private MainManager mainManager;
-
-    private List<UUID> partCopy;
 
     CommandTournament(TournamentPlugin instance) {
         this.plugin = instance;
@@ -106,7 +99,10 @@ class CommandTournament implements CommandExecutor {
                 mainManager.addParticipant(player);
                 mainManager.removeTag(player);
 
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", player.getName()));
+                if(!plugin.getConfig().getBoolean("configuration.disable-join/leave-tournament-message")) {
+                    Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", player.getName()));
+                }
+
                 player.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
                 player.teleport(mainManager.getSpectatorArea());
 
@@ -127,7 +123,9 @@ class CommandTournament implements CommandExecutor {
                 }
 
                 player.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", player.getName()));
+                if(!plugin.getConfig().getBoolean("configuration.disable-join/leave-tournament-message")) {
+                    Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", player.getName()));
+                }
 
                 if(mainManager.isInMatch(player)) {
                     final Match match = mainManager.getMatch(player);
@@ -182,6 +180,26 @@ class CommandTournament implements CommandExecutor {
                 mainManager.endTournament();
                 break;
 
+            case "end-match":
+                checkPerm(sender, "smarttournament.end-match");
+                if(args.length == 1) {
+                    if(mainManager.getMatches().size() == 1) {
+                        Bukkit.broadcastMessage("This match has been forcefully ended."); // switch to Lang.
+                        sender.sendMessage("You have successfully ended the current match"); // switch to Lang.
+                        mainManager.getMatchManager().endMatch(mainManager.getMatches().get(0));
+                    } else  {
+                        String matches = mainManager.getMatches()
+                                .stream()
+                                .map(match -> match.getMatchTask().getTaskId() + " - " + match.getInitiator().getName() + " vs " + match.getOpponent().getName())
+                                .collect(Collectors.joining(", "));
+                        sender.sendMessage("Please select which match to end: " + matches);
+                    }
+                }
+
+                checkArgs(args, 2);
+                Match match = mainManager.getMatchManager().getMatchById(Integer.parseInt(args[1]));
+                mainManager.getMatchManager().endMatch(match);
+                Bukkit.broadcastMessage("You have successfully ended the match between " + match.getInitiator().getName() + " and " + match.getOpponent().getName());
             case "setspawn":
                 checkPlayer(sender);
                 player = (Player) sender;
@@ -216,7 +234,7 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
                 break;
-            /*case "list":
+            case "list":
                 checkPerm(sender, "smarttournament.list");
 
                 if(!mainManager.isTournamentRunning()) {
@@ -224,9 +242,12 @@ class CommandTournament implements CommandExecutor {
                     return true;
                 }
 
-                partCopy = new ArrayList<>(mainManager.getParticipants());
-                mainManager.getParticipants().
-            case "forcestart":
+                String partList = mainManager.getParticipants().stream()
+                        .map(uuid -> plugin.getServer().getPlayer(uuid).getName())
+                        .collect(Collectors.joining(", "));
+
+                sender.sendMessage(Lang.TOURNAMENT_LIST_PARTICIPANTS.toString().replace("{list}", partList));
+            /*case "forcestart":
                 checkPerm(sender, "smarttournament.forcestart");
 
                 if(!mainManager.isTournamentRunning()) {

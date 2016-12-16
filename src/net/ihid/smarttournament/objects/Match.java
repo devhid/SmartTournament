@@ -8,9 +8,6 @@ import net.ihid.smarttournament.tasks.MatchTask;
 import org.bukkit.entity.Player;
 import java.util.Set;
 
-/**
- * Created by Mikey on 4/24/2016.
- */
 public class Match {
     @Getter
     private Player initiator, opponent;

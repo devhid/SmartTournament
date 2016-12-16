@@ -4,17 +4,14 @@ import lombok.Getter;
 import net.ihid.smarttournament.api.events.MatchEndEvent;
 import net.ihid.smarttournament.api.events.MatchStartEvent;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.hooks.CombatTagPlusHook;
-import net.ihid.smarttournament.objects.Tournament;
-import net.ihid.smarttournament.player.NewPlayerState;
-import net.ihid.smarttournament.player.SavedPlayerState;
+import net.ihid.smarttournament.objects.player.NewPlayerState;
+import net.ihid.smarttournament.objects.player.SavedPlayerState;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.tasks.MatchTask;
 import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 
 import java.util.*;
 
@@ -103,6 +100,10 @@ public class MatchManager {
         unmapStates(playerStates, match);
 
         match.reset();
+    }
+
+    public Match getMatchById(int matchId) throws NullPointerException {
+        return matches.stream().filter(match -> match.getMatchTask().getTaskId() == matchId).findAny().orElse(null);
     }
 
     public void endIdleMatch(Match match) {

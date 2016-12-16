@@ -33,6 +33,7 @@ public enum Lang {
     TOURNAMENT_COUNTDOWN_BROADCAST("messages.tournament-countdown-broadcast"),
     TOURNAMENT_JOINED_SUCCESS("messages.tournament-joined-success"),
     TOURNAMENT_JOINED_BROADCAST("messages.tournament-joined-broadcast"),
+    TOURNAMENT_LIST_PARTICIPANTS("messages.tournament-list-participants"),
     TOURNAMENT_LEFT_SUCCESS("messages.tournament-left-success"),
     TOURNAMENT_LEFT_BROADCAST("messages.tournament-left-broadcast"),
     TOURNAMENT_START_SUCCESS("messages.tournament-start-success"),

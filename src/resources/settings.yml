@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.3.0                                                                                         #
+# version: 1.3.6                                                                                         #
 #========================================================================================================#
 
 configuration:
@@ -13,8 +13,10 @@ configuration:
    maximum-players-allowed: -1
    force-player-clear-inventory: true
    disable-commands-in-tournament: true
-   hide-spectators-mode-enabled: true
+   hide-spectators-mode-enabled: false
    keep-vanish-until-tournament-ends: false
+   start-when-max-players-reached: false
+   disable-join/leave-tournament-message: false
    countdown-values:
    - 120
    - 60
@@ -116,6 +118,7 @@ messages:
     tournament-countdown-broadcast: "&7The tournament will begin in &c{countdown} &7second(s)."
     tournament-joined-success: "&aYou have successfully joined the tournament."
     tournament-joined-broadcast: "&e{username} &7has joined the tournament."
+    tournament-list-participants: "&cThe following players are in the tournament:\n {list}"
     tournament-left-success: "&aYou have successfully left the tournament."
     tournament-left-broadcast: "&e{username} &7has left the tournament."
     tournament-start-success: "&aYou have successfully started the tournament."

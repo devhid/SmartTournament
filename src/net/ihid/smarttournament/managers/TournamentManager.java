@@ -76,7 +76,7 @@ public class TournamentManager {
     }
 
     public boolean isTournamentRunning() {
-        return tournament != null && (tournament.getStage() != TournamentStage.NON_ACTIVE);
+        return tournament != null && (tournament.getStage() != TournamentStage.INACTIVE);
     }
     
     public void setWorldSpawn(Player player) {

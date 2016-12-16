@@ -1,19 +1,12 @@
 package net.ihid.smarttournament.tasks;
 
-import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.objects.Arena;
-import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-/**
- * Created by Mikey on 4/25/2016.
- */
 public class PreTournamentTask extends BukkitRunnable {
     private TournamentPlugin plugin;
     private Tournament tournament;
@@ -27,6 +20,15 @@ public class PreTournamentTask extends BukkitRunnable {
     }
 
     public void run() {
+        if(TournamentPlugin.getMainManager().getParticipants().size() == plugin.getConfig().getInt("configuration.start-when-max-players-reached")) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
+            TournamentTask task = new TournamentTask(tournament);
+            tournament.setTournamentTask(task);
+
+            task.runTaskTimer(TournamentPlugin.getInstance(), 0L, 40L);
+            cancel();
+        }
+
         if(countdown == 0) {
             if(TournamentPlugin.getMainManager().getParticipants().size() < plugin.getConfig().getInt("configuration.minimum-players-to-start")) {
                 tournament.end();

@@ -7,9 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-/**
- * Created by Mikey on 8/4/2016.
- */
 class BlockBreakListener implements Listener {
     private final MainManager mainManager;
     private final YamlConfiguration config;

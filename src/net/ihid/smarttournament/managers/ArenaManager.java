@@ -11,12 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
-/**
- * Created by Mikey on 4/25/2016.
- */
 public class ArenaManager {
     private final TournamentPlugin plugin;
     private final YamlConfiguration config;

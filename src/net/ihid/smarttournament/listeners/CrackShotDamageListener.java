@@ -8,9 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-/**
- * Created by Mikey on 8/19/2016.
- */
 class CrackShotDamageListener implements Listener {
     private final MainManager mainManager;
     private final HookHandler hookHandler;
