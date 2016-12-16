@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class NewPlayerState {
-    private TournamentPlugin plugin;
+    private final TournamentPlugin plugin;
 
     public NewPlayerState() {
         this.plugin = TournamentPlugin.getInstance();

@@ -2,10 +2,10 @@ name: SmartTournament
 main: net.ihid.smarttournament.TournamentPlugin
 author: Hid
 description: Starts a 1v1 tournament for players to fight.
-version: 1.3.6
+version: 1.3.5
 softdepend: [CombatTagPlus, VanishNoPacket, CrackShot]
 
 commands:
     tournament:
-        aliases: [tourney, st, smarttournament, smartt, stournament, stourney]
+        aliases: [t, tourney, st, smarttournament, smartt, stournament, stourney]
         description: The base command for all tournament commands.

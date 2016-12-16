@@ -10,16 +10,16 @@ import java.util.Set;
 
 public class Match {
     @Getter
-    private Player initiator, opponent;
+    private final Player initiator, opponent;
+
+    @Getter
+    private final long duration;
 
     @Getter @Setter
     private Arena arena;
 
     @Getter @Setter
     private Player winner;
-
-    @Getter
-    private long duration;
 
     @Getter @Setter
     private boolean isRunning;

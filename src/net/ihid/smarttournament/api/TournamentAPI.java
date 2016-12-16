@@ -8,7 +8,6 @@ import net.ihid.smarttournament.objects.Tournament;
 import net.ihid.smarttournament.objects.player.SavedPlayerState;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;

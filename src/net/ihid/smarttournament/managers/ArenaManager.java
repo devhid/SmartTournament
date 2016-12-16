@@ -3,12 +3,10 @@ package net.ihid.smarttournament.managers;
 import lombok.Getter;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.objects.Arena;
-import net.ihid.smarttournament.objects.Tournament;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class ArenaManager {
     private final YamlConfiguration config;
 
     @Getter
-    private List<Arena> arenas;
+    private final List<Arena> arenas;
 
     public ArenaManager(TournamentPlugin plugin) {
         this.plugin = plugin;

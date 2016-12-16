@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.3.6                                                                                         #
+# version: 1.3.5 | build # 39                                                                            #
 #========================================================================================================#
 
 configuration:
@@ -10,13 +10,12 @@ configuration:
    tournament-start-delay: 60
    match-duration: 180
    minimum-players-to-start: 2
-   maximum-players-allowed: -1
+   maximum-players-allowed: 8
    force-player-clear-inventory: true
    disable-commands-in-tournament: true
    hide-spectators-mode-enabled: false
    keep-vanish-until-tournament-ends: false
    start-when-max-players-reached: false
-   disable-join/leave-tournament-message: false
    countdown-values:
    - 120
    - 60
@@ -93,11 +92,16 @@ configuration:
    - /msg
    - /r
 
+   limit-plugin-to-specific-worlds: false
+   limited-worlds:
+   - world
+
 messages:
     no-permission: "&cYou do not have permission to execute this command."
     improper-usage: "&cImproper usage. Proper usage for this command: /tournament join | leave | start | end | setspawn <arena> <1|2> | setspawn <-spectator|-world>."
     invalid-sender: "&cInvalid sender. You must be a player to perform this command."
     invalid-number: "&cInvalid number. You must enter a positive integer."
+    plugin-disabled-in-world: "&cThis plugin is disabled in the world you are currently in."
     severe-error: "&cSevere error. Please contact an administrator."
     no-tournaments-running: "&cThere are currently no tournaments running."
     not-enough-players: "&eThere are not enough players for this tournament to start."
@@ -107,6 +111,12 @@ messages:
     match-start-broadcast: "&c{initiator} &7and &c{opponent} &7are now fighting."
     match-winner-broadcast: "{winner} has won the match!"
     match-idle-broadcast: "&a{initiator}&7 and &a{opponent} &7have both been eliminated for idling."
+    match-current-force-end-success: "&aYou have forcefully ended the current match."
+    match-specific-force-end-success: "&aYou have forcefully ended the match between &e{initiator} &aand &e{opponent}&a."
+    match-force-end-select: "&7Please select which match to end: {matches}"
+    match-force-end-select-format: " \n&c#{matchID} &8- &a{initiator} &7vs. &a{opponent}"
+    match-force-end-select-separator: "&7, "
+    match-force-end-broadcast: "&7The match between &a{initiator}&7 and &a{opponent} &7has been forcefully ended."
     spectator-area-set: "&aYou have successfully set the spectator area."
     arena-invalid-position: "&cInvalid number. You must enter either 1 or 2 for the position."
     arena-set-success: "&7You have successfully set position &a#{position}&7 for the arena: &a{arena}&7."
@@ -118,7 +128,6 @@ messages:
     tournament-countdown-broadcast: "&7The tournament will begin in &c{countdown} &7second(s)."
     tournament-joined-success: "&aYou have successfully joined the tournament."
     tournament-joined-broadcast: "&e{username} &7has joined the tournament."
-    tournament-list-participants: "&cThe following players are in the tournament:\n {list}"
     tournament-left-success: "&aYou have successfully left the tournament."
     tournament-left-broadcast: "&e{username} &7has left the tournament."
     tournament-start-success: "&aYou have successfully started the tournament."

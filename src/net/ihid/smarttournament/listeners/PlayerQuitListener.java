@@ -16,6 +16,7 @@ class PlayerQuitListener implements Listener {
     PlayerQuitListener(TournamentPlugin plugin) {
         this.plugin = plugin;
         this.mainManager = TournamentPlugin.getMainManager();
+
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 

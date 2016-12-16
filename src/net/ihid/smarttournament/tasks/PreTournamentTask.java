@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PreTournamentTask extends BukkitRunnable {
-    private TournamentPlugin plugin;
-    private Tournament tournament;
+    private final TournamentPlugin plugin;
+    private final Tournament tournament;
     private int countdown;
 
     public PreTournamentTask(Tournament tournament) {
@@ -20,15 +20,16 @@ public class PreTournamentTask extends BukkitRunnable {
     }
 
     public void run() {
-        if(TournamentPlugin.getMainManager().getParticipants().size() == plugin.getConfig().getInt("configuration.start-when-max-players-reached")) {
-            Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
-            TournamentTask task = new TournamentTask(tournament);
-            tournament.setTournamentTask(task);
+        if(plugin.getConfig().getBoolean("configuration.start-when-max-players-reached")) {
+            if(plugin.getConfig().getInt("configuration.maximum-players-allowed") == TournamentPlugin.getMainManager().getParticipants().size()) {
+                Bukkit.broadcastMessage(Lang.TOURNAMENT_POST_START_BROADCAST.toString());
+                TournamentTask task = new TournamentTask(tournament);
+                tournament.setTournamentTask(task);
 
-            task.runTaskTimer(TournamentPlugin.getInstance(), 0L, 40L);
-            cancel();
+                task.runTaskTimer(TournamentPlugin.getInstance(), 0L, 40L);
+                cancel();
+            }
         }
-
         if(countdown == 0) {
             if(TournamentPlugin.getMainManager().getParticipants().size() < plugin.getConfig().getInt("configuration.minimum-players-to-start")) {
                 tournament.end();

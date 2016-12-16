@@ -1,7 +1,6 @@
 package net.ihid.smarttournament.managers;
 
 import lombok.Getter;
-import net.ihid.smarttournament.api.TournamentAPI;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.TournamentStage;
 import net.ihid.smarttournament.objects.Tournament;
@@ -9,11 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 public class TournamentManager {
     private final MainManager mainManager;
@@ -24,18 +21,14 @@ public class TournamentManager {
     private Tournament tournament;
 
     @Getter
-    private List<UUID> participants, original;
+    private List<UUID> participants, originalParticipants;
 
     public TournamentManager(MainManager mainManager) {
         this.plugin = TournamentPlugin.getInstance();
         this.mainManager = mainManager;
         this.config = plugin.getConfig();
         this.participants = new ArrayList<>();
-        this.original = new ArrayList<>();
-    }
-
-    public List<UUID> getOriginalParticipants() {
-        return original;
+        this.originalParticipants = new ArrayList<>();
     }
 
     public void clearParticipants() {
@@ -43,7 +36,7 @@ public class TournamentManager {
     }
 
     public boolean isInTournament(Player player) {
-        return participants.contains(player.getUniqueId()) || mainManager.getMatchWinners().contains(player.getUniqueId()) || mainManager.getMatches().stream().filter(match -> match.toSet().contains(player)).count() > 0;
+        return participants.contains(player.getUniqueId()) || mainManager.getMatchWinners().contains(player.getUniqueId()) || mainManager.getMatches().stream().anyMatch(match -> match.toSet().contains(player));
     }
 
     public void addParticipant(Player player) {

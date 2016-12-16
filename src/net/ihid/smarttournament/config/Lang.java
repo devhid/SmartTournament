@@ -4,14 +4,12 @@ import net.ihid.smarttournament.ChatUtil;
 import net.ihid.smarttournament.TournamentPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-/**
- * Created by Mikey on 6/11/2016.
- */
 public enum Lang {
     NO_PERMISSION("messages.no-permission"),
     IMPROPER_USAGE("messages.improper-usage"),
     INVALID_SENDER("messages.invalid-sender"),
     INVALID_NUMBER("messages.invalid-number"),
+    PLUGIN_DISABLED_IN_WORLD("messages.plugin-disabled-in-world"),
     SEVERE_ERROR("messages.severe-error"),
     NO_TOURNAMENTS_RUNNING("messages.no-tournaments-running"),
     NOT_ENOUGH_PLAYERS("messages.not-enough-players"),
@@ -21,6 +19,10 @@ public enum Lang {
     MATCH_START_BROADCAST("messages.match-start-broadcast"),
     MATCH_WINNER_BROADCAST("messages.match-winner-broadcast"),
     MATCH_IDLE_BROADCAST("messages.match-idle-broadcast"),
+    MATCH_CURRENT_FORCE_END_SUCCESS("messages.match-current-force-end-success"),
+    MATCH_SPECIFIC_FORCE_END_SUCCESS("messages.match-specific-force-end-success"),
+    MATCH_FORCE_END_SELECT("messages.match-force-end-select"),
+    MATCH_FORCE_END_BROADCAST("messages.match-force-end-broadcast"),
     SPECTATOR_AREA_SET("messages.spectator-area-set"),
     ARENA_INVALID_POSITION("messages.arena-invalid-position"),
     ARENA_SET_SUCCESS("messages.arena-set-success"),
@@ -46,10 +48,11 @@ public enum Lang {
     TOURNAMENT_WINNER_REWARD_MESSAGE("messages.tournament-winner-reward-message");
 
     private final String path;
-    private YamlConfiguration config = TournamentPlugin.getInstance().getConfig();
+    private final YamlConfiguration config;
 
     Lang(String path) {
         this.path = path;
+        this.config = TournamentPlugin.getInstance().getConfig();
     }
 
     public String toString() {

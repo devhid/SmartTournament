@@ -6,7 +6,7 @@ import org.bukkit.Location;
 
 public class Arena {
     @Getter
-    private String arenaName;
+    private final String arenaName;
 
     @Setter @Getter
     private boolean occupied;

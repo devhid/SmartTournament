@@ -5,19 +5,11 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://A:/Users/Mikey/Plugins/CrackShot.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Maven: net.minelink:CombatTagPlus:1.2.4-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.mcstats.bukkit:metrics-lite:R8-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.minelink:CombatTagPlusCompat-API:1.2.4-SNAPSHOT" level="project" />
@@ -49,5 +41,14 @@
     <orderEntry type="library" name="Maven: com.google.guava:guava:18.0" level="project" />
     <orderEntry type="library" name="Maven: org.kitteh:VanishNoPacket:3.19.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.milkbowl.vault:Vault:1.2.32" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://A:/Users/Mikey/Plugins/CrackShot.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

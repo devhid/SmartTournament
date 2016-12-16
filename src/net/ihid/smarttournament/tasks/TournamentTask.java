@@ -11,14 +11,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.List;
 import java.util.UUID;
 
 public class TournamentTask extends BukkitRunnable {
-    private MainManager mainManager;
-    private Tournament tournament;
-    private List<UUID> matchWinners, participants;
+    private final MainManager mainManager;
+    private final Tournament tournament;
+    private final List<UUID> matchWinners, participants;
 
     public TournamentTask(Tournament tournament) {
         this.mainManager = TournamentPlugin.getMainManager();

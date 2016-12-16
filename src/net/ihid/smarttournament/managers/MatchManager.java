@@ -4,15 +4,14 @@ import lombok.Getter;
 import net.ihid.smarttournament.api.events.MatchEndEvent;
 import net.ihid.smarttournament.api.events.MatchStartEvent;
 import net.ihid.smarttournament.config.Lang;
-import net.ihid.smarttournament.objects.player.NewPlayerState;
-import net.ihid.smarttournament.objects.player.SavedPlayerState;
+import net.ihid.smarttournament.player.NewPlayerState;
+import net.ihid.smarttournament.player.SavedPlayerState;
 import net.ihid.smarttournament.objects.Match;
 import net.ihid.smarttournament.TournamentPlugin;
 import net.ihid.smarttournament.tasks.MatchTask;
 import net.minelink.ctplus.TagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import java.util.*;
 
 public class MatchManager {
@@ -20,16 +19,16 @@ public class MatchManager {
     private final MainManager mainManager;
 
     @Getter
-    private NewPlayerState newPlayerState;
+    private final NewPlayerState newPlayerState;
 
     @Getter
-    private List<Match> matches;
+    private final List<Match> matches;
 
     @Getter
-    private List<UUID> matchWinners;
+    private final List<UUID> matchWinners;
 
     @Getter
-    private HashMap<String, SavedPlayerState> playerStates;
+    private final HashMap<String, SavedPlayerState> playerStates;
 
     public MatchManager(MainManager mainManager) {
         this.plugin = TournamentPlugin.getInstance();
@@ -89,6 +88,10 @@ public class MatchManager {
         task.runTaskLater(TournamentPlugin.getInstance(), match.getDuration());
     }
 
+    public Match getMatchById(int matchId) throws NullPointerException {
+        return matches.stream().filter(match -> match.getMatchTask().getTaskId() == matchId).findAny().orElse(null);
+    }
+
     public void endMatch(Match match) {
         plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
         Bukkit.broadcastMessage(Lang.MATCH_WINNER_BROADCAST.toString().replace("{winner}", match.getWinner().getName()));
@@ -102,18 +105,9 @@ public class MatchManager {
         match.reset();
     }
 
-    public Match getMatchById(int matchId) throws NullPointerException {
-        return matches.stream().filter(match -> match.getMatchTask().getTaskId() == matchId).findAny().orElse(null);
-    }
-
-    public void endIdleMatch(Match match) {
+    public void endMatchForcefully(Match match) {
         plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
-        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
-
-        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1) {
-            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
-            mainManager.getTournament().end();
-        }
+        Bukkit.broadcastMessage(Lang.MATCH_FORCE_END_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
 
         //removeTag(match.getInitiator(), match.getOpponent());
         match.toSet().forEach(player -> player.teleport(mainManager.getWorldSpawn()));
@@ -123,6 +117,31 @@ public class MatchManager {
 
         match.reset();
         mainManager.removeFromTournament(match.getInitiator(), match.getOpponent());
+
+        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1 && mainManager.getMatches().size() < 1) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+            mainManager.getTournament().end();
+        }
+
+    }
+
+    public void endIdleMatch(Match match) {
+        plugin.getServer().getPluginManager().callEvent(new MatchEndEvent(match));
+        Bukkit.broadcastMessage(Lang.MATCH_IDLE_BROADCAST.toString().replace("{initiator}", match.getInitiator().getName()).replace("{opponent}", match.getOpponent().getName()));
+
+        //removeTag(match.getInitiator(), match.getOpponent());
+        match.toSet().forEach(player -> player.teleport(mainManager.getWorldSpawn()));
+
+        matches.remove(match);
+        unmapStates(playerStates, match);
+
+        match.reset();
+        mainManager.removeFromTournament(match.getInitiator(), match.getOpponent());
+
+        if(mainManager.getMatchWinners().size() == 0 && mainManager.getParticipants().size() < 1 && mainManager.getMatches().size() < 1) {
+            Bukkit.broadcastMessage(Lang.TOURNAMENT_NO_WINNER_BROADCAST.toString());
+            mainManager.getTournament().end();
+        }
     }
 
     public void removeTag(Player... ps) {

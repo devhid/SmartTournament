@@ -7,9 +7,6 @@ import org.bukkit.plugin.PluginManager;
 import org.kitteh.vanish.VanishManager;
 import org.kitteh.vanish.VanishPlugin;
 
-/**
- * Created by Mikey on 7/27/2016.
- */
 public class VanishNoPacketHook implements Hook {
     private final PluginManager pluginManager;
     private final String pluginName;
@@ -34,11 +31,11 @@ public class VanishNoPacketHook implements Hook {
         return pluginName;
     }
 
-    public VanishPlugin get() {
+    private VanishPlugin get() {
         return (VanishPlugin) getPlugin();
     }
 
-    public VanishManager getVanishManager() {
+    private VanishManager getVanishManager() {
         return get().getManager();
     }
 
