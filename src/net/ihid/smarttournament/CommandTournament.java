@@ -113,7 +113,9 @@ class CommandTournament implements CommandExecutor {
                 mainManager.addParticipant(player);
                 mainManager.removeTag(player);
 
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", player.getName()));
+                if(!plugin.getConfig().getBoolean("configuration.disable-join/leave-tournament-message")) {
+                    Bukkit.broadcastMessage(Lang.TOURNAMENT_JOINED_BROADCAST.toString().replace("{username}", player.getName()));
+                }
                 player.sendMessage(Lang.TOURNAMENT_JOINED_SUCCESS.toString());
                 player.teleport(mainManager.getSpectatorArea());
 
@@ -134,7 +136,9 @@ class CommandTournament implements CommandExecutor {
                 }
 
                 player.sendMessage(Lang.TOURNAMENT_LEFT_SUCCESS.toString());
-                Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", player.getName()));
+                if(!plugin.getConfig().getBoolean("configuration.disable-join/leave-tournament-message")) {
+                    Bukkit.broadcastMessage(Lang.TOURNAMENT_LEFT_BROADCAST.toString().replace("{username}", player.getName()));
+                }
 
                 if(mainManager.isInMatch(player)) {
                     final Match match = mainManager.getMatch(player);

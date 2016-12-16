@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: SmartTournament                                                                                  #
 # author: Hid                                                                                            #
-# version: 1.3.5 | build # 39                                                                            #
+# version: 1.3.6 | build # 40                                                                            #
 #========================================================================================================#
 
 configuration:
@@ -16,6 +16,7 @@ configuration:
    hide-spectators-mode-enabled: false
    keep-vanish-until-tournament-ends: false
    start-when-max-players-reached: false
+   disable-join/leave-tournament-message: false
    countdown-values:
    - 120
    - 60
